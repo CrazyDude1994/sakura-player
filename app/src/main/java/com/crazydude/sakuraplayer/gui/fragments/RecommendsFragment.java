@@ -19,4 +19,5 @@ public class RecommendsFragment extends BaseFragment {
     @AfterViews
     void initViews() {
     }
+
 }

@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_screen">
 
     <RelativeLayout
-            android:id="@+id/activity_home_progressbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_material_dark"
-            android:alpha="0.9"
-            android:visibility="gone">
+        android:id="@+id/activity_home_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_material_dark"
+        android:alpha="0.9"
+        android:visibility="gone">
+
         <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="HELLO"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HELLO" />
 
     <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/activity_home_placeholder">
-    </FrameLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_home_placeholder"></FrameLayout>
 
 </RelativeLayout>
