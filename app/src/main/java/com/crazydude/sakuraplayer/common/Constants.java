@@ -8,6 +8,8 @@ import org.androidannotations.annotations.EBean;
 @EBean(scope = EBean.Scope.Singleton)
 public class Constants {
 
+    public final static int SPLASH_DURATION = 3000;
+
     public final static String LASTFM_API_ROOT_URL = "http://ws.audioscrobbler.com/2.0/";
     public final static String LASTFM_GRANTED_URL = "http://www.last.fm/api/grantaccess";
     public final static String LASTFM_API_KEY = "30f5f9d26d668aa917f0b76bd3fa5773";

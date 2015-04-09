@@ -15,7 +15,6 @@ import com.crazydude.sakuraplayer.models.LastfmTokenResponse;
 import com.crazydude.sakuraplayer.models.events.SessionEvent;
 import de.greenrobot.event.EventBus;
 import org.androidannotations.annotations.*;
-import org.springframework.web.client.RestClientException;
 
 import java.util.TreeMap;
 
@@ -53,7 +52,7 @@ public class LastfmLoginFragment extends BaseFragment {
 
     @Background
     void getToken() {
-        try {
+/*        try {
             TreeMap<String, String> params = new TreeMap<String, String>();
             params.put("method", "auth.getToken");
             String signature = Utils.getSignature(params);
@@ -64,12 +63,12 @@ public class LastfmLoginFragment extends BaseFragment {
             }
         } catch (RestClientException e) {
             hideProgressBar();
-        }
+        }*/
     }
 
     @Background
     void getSession() {
-        try {
+/*        try {
             TreeMap<String, String> params = new TreeMap<String, String>();
             params.put("method", "auth.getSession");
             params.put("token", mToken);
@@ -82,7 +81,7 @@ public class LastfmLoginFragment extends BaseFragment {
             }
         } catch (RestClientException e) {
             hideProgressBar();
-        }
+        }*/
     }
 
     @UiThread

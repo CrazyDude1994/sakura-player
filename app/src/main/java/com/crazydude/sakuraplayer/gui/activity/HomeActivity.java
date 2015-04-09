@@ -1,12 +1,15 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.os.Handler;
 import android.view.View;
-import android.widget.Toast;
+
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment_;
-import com.crazydude.sakuraplayer.models.events.SessionEvent;
-import de.greenrobot.event.EventBus;
+import com.crazydude.sakuraplayer.common.Constants;
+import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
@@ -18,31 +21,64 @@ public class HomeActivity extends Activity {
     @ViewById(R.id.activity_home_progressbar)
     View mProgressBar;
 
+    @ViewById(R.id.activity_home_splash_screen)
+    View mSplashScreenImage;
+
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @UiThread
-    public void onEvent(SessionEvent session) {
-        getFragmentManager().popBackStack();
-        hideProgressBar();
-        Toast.makeText(getApplication(), session.session, Toast.LENGTH_LONG).show();
     }
 
     @AfterViews
     void initViews() {
+        hideSplashScreen(Constants.SPLASH_DURATION);
+    }
+
+    private void afterSplash() {
         getFragmentManager().beginTransaction()
-                .replace(R.id.activity_home_placeholder, LastfmLoginFragment_.builder().build())
-                .addToBackStack("login")
+                .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
                 .commit();
+    }
+
+    public void hideSplashScreen(final int duration) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ObjectAnimator anim = ObjectAnimator.ofFloat(mSplashScreenImage, "alpha", 1f, 0f);
+                anim.setDuration(500);
+                anim.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mSplashScreenImage.setVisibility(View.GONE);
+                        afterSplash();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                anim.start();
+            }
+        }, duration);
     }
 
     @UiThread
