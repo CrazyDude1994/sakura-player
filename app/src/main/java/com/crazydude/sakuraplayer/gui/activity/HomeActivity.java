@@ -9,6 +9,8 @@ import android.view.View;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
+import com.crazydude.sakuraplayer.services.PlayerService;
+import com.crazydude.sakuraplayer.services.PlayerService_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -42,10 +44,12 @@ public class HomeActivity extends Activity {
     }
 
     private void afterSplash() {
+        PlayerService_.intent(getApplicationContext()).action(PlayerService.ACTION_PLAY).start();
         getFragmentManager().beginTransaction()
                 .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
                 .commit();
     }
+
 
     public void hideSplashScreen(final int duration) {
         final Handler handler = new Handler();

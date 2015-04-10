@@ -1,19 +1,23 @@
 package com.crazydude.sakuraplayer.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 
 import org.androidannotations.annotations.EService;
+import org.androidannotations.annotations.RootContext;
 
-import static com.crazydude.sakuraplayer.services.PlayerService.ACTION_PLAY;
+import java.io.IOException;
 
 /**
  * Created by CrazyDude on 09.04.2015.
  */
 @EService
-public class PlayerService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
+public class PlayerService extends Service implements MediaPlayer.OnErrorListener,
+        MediaPlayer.OnPreparedListener {
 
     public static final String ACTION_PLAY = "com.crazydude.sakuraplayer.PLAY";
 
@@ -34,16 +38,26 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-       switch (intent.getAction()) {
-           case ACTION_PLAY:
-               mMediaPlayer.start();
-
-       }
+        switch (intent.getAction()) {
+            case ACTION_PLAY:
+                playMusic();
+                break;
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
     private void playMusic() {
-
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+        }
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mMediaPlayer.setDataSource("/sdcard/Music/Feint - Lonesong.mp3");
+            mMediaPlayer.setOnPreparedListener(this);
+            mMediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -53,6 +67,6 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-
+        mMediaPlayer.start();
     }
 }

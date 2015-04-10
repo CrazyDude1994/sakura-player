@@ -5,4 +5,6 @@ package com.crazydude.sakuraplayer.mvp.views;
  */
 public interface PlayerView {
 
+
+
 }

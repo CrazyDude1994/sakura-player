@@ -1,8 +1,9 @@
 package com.crazydude.sakuraplayer.mvp.presenters;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 
+import com.crazydude.sakuraplayer.mvp.models.IPlayerModel;
+import com.crazydude.sakuraplayer.mvp.models.PlayerModel;
 import com.crazydude.sakuraplayer.mvp.views.PlayerView;
 
 /**
@@ -11,9 +12,11 @@ import com.crazydude.sakuraplayer.mvp.views.PlayerView;
 public class PlayerPresenter implements IPlayerPresenter {
 
     private PlayerView mPlayerView;
+    private IPlayerModel mPlayerModel;
 
-    PlayerPresenter(PlayerView playerView) {
+    public PlayerPresenter(PlayerView playerView) {
         this.mPlayerView = playerView;
+        this.mPlayerModel = new PlayerModel(this);
     }
 
     @Override
