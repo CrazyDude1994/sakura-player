@@ -3,12 +3,18 @@ package com.crazydude.sakuraplayer.gui.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
+import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 
@@ -25,6 +31,8 @@ public class HomeActivity extends Activity {
 
     @ViewById(R.id.activity_home_splash_screen)
     View mSplashScreenImage;
+
+    private PlayerServiceConnection mPlayerServiceConnection;
 
     @Override
     protected void onStart() {
@@ -43,8 +51,24 @@ public class HomeActivity extends Activity {
         hideSplashScreen(Constants.SPLASH_DURATION);
     }
 
+    private class PlayerServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ((PlayerBinder)service).play("/sdcard/Music/Feint - Lonesong.mp3");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    }
+
     private void afterSplash() {
-        PlayerService_.intent(getApplicationContext()).action(PlayerService.ACTION_PLAY).start();
+        //PlayerService_.intent(getApplicationContext()).action(PlayerService.ACTION_PLAY)
+        //        .extra(PlayerService.EXTRA_PATH, "/sdcard/Music/Feint - Lonesong.mp3")
+        //        .start();
+        Intent intent = new Intent(this, PlayerService_.class); // note the underscore
+        bindService(intent, mPlayerServiceConnection, Context.BIND_AUTO_CREATE);
         getFragmentManager().beginTransaction()
                 .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
                 .commit();
