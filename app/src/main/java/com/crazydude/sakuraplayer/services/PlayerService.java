@@ -6,7 +6,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 
+import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 
 import org.androidannotations.annotations.EService;
@@ -20,6 +22,7 @@ import java.io.IOException;
 public class PlayerService extends Service implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnPreparedListener {
 
+    private static final String TAG = PlayerService.class.getSimpleName();
 
     public static final String ACTION_PLAY = "com.crazydude.sakuraplayer.PLAY";
     public static final String EXTRA_PATH = "extra_path";
@@ -44,13 +47,20 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        switch (intent.getAction()) {
-            case ACTION_PLAY:
-                String path = intent.getStringExtra(EXTRA_PATH);
-                playMusic(path);
-                break;
+        if (intent != null) {
+            switch (intent.getAction()) {
+                case ACTION_PLAY:
+                    String path = intent.getStringExtra(EXTRA_PATH);
+                    playMusic(path);
+                    break;
+            }
         }
-        return super.onStartCommand(intent, flags, startId);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("HELLO")
+                .setContentText("OMG");
+        builder.build();
+        return START_STICKY;
     }
 
     private void setupPlayer() {

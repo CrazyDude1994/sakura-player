@@ -14,14 +14,20 @@ import android.view.View;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager_;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 @EActivity(R.layout.activity_home)
 public class HomeActivity extends Activity {
@@ -31,6 +37,9 @@ public class HomeActivity extends Activity {
 
     @ViewById(R.id.activity_home_splash_screen)
     View mSplashScreenImage;
+
+    @Bean
+    MusicLibraryManager mMusicLibraryManager;
 
     private PlayerServiceConnection mPlayerServiceConnection;
 
@@ -54,7 +63,7 @@ public class HomeActivity extends Activity {
     private class PlayerServiceConnection implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            ((PlayerBinder)service).play("/sdcard/Music/Feint - Lonesong.mp3");
+            ((PlayerBinder)service).play("/sdcard/Music/1.mp3");
         }
 
         @Override
@@ -64,11 +73,13 @@ public class HomeActivity extends Activity {
     }
 
     private void afterSplash() {
-        //PlayerService_.intent(getApplicationContext()).action(PlayerService.ACTION_PLAY)
-        //        .extra(PlayerService.EXTRA_PATH, "/sdcard/Music/Feint - Lonesong.mp3")
-        //        .start();
-        Intent intent = new Intent(this, PlayerService_.class); // note the underscore
-        bindService(intent, mPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+//        PlayerService_.intent(getApplicationContext()).action(PlayerService.ACTION_PLAY)
+//                .extra(PlayerService.EXTRA_PATH, "/sdcard/Music/1.mp3")
+//                .start();
+        //Intent intent = new Intent(this, PlayerService_.class); // note the underscore
+        //bindService(intent, mPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+        //ArrayList<String> tracks = mMusicLibraryManager.getAllTracks();
+        HashSet<String> tracks = mMusicLibraryManager.getArtistList();
         getFragmentManager().beginTransaction()
                 .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
                 .commit();
