@@ -46,9 +46,11 @@ apt {
 dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:support-v4:22.0.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile project(':viewpagerindicator')
 }
