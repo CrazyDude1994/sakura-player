@@ -2,9 +2,7 @@ package com.crazydude.sakuraplayer.gui.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
@@ -16,6 +14,7 @@ import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
+import com.crazydude.sakuraplayer.services.PlayerService_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -35,7 +34,7 @@ public class HomeActivity extends FragmentActivity {
     @Bean
     MusicLibraryManager mMusicLibraryManager;
 
-    private PlayerServiceConnection mPlayerServiceConnection;
+    private PlayerServiceConnection mPlayerServiceConnection = new PlayerServiceConnection();
 
     @Override
     protected void onStart() {
@@ -57,7 +56,7 @@ public class HomeActivity extends FragmentActivity {
     private class PlayerServiceConnection implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            ((PlayerBinder) service).play("/sdcard/Music/1.mp3");
+            ((PlayerBinder) service).play("/sdcard/Download/1.mp3");
         }
 
         @Override
@@ -67,17 +66,19 @@ public class HomeActivity extends FragmentActivity {
     }
 
     private void afterSplash() {
-//        PlayerService_.intent(getApplicationContext()).action(PlayerService.ACTION_PLAY)
-//                .extra(PlayerService.EXTRA_PATH, "/sdcard/Music/1.mp3")
-//                .start();
-        //Intent intent = new Intent(this, PlayerService_.class); // note the underscore
-        //bindService(intent, mPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+        PlayerService_.intent(this).start();
+//        Intent intent = new Intent(this, PlayerService_.class); // note the underscore
+//        bindService(intent, mPlayerServiceConnection, Context.BIND_AUTO_CREATE);
         //ArrayList<String> tracks = mMusicLibraryManager.getAllTracks();
         //HashSet<String> tracks = mMusicLibraryManager.getArtistList();
 //        getFragmentManager().beginTransaction()
 //                .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
 //                .commit();
-        startActivity(new Intent(this, TracklistActivity_.class));
+        //startActivity(new Intent(this, TracklistActivity_.class));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.activity_home_placeholder, new PlayerFragment_().builder().build())
+                .commit();
     }
 
 

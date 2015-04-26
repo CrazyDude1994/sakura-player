@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="R:\Programming\Android\SakuraPlayer\viewpagerindicator\src\main\assets"/></dataSet><dataSet config="release"><source path="R:\Programming\Android\SakuraPlayer\viewpagerindicator\src\release\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="C:\Programming\Android\SakuraPlayer\viewpagerindicator\src\main\assets"/></dataSet><dataSet config="release"><source path="C:\Programming\Android\SakuraPlayer\viewpagerindicator\src\release\assets"/></dataSet></merger>

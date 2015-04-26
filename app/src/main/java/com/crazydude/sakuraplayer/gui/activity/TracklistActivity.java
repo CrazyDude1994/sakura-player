@@ -1,6 +1,5 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +9,8 @@ import android.support.v4.view.ViewPager;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment_;
-import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.IconPageIndicator;
+import com.viewpagerindicator.IconPagerAdapter;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -21,27 +21,31 @@ public class TracklistActivity extends FragmentActivity {
 
 
     static final int PAGE_COUNT = 4;
-    static final String[] CONTENT = new String[] { "This", "Is", "A", "Test"};
+    static final String[] CONTENT = new String[]{"This", "Is", "A", "Test"};
 
     @ViewById(R.id.activity_tracklist_viewpager)
     ViewPager mViewPager;
 
     @ViewById(R.id.activity_tracklist_viewpager_titles)
-    TitlePageIndicator mTitleIndicator;
+    IconPageIndicator mIconPageIndicator;
 
-    PagerAdapter mPagerAdapter;
+
+    private PagerAdapter mPagerAdapter;
 
     @AfterViews
     void initViews() {
         mPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
 
-        mTitleIndicator.setViewPager(mViewPager);
+        mIconPageIndicator.setViewPager(mViewPager);
     }
 
-    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+    private class MyFragmentPagerAdapter extends FragmentPagerAdapter implements IconPagerAdapter {
 
-
+        @Override
+        public int getIconResId(int index) {
+            return R.drawable.ic_launcher;
+        }
 
         public MyFragmentPagerAdapter(FragmentManager fm) {
             super(fm);

@@ -33,4 +33,8 @@ public class PlayerBinder extends Binder {
     public void resume() {
         mPlayerService.resumeMusic();
     }
+
+    public boolean isPlaying() {
+        return mPlayerService.isPlaying();
+    }
 }

@@ -6,9 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
 
-import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 
 import org.androidannotations.annotations.EService;
@@ -28,10 +26,13 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public static final String EXTRA_PATH = "extra_path";
 
     private MediaPlayer mMediaPlayer;
-    private PlayerBinder mBinder = new PlayerBinder(this);
+    private PlayerBinder mBinder;
 
     @Override
     public IBinder onBind(Intent intent) {
+        if (mBinder == null) {
+            mBinder = new PlayerBinder(this);
+        }
         return mBinder;
     }
 
@@ -47,7 +48,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
+        if (intent != null && intent.getAction() != null) {
             switch (intent.getAction()) {
                 case ACTION_PLAY:
                     String path = intent.getStringExtra(EXTRA_PATH);
@@ -55,11 +56,6 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
                     break;
             }
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("HELLO")
-                .setContentText("OMG");
-        builder.build();
         return START_STICKY;
     }
 
@@ -76,6 +72,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public void playMusic(String path) {
         setupPlayer();
         try {
+            mMediaPlayer.stop();
             mMediaPlayer.setDataSource(path);
             mMediaPlayer.prepareAsync();
         } catch (IOException e) {
@@ -108,6 +105,14 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public void resumeMusic() {
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
+        }
+    }
+
+    public boolean isPlaying() {
+        if (mMediaPlayer != null) {
+            return mMediaPlayer.isPlaying();
+        } else {
+            return false;
         }
     }
 }
