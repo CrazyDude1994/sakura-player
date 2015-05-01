@@ -2,18 +2,14 @@ package com.crazydude.sakuraplayer.gui.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.content.ComponentName;
-import android.content.ServiceConnection;
+import android.content.Intent;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
-import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
-import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 
 import org.androidannotations.annotations.AfterViews;
@@ -34,8 +30,6 @@ public class HomeActivity extends FragmentActivity {
     @Bean
     MusicLibraryManager mMusicLibraryManager;
 
-    private PlayerServiceConnection mPlayerServiceConnection = new PlayerServiceConnection();
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -53,17 +47,6 @@ public class HomeActivity extends FragmentActivity {
         hideSplashScreen(Constants.SPLASH_DURATION);
     }
 
-    private class PlayerServiceConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ((PlayerBinder) service).play("/sdcard/Download/1.mp3");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    }
 
     private void afterSplash() {
         PlayerService_.intent(this).start();
@@ -74,11 +57,11 @@ public class HomeActivity extends FragmentActivity {
 //        getFragmentManager().beginTransaction()
 //                .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
 //                .commit();
-        //startActivity(new Intent(this, TracklistActivity_.class));
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.activity_home_placeholder, new PlayerFragment_().builder().build())
-                .commit();
+        startActivity(new Intent(this, TracklistActivity_.class));
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.activity_home_placeholder, new PlayerFragment_().builder().build())
+//                .commit();
     }
 
 

@@ -10,26 +10,21 @@ import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
-import com.crazydude.sakuraplayer.mvp.models.IPlayerModel;
-import com.crazydude.sakuraplayer.mvp.models.PlayerModel;
-import com.crazydude.sakuraplayer.mvp.views.PlayerView;
+import com.crazydude.sakuraplayer.mvp.models.interfaces.PlayerModel;
+import com.crazydude.sakuraplayer.mvp.models.PlayerModelImpl;
+import com.crazydude.sakuraplayer.mvp.presenters.interfaces.PlayerPresenter;
+import com.crazydude.sakuraplayer.mvp.views.interfaces.PlayerView;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 
 /**
  * Created by CrazyDude on 09.04.2015.
  */
-public class PlayerPresenter implements IPlayerPresenter, ServiceConnection {
+public class PlayerPresenterImpl extends BasePresenterImpl<PlayerView, PlayerModel> implements PlayerPresenter, ServiceConnection {
 
-    private PlayerView mPlayerView;
-    private IPlayerModel mPlayerModel;
-    private Context mContext;
     private PlayerBinder mBinder;
 
-    public PlayerPresenter(Context context, PlayerView playerView) {
-        this.mPlayerView = playerView;
-        this.mPlayerModel = new PlayerModel(this);
-        this.mContext = context;
-
+    public PlayerPresenterImpl(Context context, PlayerView presenterView, PlayerModel model) {
+        super(context, presenterView, model);
         Intent intent = new Intent(context, PlayerService_.class);
         context.bindService(intent, this, Context.BIND_AUTO_CREATE);
     }

@@ -22,6 +22,8 @@ public class TracklistActivity extends FragmentActivity {
 
     static final int PAGE_COUNT = 4;
     static final String[] CONTENT = new String[]{"This", "Is", "A", "Test"};
+    static final int[] ICONS = new int[]{R.drawable.ic_action_favorite, R.drawable.ic_launcher,
+            R.drawable.ic_action_favorite, R.drawable.ic_launcher};
 
     @ViewById(R.id.activity_tracklist_viewpager)
     ViewPager mViewPager;

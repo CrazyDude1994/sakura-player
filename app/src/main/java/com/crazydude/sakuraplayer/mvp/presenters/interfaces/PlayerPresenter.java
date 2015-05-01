@@ -1,4 +1,4 @@
-package com.crazydude.sakuraplayer.mvp.presenters;
+package com.crazydude.sakuraplayer.mvp.presenters.interfaces;
 
 import android.net.Uri;
 import android.view.View;
@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * Created by CrazyDude on 09.04.2015.
  */
-public interface IPlayerPresenter {
+public interface PlayerPresenter {
 
     public void playMusic(Uri file);
     public void pause();
