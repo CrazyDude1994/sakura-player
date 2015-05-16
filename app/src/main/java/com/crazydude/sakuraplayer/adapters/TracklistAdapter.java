@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.crazydude.sakuraplayer.gui.views.TrackView;
+import com.crazydude.sakuraplayer.gui.views.TrackView_;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import org.androidannotations.annotations.EBean;
@@ -24,19 +26,27 @@ public class TracklistAdapter extends BaseAdapter<TrackModel> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView textView = new TextView(mContext);
-        return new ViewHolder(textView);
+        TrackView trackView = TrackView_.build(mContext);
+        return new ViewHolder(trackView);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((TextView) holder.itemView).setText(getData(position).getTrackPath());
+        TrackView trackView = ((ViewHolder)holder).getView();
+        trackView.setContent(getData(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        private TrackView mTrackView;
+
+        public ViewHolder(TrackView trackView) {
+            super(trackView);
+            this.mTrackView = trackView;
+        }
+
+        public TrackView getView() {
+            return mTrackView;
         }
     }
 }

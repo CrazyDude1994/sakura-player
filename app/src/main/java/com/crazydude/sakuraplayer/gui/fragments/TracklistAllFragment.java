@@ -10,6 +10,7 @@ import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
         mTrackProvider.loadAllTracks(this);
     }
 
+    @UiThread
     @Override
     public void onTrackLoaded(List<TrackModel> tracks) {
         mTracklistAllFragmentView.setTrackList(tracks);

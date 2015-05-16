@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import org.androidannotations.annotations.EBean;
@@ -31,7 +32,7 @@ public class MusicLibraryManager {
                 "1"
         };
 
-        return getTracks(projection, selection, selectionArgs, null);
+        return getTracks(selection, selectionArgs);
     }
 
     public HashSet<TrackModel> getArtistList() {
@@ -43,8 +44,7 @@ public class MusicLibraryManager {
                 "1",
         };
 
-        HashSet<TrackModel> result = new HashSet<>(getTracks(projection, selection, selectionArgs,
-                MediaStore.Audio.Media.ARTIST));
+        HashSet<TrackModel> result = new HashSet<>(getTracks(selection, selectionArgs));
 
         return result;
     }
@@ -60,23 +60,29 @@ public class MusicLibraryManager {
                 artistName
         };
 
-        return getTracks(projection, selection, selectionArgs, null);
+        return getTracks(selection, selectionArgs);
     }
 
-    private ArrayList<TrackModel> getTracks(String[] projection, String selection,
-                                        String[] selectionArgs, String columnName) {
+    private ArrayList<TrackModel> getTracks(String selection, String[] selectionArgs) {
         ArrayList<TrackModel> result = new ArrayList<>();
         ContentResolver contentResolver = mContext.getContentResolver();
+        String[] projection = {
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DATA
+        };
         Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection, selection, selectionArgs, null);
-        if (columnName == null) {
-            columnName = MediaStore.Audio.Media.DATA;
-        }
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                String data = cursor.getString(cursor.getColumnIndex(columnName));
                 TrackModel model = new TrackModel();
-                model.setTrackPath(data);
+                ArtistModel artistModel = new ArtistModel();
+                artistModel.setArtistName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
+                model.setArtist(artistModel);
+                model.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                model.setAlbumName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 result.add(model);
             }
         }

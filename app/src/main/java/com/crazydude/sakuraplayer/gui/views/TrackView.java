@@ -1,0 +1,43 @@
+package com.crazydude.sakuraplayer.gui.views;
+
+import android.content.Context;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.models.TrackModel;
+
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EViewGroup;
+import org.androidannotations.annotations.ViewById;
+
+/**
+ * Created by Crazy on 16.05.2015.
+ */
+@EViewGroup(R.layout.view_track)
+public class TrackView extends RelativeLayout {
+
+    @ViewById(R.id.view_track_artist)
+    TextView mTrackArtist;
+
+    @ViewById(R.id.view_track_song_name)
+    TextView mSongName;
+
+    @ViewById(R.id.view_track_song_duration)
+    TextView mTrackSongDuration;
+
+    public TrackView(Context context) {
+        super(context);
+    }
+
+    public void setContent(TrackModel data) {
+        mTrackArtist.setText(data.getArtist().getArtistName());
+        mSongName.setText(data.getTrackName());
+        //mTrackSongDuration.setText();
+    }
+
+    @Click(R.id.view_track_favorite_button)
+    public void onClickedFavorite() {
+
+    }
+}

@@ -35,6 +35,7 @@ public class TracklistAllFragmentView extends BaseFragmentView {
     void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mTracklistAdapter);
     }
 
     public void setTrackList(List<TrackModel> tracks) {
