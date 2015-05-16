@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.crazydude.sakuraplayer.models.TrackModel;
+
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
@@ -20,7 +22,7 @@ public class MusicLibraryManager {
     @RootContext
     Context mContext;
 
-    public ArrayList<String> getAllTracks() {
+    public ArrayList<TrackModel> getAllTracks() {
         String[] projection = {
                 MediaStore.Audio.Media.DATA
         };
@@ -32,7 +34,7 @@ public class MusicLibraryManager {
         return getTracks(projection, selection, selectionArgs, null);
     }
 
-    public HashSet<String> getArtistList() {
+    public HashSet<TrackModel> getArtistList() {
         String[] projection = {
                 MediaStore.Audio.Media.ARTIST
         };
@@ -41,13 +43,13 @@ public class MusicLibraryManager {
                 "1",
         };
 
-        HashSet<String> result = new HashSet<>(getTracks(projection, selection, selectionArgs,
+        HashSet<TrackModel> result = new HashSet<>(getTracks(projection, selection, selectionArgs,
                 MediaStore.Audio.Media.ARTIST));
 
         return result;
     }
 
-    public ArrayList<String> getTracksByArtist(String artistName) {
+    public ArrayList<TrackModel> getTracksByArtist(String artistName) {
         String[] projection = {
                 MediaStore.Audio.Media.DATA
         };
@@ -61,9 +63,9 @@ public class MusicLibraryManager {
         return getTracks(projection, selection, selectionArgs, null);
     }
 
-    private ArrayList<String> getTracks(String[] projection, String selection,
+    private ArrayList<TrackModel> getTracks(String[] projection, String selection,
                                         String[] selectionArgs, String columnName) {
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<TrackModel> result = new ArrayList<>();
         ContentResolver contentResolver = mContext.getContentResolver();
         Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection, selection, selectionArgs, null);
@@ -73,7 +75,9 @@ public class MusicLibraryManager {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 String data = cursor.getString(cursor.getColumnIndex(columnName));
-                result.add(data);
+                TrackModel model = new TrackModel();
+                model.setTrackPath(data);
+                result.add(model);
             }
         }
 

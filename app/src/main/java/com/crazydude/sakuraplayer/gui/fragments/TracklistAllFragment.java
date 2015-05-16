@@ -1,22 +1,15 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.interfaces.Callbacks;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.mvp.models.TrackListModelImpl;
-import com.crazydude.sakuraplayer.mvp.presenters.TracklistPresenterImpl;
-import com.crazydude.sakuraplayer.mvp.presenters.interfaces.TracklistPresenter;
-import com.crazydude.sakuraplayer.mvp.views.interfaces.TracklistAllView;
+import com.crazydude.sakuraplayer.providers.TrackProvider;
+import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
@@ -24,40 +17,55 @@ import java.util.List;
  * Created by CrazyDude on 13.04.2015.
  */
 @EFragment(R.layout.fragment_tracklist_alltracks)
-public class TracklistAllFragment extends BaseFragment implements TracklistAllView {
-
-    private TracklistPresenter mTracklistAllPresenter;
+public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener {
 
     @Bean
-    TrackListModelImpl trackListModel;
+    TracklistAllFragmentView mTracklistAllFragmentView;
 
-    @ViewById(R.id.fragment_tracklist_alltracks_recycler)
-    RecyclerView mRecyclerView;
+    @Bean
+    MusicLibraryManager mMusicLibraryManager;
 
-
-    @AfterInject
-    void init() {
-        mTracklistAllPresenter = new TracklistPresenterImpl(this.getActivity(), this, trackListModel);
-    }
+    @Bean
+    TrackProvider mTrackProvider;
 
     @AfterViews
     void initViews() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        mRecyclerView.setHasFixedSize(true);
+        mTrackProvider.loadAllTracks(this);
     }
 
     @Override
-    public void onPause() {
-        mTracklistAllPresenter.onPause();
+    public void onTrackLoaded(List<TrackModel> tracks) {
+        mTracklistAllFragmentView.setTrackList(tracks);
     }
 
-    @Override
-    public void onResume() {
-        mTracklistAllPresenter.onResume();
-    }
-
-    @Override
-    public void setTrackList(List<TrackModel> tracks) {
-
-    }
+//
+//    private TracklistAllView mTracklistAllView;
+//
+//    public void setView(TracklistAllView view) {
+//        this.mTracklistAllView = view;
+//    }
+//
+//    @AfterInject
+//    void init() {
+//        EventBus.getDefault().register(this);
+//    }
+//
+//    public void onEvent(OnLoadedTracks event) {
+//        Log.d("TRACKS", "LOADED TRACKS");
+//    }
+//
+//    @Override
+//    public void loadAllTracks() {
+//        mModel.loadAllTracks();
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        loadAllTracks();
+//    }
+//
+//    @Override
+//    public void onPause() {
+//
+//    }
 }

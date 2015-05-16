@@ -11,21 +11,4 @@ import org.androidannotations.annotations.UiThread;
 @EFragment
 public class BaseFragment extends android.support.v4.app.Fragment {
 
-    @UiThread
-    public void hideProgressBar() {
-        try {
-            ((HomeActivity) getActivity()).hideProgressBar();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @UiThread
-    public void showProgressBar() {
-        try {
-            ((HomeActivity) getActivity()).showProgressBar();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -1,22 +1,19 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
-import android.graphics.Bitmap;
-import android.os.Debug;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
-import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
-import com.crazydude.sakuraplayer.models.LastfmSessionResponse;
-import com.crazydude.sakuraplayer.models.LastfmTokenResponse;
-import com.crazydude.sakuraplayer.models.events.SessionEvent;
-import de.greenrobot.event.EventBus;
-import org.androidannotations.annotations.*;
 
-import java.util.TreeMap;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * Created by CrazyDude on 14.03.2015.
@@ -39,14 +36,14 @@ public class LastfmLoginFragment extends BaseFragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (url.startsWith(Constants.LASTFM_GRANTED_URL)) {
-                    showProgressBar();
+                    //showProgressBar();
                     getSession();
                 }
             }
         }
 
         mWebView.setWebViewClient(new LastfmWebClient());
-        showProgressBar();
+        //showProgressBar();
         getToken();
     }
 
@@ -86,7 +83,7 @@ public class LastfmLoginFragment extends BaseFragment {
 
     @UiThread
     void requestAuthorization(String token) {
-        hideProgressBar();
+       // hideProgressBar();
         mWebView.loadUrl(Constants.LASTFM_LOGIN_URL + token);
         mWebView.setVisibility(View.VISIBLE);
     }
