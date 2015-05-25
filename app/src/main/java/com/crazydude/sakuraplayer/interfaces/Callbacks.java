@@ -1,5 +1,7 @@
 package com.crazydude.sakuraplayer.interfaces;
 
+import android.view.View;
+
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import java.util.List;
@@ -15,5 +17,9 @@ public interface Callbacks {
 
     public interface OnTracksLoadedListener {
         public void onTrackLoaded(List<TrackModel> tracks);
+    }
+
+    public interface RecyclerViewClickListener {
+        void onClick(View view, int position);
     }
 }

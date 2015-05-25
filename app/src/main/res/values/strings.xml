@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sakura Player</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_tracklist">TracklistActivity</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="page_indicator_artists">Исполнители</string>
+    <string name="page_indicator_albums">Альбомы</string>
+    <string name="page_indicator_tracks">Треки</string>
+    <string name="page_indicator_playlists">Плейлисты</string>
 </resources>

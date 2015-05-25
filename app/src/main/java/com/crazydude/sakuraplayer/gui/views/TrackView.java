@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.gui.views;
 
 import android.content.Context;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,9 @@ public class TrackView extends RelativeLayout {
     @ViewById(R.id.view_track_song_duration)
     TextView mTrackSongDuration;
 
+    @ViewById(R.id.view_track_favorite_checkbox)
+    CheckBox mFavoriteCheckbox;
+
     public TrackView(Context context) {
         super(context);
     }
@@ -34,10 +38,5 @@ public class TrackView extends RelativeLayout {
         mTrackArtist.setText(data.getArtist().getArtistName());
         mSongName.setText(data.getTrackName());
         //mTrackSongDuration.setText();
-    }
-
-    @Click(R.id.view_track_favorite_button)
-    public void onClickedFavorite() {
-
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
+import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import org.androidannotations.annotations.AfterViews;
@@ -15,6 +16,8 @@ import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
+
+import static com.crazydude.sakuraplayer.interfaces.Callbacks.RecyclerViewClickListener;
 
 /**
  * Created by Crazy on 16.05.2015.
@@ -36,6 +39,11 @@ public class TracklistAllFragmentView extends BaseFragmentView {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mTracklistAdapter);
+    }
+
+    public void setOnRecyclerClickListener(RecyclerViewClickListener listener) {
+        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
+                mRecyclerView));
     }
 
     public void setTrackList(List<TrackModel> tracks) {

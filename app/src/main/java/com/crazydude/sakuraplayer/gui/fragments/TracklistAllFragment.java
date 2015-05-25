@@ -1,6 +1,11 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
+import android.util.Log;
+import android.view.View;
+
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.gui.activity.BaseActivity;
+import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -18,7 +23,8 @@ import java.util.List;
  * Created by CrazyDude on 13.04.2015.
  */
 @EFragment(R.layout.fragment_tracklist_alltracks)
-public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener {
+public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener,
+        Callbacks.RecyclerViewClickListener {
 
     @Bean
     TracklistAllFragmentView mTracklistAllFragmentView;
@@ -29,6 +35,8 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     @Bean
     TrackProvider mTrackProvider;
 
+    private PlayerFragment mPlayerFragment;
+
     @AfterViews
     void initViews() {
         mTrackProvider.loadAllTracks(this);
@@ -38,36 +46,20 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     @Override
     public void onTrackLoaded(List<TrackModel> tracks) {
         mTracklistAllFragmentView.setTrackList(tracks);
+        mTracklistAllFragmentView.setOnRecyclerClickListener(this);
     }
 
-//
-//    private TracklistAllView mTracklistAllView;
-//
-//    public void setView(TracklistAllView view) {
-//        this.mTracklistAllView = view;
-//    }
-//
-//    @AfterInject
-//    void init() {
-//        EventBus.getDefault().register(this);
-//    }
-//
-//    public void onEvent(OnLoadedTracks event) {
-//        Log.d("TRACKS", "LOADED TRACKS");
-//    }
-//
-//    @Override
-//    public void loadAllTracks() {
-//        mModel.loadAllTracks();
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        loadAllTracks();
-//    }
-//
-//    @Override
-//    public void onPause() {
-//
-//    }
+    @Override
+    public void onClick(View view, int position) {
+        Log.d("TracklistAllFragment", "Clicked " + position);
+
+        if (mPlayerFragment == null) {
+            mPlayerFragment = PlayerFragment_.builder().build();
+        }
+
+        mPlayerFragment.playMusic();
+
+        ((BaseActivity) getActivity()).addFragment(mPlayerFragment, true,
+                R.id.activity_home_placeholder);
+    }
 }

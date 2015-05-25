@@ -16,6 +16,7 @@ import com.crazydude.sakuraplayer.views.fragments.PlayerView;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
 
 @EFragment(R.layout.fragment_player)
 public class PlayerFragment extends BaseFragment implements ServiceConnection {
@@ -55,6 +56,7 @@ public class PlayerFragment extends BaseFragment implements ServiceConnection {
     }
 
     public void onStop() {
+        super.onStop();
         if (mBinder != null) {
             getActivity().unbindService(this);
         }

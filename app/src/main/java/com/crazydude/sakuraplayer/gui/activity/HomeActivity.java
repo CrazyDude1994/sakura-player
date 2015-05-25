@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentActivity;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.services.PlayerService_;
@@ -15,7 +17,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 
 @EActivity(R.layout.activity_home)
-public class HomeActivity extends FragmentActivity implements Callbacks.OnAfterSplashScreenListener {
+public class HomeActivity extends BaseActivity implements Callbacks.OnAfterSplashScreenListener {
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -32,6 +34,7 @@ public class HomeActivity extends FragmentActivity implements Callbacks.OnAfterS
     @Override
     public void onAfterSplashScreen() {
         PlayerService_.intent(this).start();
+        switchFragment(TracklistFragment_.builder().build(), false, R.id.activity_home_placeholder);
 //        Intent intent = new Intent(this, PlayerService_.class); // note the underscore
 //        bindService(intent, mPlayerServiceConnection, Context.BIND_AUTO_CREATE);
         //ArrayList<String> tracks = mMusicLibraryManager.getAllTracks();
@@ -39,7 +42,6 @@ public class HomeActivity extends FragmentActivity implements Callbacks.OnAfterS
 //        getFragmentManager().beginTransaction()
 //                .replace(R.id.activity_home_placeholder, PlayerFragment_.builder().build())
 //                .commit();
-        startActivity(new Intent(this, TracklistActivity_.class));
 //        getSupportFragmentManager()
 //                .beginTransaction()
 //                .replace(R.id.activity_home_placeholder, new PlayerFragment_().builder().build())
