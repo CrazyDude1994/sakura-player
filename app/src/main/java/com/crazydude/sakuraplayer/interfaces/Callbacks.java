@@ -2,8 +2,11 @@ package com.crazydude.sakuraplayer.interfaces;
 
 import android.view.View;
 
+import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,5 +24,9 @@ public interface Callbacks {
 
     public interface RecyclerViewClickListener {
         void onClick(View view, int position);
+    }
+
+    public interface OnArtistsLoadedListener {
+        public void onArtistsLoaded(ArrayList<ArtistModel> artists);
     }
 }

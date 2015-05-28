@@ -36,8 +36,8 @@ public final class HomeActivity_
     }
 
     private void init_(Bundle savedInstanceState) {
-        mMusicLibraryManager = MusicLibraryManager_.getInstance_(this);
         mHomeActivityView = HomeActivityView_.getInstance_(this);
+        mMusicLibraryManager = MusicLibraryManager_.getInstance_(this);
         OnViewChangedNotifier.registerOnViewChangedListener(this);
     }
 

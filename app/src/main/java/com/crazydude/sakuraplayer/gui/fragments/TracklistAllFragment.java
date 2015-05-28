@@ -51,15 +51,5 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
 
     @Override
     public void onClick(View view, int position) {
-        Log.d("TracklistAllFragment", "Clicked " + position);
-
-        if (mPlayerFragment == null) {
-            mPlayerFragment = PlayerFragment_.builder().build();
-        }
-
-        mPlayerFragment.playMusic();
-
-        ((BaseActivity) getActivity()).addFragment(mPlayerFragment, true,
-                R.id.activity_home_placeholder);
     }
 }

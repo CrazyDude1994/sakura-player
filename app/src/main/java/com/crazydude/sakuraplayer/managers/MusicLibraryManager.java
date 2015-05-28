@@ -35,16 +35,13 @@ public class MusicLibraryManager {
         return getTracks(selection, selectionArgs);
     }
 
-    public HashSet<TrackModel> getArtistList() {
-        String[] projection = {
-                MediaStore.Audio.Media.ARTIST
-        };
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " = ?";
+    public ArrayList<ArtistModel> getArtistList() {
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " = ?) GROUP BY (" + MediaStore.Audio.Media.ARTIST;
         String[] selectionArgs = {
                 "1",
         };
 
-        HashSet<TrackModel> result = new HashSet<>(getTracks(selection, selectionArgs));
+        ArrayList<ArtistModel> result = new ArrayList<>(getArtists(selection, selectionArgs));
 
         return result;
     }
@@ -84,6 +81,26 @@ public class MusicLibraryManager {
                 model.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
                 model.setAlbumName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 result.add(model);
+            }
+        }
+
+        cursor.close();
+        return result;
+    }
+
+    private ArrayList<ArtistModel> getArtists(String selection, String[] selectionArgs) {
+        ArrayList<ArtistModel> result = new ArrayList<>();
+        ContentResolver contentResolver = mContext.getContentResolver();
+        String[] projection = {
+                MediaStore.Audio.Media.ARTIST,
+        };
+        Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                projection, selection, selectionArgs, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                ArtistModel artistModel = new ArtistModel();
+                artistModel.setArtistName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                result.add(artistModel);
             }
         }
 

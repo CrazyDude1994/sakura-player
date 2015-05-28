@@ -2,39 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-ba7a855a183b3d1d75ae6165553b87a6908a3139.jar" />
-    </item>
-    <item
-        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\libs\internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-692b11fbbb496f3b0a3bc8af77c5975c84eca906.jar" />
-    </item>
-    <item
-        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.0.0\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c6d79137693d494dee16372d3921f919eb724ced">
-        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-5ad6a3663a3059ef80bc3eafad5797002047b63e.jar" />
-    </item>
-    <item
         jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.github.traex.rippleeffect\library\1.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="ee17feb34ce104bc17d1a1e64346d7f779ebb066">
         <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-b517ace8e9c61f7b7c2ee2751846cb9c461566dd.jar" />
-    </item>
-    <item
-        jar="C:\Program Files\Android Studio\sdk\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-2716d02b6010324fd3663ac0ac542924bb4fe523.jar" />
     </item>
     <item
         jar="C:\Users\Crazy\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
@@ -44,6 +16,20 @@
         <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-c76bec3999a73d21f84247bbe8b3e78368908199.jar" />
     </item>
     <item
+        jar="C:\Program Files\Android Studio\sdk\sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-d587cb013b9dd2fb537e7b673596fdb967e211b2.jar" />
+    </item>
+    <item
+        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="80434c45861675a57d690fba5ca31c3d55c89489">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-1d78a9595e106717ea0b997da689be06dfd1d0e0.jar" />
+    </item>
+    <item
         jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\SakuraPlayer\viewpagerindicator\unspecified\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -51,18 +37,11 @@
         <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-90737cb9d268978d600abe259cf7ed2b047bd0d0.jar" />
     </item>
     <item
-        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-75bbd0a18ceee9d9f3196cde11343f9582caca49.jar" />
-    </item>
-    <item
-        jar="C:\Users\Crazy\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\gson-2.3.1-b74c05c336e5f8ff17558b75ec1150dde36dca52.jar" />
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-023077642b3babb3a21cad2628e1a56898726c83.jar" />
     </item>
     <item
         jar="C:\Users\Crazy\.gradle\caches\modules-2\files-2.1\org.androidannotations\androidannotations-api\3.2\89b33bb1e996eb2c4089f79d1b8651c71fe8e2d1\androidannotations-api-3.2.jar"
@@ -70,6 +49,34 @@
         revision="21.1.2"
         sha1="89b33bb1e996eb2c4089f79d1b8651c71fe8e2d1">
         <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\androidannotations-api-3.2-801cb3caecfb61d78269effb65af3ff15a6580ef.jar" />
+    </item>
+    <item
+        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-78d1c56dfcddb0257f41846e349dd780b32c40e4.jar" />
+    </item>
+    <item
+        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66fd9d179eb79b64c99e555dead32e725792217a">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\classes-b2f41d3e31a30de20731f0749d0943632b08ca67.jar" />
+    </item>
+    <item
+        jar="C:\Programming\Android\SakuraPlayer\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-62c971ba42ebb2bfa0a3dc94f230a965325233d2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Crazy\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Programming\Android\SakuraPlayer\app\build\intermediates\pre-dexed\debug\gson-2.3.1-b74c05c336e5f8ff17558b75ec1150dde36dca52.jar" />
     </item>
     <item
         jar="C:\Users\Crazy\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.9.0\a681c044244d9fc375198588297a39ba78028423\retrofit-1.9.0.jar"

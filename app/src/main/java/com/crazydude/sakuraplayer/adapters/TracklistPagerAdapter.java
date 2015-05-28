@@ -6,7 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment_;
 import com.viewpagerindicator.IconPagerAdapter;
 
 /**
@@ -25,7 +28,17 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconP
 
     @Override
     public Fragment getItem(int position) {
-        return TracklistAllFragment_.builder().build();
+        switch (position) {
+            case 0:
+                return TracklistAllFragment_.builder().build();
+            case 1:
+                return TracklistArtistFragment_.builder().build();
+            case 2:
+                return TracklistAllFragment_.builder().build();
+            case 3:
+                return TracklistAllFragment_.builder().build();
+        }
+        return null;
     }
 
 

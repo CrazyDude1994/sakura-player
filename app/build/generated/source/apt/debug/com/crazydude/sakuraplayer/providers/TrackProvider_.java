@@ -6,6 +6,7 @@
 package com.crazydude.sakuraplayer.providers;
 
 import android.content.Context;
+import com.crazydude.sakuraplayer.interfaces.Callbacks.OnArtistsLoadedListener;
 import com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedListener;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager_;
 import org.androidannotations.api.BackgroundExecutor;
@@ -43,6 +44,24 @@ public final class TrackProvider_
             public void execute() {
                 try {
                     TrackProvider_.super.loadAllTracks(listener);
+                } catch (Throwable e) {
+                    Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                }
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void loadAllArtists(final OnArtistsLoadedListener listener) {
+        BackgroundExecutor.execute(new BackgroundExecutor.Task("", 0, "") {
+
+
+            @Override
+            public void execute() {
+                try {
+                    TrackProvider_.super.loadAllArtists(listener);
                 } catch (Throwable e) {
                     Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
                 }

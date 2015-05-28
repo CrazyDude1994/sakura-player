@@ -47,8 +47,8 @@ public final class TracklistFragmentView_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        mViewPager = ((ViewPager) hasViews.findViewById(id.fragment_tracklist_viewpager));
         mIconPageIndicator = ((IconPageIndicator) hasViews.findViewById(id.fragment_tracklist_viewpager_titles));
+        mViewPager = ((ViewPager) hasViews.findViewById(id.fragment_tracklist_viewpager));
         initViews();
     }
 

@@ -63,9 +63,9 @@ public final class TracklistAllFragment_
     }
 
     private void init_(Bundle savedInstanceState) {
+        mTracklistAllFragmentView = TracklistAllFragmentView_.getInstance_(getActivity());
         mMusicLibraryManager = MusicLibraryManager_.getInstance_(getActivity());
         mTrackProvider = TrackProvider_.getInstance_(getActivity());
-        mTracklistAllFragmentView = TracklistAllFragmentView_.getInstance_(getActivity());
         OnViewChangedNotifier.registerOnViewChangedListener(this);
     }
 

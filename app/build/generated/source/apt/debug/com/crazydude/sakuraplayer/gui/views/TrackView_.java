@@ -67,8 +67,8 @@ public final class TrackView_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        mTrackArtist = ((TextView) hasViews.findViewById(id.view_track_artist));
         mFavoriteCheckbox = ((CheckBox) hasViews.findViewById(id.view_track_favorite_checkbox));
+        mTrackArtist = ((TextView) hasViews.findViewById(id.view_track_artist));
         mSongName = ((TextView) hasViews.findViewById(id.view_track_song_name));
         mTrackSongDuration = ((TextView) hasViews.findViewById(id.view_track_song_duration));
     }

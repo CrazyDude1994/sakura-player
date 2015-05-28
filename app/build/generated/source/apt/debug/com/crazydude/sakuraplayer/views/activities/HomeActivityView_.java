@@ -46,20 +46,6 @@ public final class HomeActivityView_
     }
 
     @Override
-    public void showProgressBar() {
-        handler_.post(new Runnable() {
-
-
-            @Override
-            public void run() {
-                HomeActivityView_.super.showProgressBar();
-            }
-
-        }
-        );
-    }
-
-    @Override
     public void hideProgressBar() {
         handler_.post(new Runnable() {
 
@@ -67,6 +53,20 @@ public final class HomeActivityView_
             @Override
             public void run() {
                 HomeActivityView_.super.hideProgressBar();
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void showProgressBar() {
+        handler_.post(new Runnable() {
+
+
+            @Override
+            public void run() {
+                HomeActivityView_.super.showProgressBar();
             }
 
         }

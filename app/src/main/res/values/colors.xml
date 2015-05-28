@@ -2,6 +2,6 @@
 <resources>
     <color name="black">#101010</color>
     <color name="title_text">#01579b</color>
-    <color name="track_ripple_color">#ffff5f85</color>
+    <color name="list_ripple_color">#ffff5f85</color>
     <color name="white">#ffffff</color>
 </resources>

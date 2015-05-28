@@ -7,12 +7,12 @@
     android:paddingRight="@dimen/list_padding_right"
     android:paddingTop="@dimen/list_padding_top"
     android:paddingBottom="@dimen/list_padding_bottom"
-    android:layout_height="72dp">
+    android:layout_height="@dimen/list_element_height">
 
     <com.andexert.library.RippleView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:rv_color="@color/track_ripple_color"
+        app:rv_color="@color/list_ripple_color"
         rv_centered="true">
 
         <LinearLayout

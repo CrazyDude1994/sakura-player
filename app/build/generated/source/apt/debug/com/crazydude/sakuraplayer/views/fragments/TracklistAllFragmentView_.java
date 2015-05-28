@@ -5,10 +5,14 @@
 
 package com.crazydude.sakuraplayer.views.fragments;
 
+import java.util.List;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import com.crazydude.sakuraplayer.R.id;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter_;
+import com.crazydude.sakuraplayer.models.TrackModel;
 import org.androidannotations.api.view.HasViews;
 import org.androidannotations.api.view.OnViewChangedListener;
 import org.androidannotations.api.view.OnViewChangedNotifier;
@@ -19,6 +23,7 @@ public final class TracklistAllFragmentView_
 {
 
     private Context context_;
+    private Handler handler_ = new Handler(Looper.getMainLooper());
 
     private TracklistAllFragmentView_(Context context) {
         context_ = context;
@@ -44,6 +49,20 @@ public final class TracklistAllFragmentView_
     public void onViewChanged(HasViews hasViews) {
         mRecyclerView = ((RecyclerView) hasViews.findViewById(id.fragment_tracklist_alltracks_recycler));
         initViews();
+    }
+
+    @Override
+    public void setTrackList(final List<TrackModel> tracks) {
+        handler_.post(new Runnable() {
+
+
+            @Override
+            public void run() {
+                TracklistAllFragmentView_.super.setTrackList(tracks);
+            }
+
+        }
+        );
     }
 
 }

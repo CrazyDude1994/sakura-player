@@ -13,6 +13,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class TracklistAllFragmentView extends BaseFragmentView {
                 mRecyclerView));
     }
 
+    @UiThread
     public void setTrackList(List<TrackModel> tracks) {
         mTracklistAdapter.setData(tracks);
     }
