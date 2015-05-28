@@ -1,6 +1,0 @@
-<!-- From: file:/Users/andraskindler/git/parallaxviewpager/lib/src/main/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6" android:versionName="0.3.1" package="com.andraskindler.parallaxviewpager">
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
-
-    <application android:allowBackup="true"/>
-
-</manifest>
