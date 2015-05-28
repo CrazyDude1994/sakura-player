@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    style="@style/DefaultFragment"
+    android:layout_height="match_parent">
+
+    <SeekBar
+        android:id="@+id/fragment_player_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/fragment_player_seekbar_margin_left"
+        android:layout_marginRight="@dimen/fragment_player_seekbar_margin_right"
+        android:layout_marginTop="@dimen/fragment_player_seekbar_margin_top"
+        android:layout_marginBottom="@dimen/fragment_player_seekbar_margin_bottom" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/fragment_player_seekbar">
+
+        <ImageButton
+            android:id="@+id/fragment_player_button_prev"
+            android:layout_width="@dimen/touchable_ui"
+            android:layout_height="@dimen/touchable_ui"
+            android:src="@android:drawable/ic_media_previous" />
+
+        <ImageButton
+            android:id="@+id/fragment_player_button_play"
+            android:layout_width="@dimen/touchable_ui"
+            android:layout_height="@dimen/touchable_ui"
+            android:src="@android:drawable/ic_media_play" />
+
+        <ImageButton
+            android:id="@+id/fragment_player_button_next"
+            android:layout_width="@dimen/touchable_ui"
+            android:layout_height="@dimen/touchable_ui"
+            android:src="@android:drawable/ic_media_next" />
+    </LinearLayout>
+
+
+</RelativeLayout><!-- From: file:/C:/Programming/sakura-player/app/src/main/res/layout/fragment_player.xml -->

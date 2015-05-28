@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-1147f877256f13aaa4fa0ef0c28d825eba3a5192.jar" />
+    </item>
+    <item
+        jar="C:\Users\kartavtsev.s\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.9.0\a681c044244d9fc375198588297a39ba78028423\retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-2bf9262de513fa1c7a49f49d7e3124d355ac7d69.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\uk.co.chrisjenx\calligraphy\2.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e653e15e62e8a59ddd76cc7f827bf8bce38ae7bb">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-8d3f4176efc1b10ff9cbe70f5ff43db2f8401451.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.andraskindler.parallaxviewpager\parallaxviewpager\0.3.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="8c5bc1c74aa5ed829fd4039033f5adaac721d24f">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-6782061fef4cee199e916976b392ccff10c899fe.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-7836ae5597020fac0fc8b314a7035afcde68ff72.jar" />
+    </item>
+    <item
+        jar="C:\Users\kartavtsev.s\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\gson-2.3.1-e11df06db90a65f6e9018fc8c345ab6ec511ee0c.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.github.traex.rippleeffect\library\1.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ee17feb34ce104bc17d1a1e64346d7f779ebb066">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-2291992a7f40d9fc15a93c844d6917b0ed4e8e66.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\sakura-player\viewpagerindicator\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4603302296c083cad70e93b3f8e113119430e98d">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-0d0af972f050aae97322abae7d70ee4aa81c69ce.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-ae7566a6f60c34b27160272522b5f8012aaa0e19.jar" />
+    </item>
+    <item
+        jar="C:\Users\kartavtsev.s\.gradle\caches\modules-2\files-2.1\org.androidannotations\androidannotations-api\3.2\89b33bb1e996eb2c4089f79d1b8651c71fe8e2d1\androidannotations-api-3.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="89b33bb1e996eb2c4089f79d1b8651c71fe8e2d1">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\androidannotations-api-3.2-c8b16d75ed95d2f0bbd0b3f6eebafae8a79a9379.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="80434c45861675a57d690fba5ca31c3d55c89489">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-153eacfda60e3da2bc01352d230410c47759bf82.jar" />
+    </item>
+    <item
+        jar="C:\Users\kartavtsev.s\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-555c45f019a3b0ba0836248b635430ea3336f6a9.jar" />
+    </item>
+    <item
+        jar="C:\Program Files\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-73915877a018e74bd2547dd9838cd67ae15fb58f.jar" />
+    </item>
+    <item
+        jar="C:\Programming\sakura-player\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66fd9d179eb79b64c99e555dead32e725792217a">
+        <dex dex="C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-4bba9ba95245ddbf1572fd7287549633f4d579b6.jar" />
+    </item>
+
+</items>

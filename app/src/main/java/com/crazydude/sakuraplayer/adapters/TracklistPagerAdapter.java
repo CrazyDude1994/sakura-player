@@ -20,9 +20,7 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconP
     static final int[] ICONS = new int[]{R.drawable.ic_audiotrack_selector, R.drawable.ic_piano_selector,
             R.drawable.ic_album_selector, R.drawable.ic_playlists_selector};
 
-    private Context mContext;
-
-    public TracklistPagerAdapter(Context context, FragmentManager fm) {
+    public TracklistPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

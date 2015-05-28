@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.gui.views.ArtistView;
 import com.crazydude.sakuraplayer.gui.views.ArtistView_;
-import com.crazydude.sakuraplayer.gui.views.TrackView;
-import com.crazydude.sakuraplayer.gui.views.TrackView_;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 
 import org.androidannotations.annotations.EBean;
@@ -30,7 +28,7 @@ public class ArtistAdapter extends BaseAdapter<ArtistModel> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ArtistView artistView = ((ViewHolder)holder).getView();
+        ArtistView artistView = ((ViewHolder) holder).getView();
         artistView.setContent(getData(position));
     }
 

@@ -1,7 +1,7 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.views.activities.TracklistFragmentView;
+import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;

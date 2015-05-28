@@ -367,13 +367,13 @@ public class CirclePageIndicator extends View implements PageIndicator {
             return;
         }
         if (mViewPager != null) {
-            mViewPager.setOnPageChangeListener(null);
+            //mViewPager.setOnPageChangeListener(null);
         }
         if (view.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = view;
-        mViewPager.setOnPageChangeListener(this);
+        //mViewPager.setOnPageChangeListener(this);
         invalidate();
     }
 

@@ -1,0 +1,15 @@
+C:\Programming\sakura-player\app\build\intermediates\classes\debug
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-73915877a018e74bd2547dd9838cd67ae15fb58f.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-6782061fef4cee199e916976b392ccff10c899fe.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-2291992a7f40d9fc15a93c844d6917b0ed4e8e66.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-4bba9ba95245ddbf1572fd7287549633f4d579b6.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-8d3f4176efc1b10ff9cbe70f5ff43db2f8401451.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-0d0af972f050aae97322abae7d70ee4aa81c69ce.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\androidannotations-api-3.2-c8b16d75ed95d2f0bbd0b3f6eebafae8a79a9379.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-2bf9262de513fa1c7a49f49d7e3124d355ac7d69.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\picasso-2.5.2-555c45f019a3b0ba0836248b635430ea3336f6a9.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\gson-2.3.1-e11df06db90a65f6e9018fc8c345ab6ec511ee0c.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-ae7566a6f60c34b27160272522b5f8012aaa0e19.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-153eacfda60e3da2bc01352d230410c47759bf82.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-1147f877256f13aaa4fa0ef0c28d825eba3a5192.jar
+C:\Programming\sakura-player\app\build\intermediates\pre-dexed\debug\classes-7836ae5597020fac0fc8b314a7035afcde68ff72.jar
