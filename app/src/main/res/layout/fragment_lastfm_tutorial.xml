@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,13 +18,29 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 
-    <Button
-        android:id="@+id/fragment_lastfm_tutorial_button"
-        android:visibility="gone"
-        style="@style/Button.Flat"
-        android:layout_above="@id/fragment_lastfm_tutorial_indicator"
+    <LinearLayout
+        android:id="@+id/fragment_lastfm_tutorial_button_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/fragment_lastfm_tutorial_indicator"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/fragment_lastfm_tutorial_login_button"
+            style="@style/Button.Flat.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_to_lastfm" />
+
+        <Button
+            android:id="@+id/fragment_lastfm_tutorial_cancel_button"
+            style="@style/Button.Flat.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_thank_you" />
+    </LinearLayout>
 
 
 </RelativeLayout>

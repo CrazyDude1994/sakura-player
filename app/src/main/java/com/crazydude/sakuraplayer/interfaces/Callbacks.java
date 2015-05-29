@@ -29,4 +29,8 @@ public interface Callbacks {
     public interface OnArtistsLoadedListener {
         public void onArtistsLoaded(ArrayList<ArtistModel> artists);
     }
+
+    public interface OnLastfmTutorialCompletedListener {
+        public void onTutorialCompleted(boolean isLoginToLastfm);
+    }
 }

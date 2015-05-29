@@ -7,4 +7,6 @@
     <string name="page_indicator_albums">Альбомы</string>
     <string name="page_indicator_tracks">Треки</string>
     <string name="page_indicator_playlists">Плейлисты</string>
+    <string name="login_to_lastfm">Войти в LastFM</string>
+    <string name="no_thank_you">Нет, спасибо</string>
 </resources>
