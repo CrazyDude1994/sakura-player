@@ -17,5 +17,13 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 
+    <Button
+        android:id="@+id/fragment_lastfm_tutorial_button"
+        android:visibility="gone"
+        style="@style/Button.Flat"
+        android:layout_above="@id/fragment_lastfm_tutorial_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

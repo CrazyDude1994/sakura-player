@@ -30,4 +30,8 @@
         <item name="android:gravity">center</item>
         <item name="fontPath">fonts/Roboto-Bold.ttf</item>
     </style>
+
+    <style name="Button.Flat" parent="Widget.AppCompat.Button.Borderless">
+
+    </style>
 </resources>
