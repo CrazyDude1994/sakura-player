@@ -24,4 +24,6 @@
     <dimen name="fragment_player_seekbar_margin_bottom">10dp</dimen>
     <dimen name="fragment_player_seekbar_margin_top">20dp</dimen>
     <dimen name="list_element_height">72dp</dimen>
+    <dimen name="dialog_content_padding">24dp</dimen>
+    <dimen name="dialog_title_margin_bottom">20dp</dimen>
 </resources>

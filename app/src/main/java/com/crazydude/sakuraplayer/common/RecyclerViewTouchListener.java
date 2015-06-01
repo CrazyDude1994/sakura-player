@@ -12,8 +12,10 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.RecyclerViewClickL
  * Created by Crazy on 18.05.2015.
  */
 public class RecyclerViewTouchListener extends GestureDetector.SimpleOnGestureListener implements RecyclerView.OnItemTouchListener {
+
     private Context mContext;
     private RecyclerViewClickListener mRecycleViewClicksHandler;
+
     private RecyclerView mRecyclerView;
     private GestureDetector mGestureDetector;
 

@@ -1,14 +1,9 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
-import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
-import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
+import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
@@ -23,7 +18,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 @EActivity(R.layout.activity_home)
 public class HomeActivity extends BaseActivity implements Callbacks.OnAfterSplashScreenListener,
-        Callbacks.OnLastfmTutorialCompletedListener{
+        Callbacks.OnLastfmTutorialCompletedListener {
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -62,8 +57,9 @@ public class HomeActivity extends BaseActivity implements Callbacks.OnAfterSplas
         mPrefs.isTutorialCompleted().put(true);
 
         if (isLoginToLastfm) {
-            switchFragment(LastfmLoginFragment_.builder().build(), false,
-                    R.id.activity_home_placeholder);
+            new LastfmLoginFragment().show(getFragmentManager(), "");
+//            switchFragment(LastfmLoginFragment_.builder().build(), false,
+//                    R.id.activity_home_placeholder);
         } else {
             switchFragment(TracklistFragment_.builder().build(), false,
                     R.id.activity_home_placeholder);
