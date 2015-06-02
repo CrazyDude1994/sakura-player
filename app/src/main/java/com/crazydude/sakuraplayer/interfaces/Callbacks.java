@@ -33,4 +33,18 @@ public interface Callbacks {
     public interface OnLastfmTutorialCompletedListener {
         public void onTutorialCompleted(boolean isLoginToLastfm);
     }
+
+    public interface OnLastfmLoginListener {
+        public void onLastfmLogin(String login, String password);
+        public void onLastfmRegister();
+    }
+
+    public interface OnNetworkErrorListener {
+        public void onNetworkError(String message);
+    }
+
+    public interface OnLastfmResponseListener<T> {
+        public void onSuccess(T response);
+        public void onLastfmError(String message, Integer code);
+    }
 }

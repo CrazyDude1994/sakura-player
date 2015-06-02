@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.interfaces;
 
 import org.androidannotations.annotations.sharedpreferences.DefaultBoolean;
+import org.androidannotations.annotations.sharedpreferences.DefaultString;
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 
 /**
@@ -14,4 +15,7 @@ public interface Preferences {
 
     @DefaultBoolean(true)
     boolean isFirstLaunch();
+
+    @DefaultString("")
+    String lastfmToken();
 }

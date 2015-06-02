@@ -15,6 +15,7 @@ import java.util.TreeMap;
  */
 @EBean(scope = EBean.Scope.Singleton)
 public class Utils {
+
     private static String convertToHex(byte[] data) {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < data.length; i++) {
@@ -35,13 +36,13 @@ public class Utils {
             throws NoSuchAlgorithmException, UnsupportedEncodingException  {
         MessageDigest md;
         md = MessageDigest.getInstance("MD5");
-        byte[] md5hash = new byte[32];
+        byte[] md5hash;
         md.update(text.getBytes("UTF-8"), 0, text.length());
         md5hash = md.digest();
         return convertToHex(md5hash);
     }
 
-    public static String getSignature(TreeMap<String, String> params) {
+    public String getSignature(TreeMap<String, String> params) {
         params.put("api_key", Constants.LASTFM_API_KEY);
         String signature = "";
         for (String key : params.keySet()) {

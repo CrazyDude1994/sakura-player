@@ -14,4 +14,5 @@
     <string name="password">Пароль</string>
     <string name="cancel">Отмена</string>
     <string name="enter">Войти</string>
+    <string name="register">Регистрация</string>
 </resources>

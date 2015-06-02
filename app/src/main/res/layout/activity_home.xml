@@ -10,7 +10,12 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@drawable/splash_screen"
-        tools:visibility="gone"/>
+        tools:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_home_placeholder" />
 
     <RelativeLayout
         android:id="@+id/activity_home_progressbar"
@@ -26,10 +31,5 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true" />
     </RelativeLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activity_home_placeholder"></FrameLayout>
 
 </RelativeLayout>
