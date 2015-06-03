@@ -3,10 +3,12 @@ package com.crazydude.sakuraplayer.views.activities;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.ViewById;
 

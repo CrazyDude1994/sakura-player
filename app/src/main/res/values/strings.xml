@@ -15,4 +15,8 @@
     <string name="cancel">Отмена</string>
     <string name="enter">Войти</string>
     <string name="register">Регистрация</string>
+    <string name="network_error">Сетевая ошибка</string>
+    <string name="error">Ошибка</string>
+    <string name="ok">OK</string>
+    <string name="invalid_password_or_login">Не верный пароль либо логин</string>
 </resources>

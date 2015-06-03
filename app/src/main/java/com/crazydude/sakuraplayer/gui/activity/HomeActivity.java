@@ -2,6 +2,8 @@ package com.crazydude.sakuraplayer.gui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
@@ -20,18 +22,21 @@ import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmResponseListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmTutorialCompletedListener;
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnNetworkErrorListener;
+import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 
 @EActivity(R.layout.activity_home)
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
-        OnLastfmTutorialCompletedListener, OnLastfmLoginListener, OnNetworkErrorListener,
-        OnLastfmResponseListener<SessionResponse> {
+        OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
+        OnResponseListener<SessionResponse> {
+
+    @ViewById(R.id.activity_home_toolbar)
+    Toolbar mToolbar;
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -48,16 +53,12 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Bean
     LastfmApiManager mLastfmApiManager;
 
-    @AfterInject
-    void init() {
-        mLastfmApiManager.setOnLastfmResponseListener(this);
-        mLastfmApiManager.setOnNetworkErrorListener(this);
-    }
-
     @AfterViews
     void initViews() {
         mHomeActivityView.setOnAfterSplashScreenListener(this);
         mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onLastfmLogin(String login, String password) {
         mHomeActivityView.showProgressBar();
-        mLastfmApiManager.login(login, password);
+        mLastfmApiManager.login(login, password, this);
     }
 
     @Override
@@ -108,10 +109,20 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onNetworkError(String message) {
         mHomeActivityView.hideProgressBar();
+        mHomeActivityView.showInfoDialog(getString(R.string.network_error), message);
     }
 
     @Override
     public void onLastfmError(String message, Integer code) {
         mHomeActivityView.hideProgressBar();
+        switch (code) {
+            case 4:
+                mHomeActivityView.showInfoDialog(getString(R.string.error),
+                        getString(R.string.invalid_password_or_login));
+                break;
+            default:
+                mHomeActivityView.showInfoDialog(getString(R.string.error), message);
+                break;
+        }
     }
 }

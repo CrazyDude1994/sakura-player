@@ -2,6 +2,7 @@ package com.crazydude.sakuraplayer.managers;
 
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
+import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.LastfmInterface;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
@@ -15,9 +16,6 @@ import java.util.TreeMap;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmResponseListener;
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnNetworkErrorListener;
-
 /**
  * Created by CrazyDude on 15.03.2015.
  */
@@ -29,9 +27,6 @@ public class LastfmApiManager {
 
     LastfmInterface mLastfmInterface;
 
-    private OnNetworkErrorListener mOnNetworkErrorListener;
-    private OnLastfmResponseListener mOnlastfmResponseListener;
-
     public LastfmApiManager() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.LASTFM_API_ROOT_URL)
@@ -42,7 +37,7 @@ public class LastfmApiManager {
     }
 
     @Background
-    public void login(String username, String password) {
+    public void login(String username, String password, Callbacks.OnResponseListener callback) {
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.put("username", username);
         treeMap.put("password", password);
@@ -51,17 +46,17 @@ public class LastfmApiManager {
         try {
             SessionResponse response = mLastfmInterface.login(username, password, Constants.LASTFM_API_KEY, apiSig);
             checkForErrors(response);
-            if (mOnlastfmResponseListener != null) {
-                mOnlastfmResponseListener.onSuccess(response);
+            if (callback != null) {
+                callback.onSuccess(response);
             }
         } catch (LastfmError lastfmError) {
-            if (mOnlastfmResponseListener != null) {
-                mOnlastfmResponseListener.onLastfmError(lastfmError.getMessage(),
+            if (callback != null) {
+                callback.onLastfmError(lastfmError.getMessage(),
                         lastfmError.getCode());
             }
         } catch (RetrofitError error) {
-            if (mOnNetworkErrorListener != null) {
-                mOnNetworkErrorListener.onNetworkError(error.getMessage());
+            if (callback != null) {
+                callback.onNetworkError(error.getMessage());
             }
         }
 
@@ -71,14 +66,6 @@ public class LastfmApiManager {
         if (response.getError() != null) {
             throw new LastfmError(response.getMessage(), response.getError());
         }
-    }
-
-    public void setOnNetworkErrorListener(OnNetworkErrorListener listener) {
-        this.mOnNetworkErrorListener = listener;
-    }
-
-    public void setOnLastfmResponseListener(OnLastfmResponseListener listener) {
-        this.mOnlastfmResponseListener = listener;
     }
 
     public class LastfmError extends Exception {

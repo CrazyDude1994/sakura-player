@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,12 +40,9 @@ public interface Callbacks {
         public void onLastfmRegister();
     }
 
-    public interface OnNetworkErrorListener {
-        public void onNetworkError(String message);
-    }
-
-    public interface OnLastfmResponseListener<T> {
+    public interface OnResponseListener<T extends ErrorResponse> {
         public void onSuccess(T response);
         public void onLastfmError(String message, Integer code);
+        public void onNetworkError(String message);
     }
 }
