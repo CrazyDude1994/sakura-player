@@ -3,13 +3,17 @@ package com.crazydude.sakuraplayer.views.activities;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 
-import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.ViewById;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
@@ -20,13 +24,49 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScree
 @EBean
 public class HomeActivityView extends BaseActivityView implements Animator.AnimatorListener {
 
+    @RootContext
+    AppCompatActivity mActivity;
+
     @ViewById(R.id.activity_home_splash_screen)
     View mSplashScreenImage;
 
+    @ViewById(R.id.activity_home_toolbar)
+    Toolbar mToolbar;
+
+    @ViewById(R.id.navigation_drawer)
+    DrawerLayout mDrawerLayout;
+
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    @AfterViews
+    void initViews() {
+        initToolbar();
+        initNavigationDrawer();
+    }
 
     public void setOnAfterSplashScreenListener(OnAfterSplashScreenListener listener) {
         mOnAfterSplashScreen = listener;
+    }
+
+    public void showToolbar() {
+        mToolbar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideToolbar() {
+        mToolbar.setVisibility(View.INVISIBLE);
+    }
+
+    private void initToolbar() {
+        mActivity.setSupportActionBar(mToolbar);
+        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    private void initNavigationDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, mToolbar,
+                R.string.open_drawer, R.string.close_drawer);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     public void hideSplashScreen(final int duration) {

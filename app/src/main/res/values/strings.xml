@@ -19,4 +19,6 @@
     <string name="error">Ошибка</string>
     <string name="ok">OK</string>
     <string name="invalid_password_or_login">Не верный пароль либо логин</string>
+    <string name="open_drawer">open_drawer</string>
+    <string name="close_drawer">close_drawer</string>
 </resources>

@@ -2,7 +2,6 @@ package com.crazydude.sakuraplayer.gui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 
 import com.crazydude.sakuraplayer.R;
@@ -18,7 +17,6 @@ import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
@@ -34,9 +32,6 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
         OnResponseListener<SessionResponse> {
-
-    @ViewById(R.id.activity_home_toolbar)
-    Toolbar mToolbar;
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -57,8 +52,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     void initViews() {
         mHomeActivityView.setOnAfterSplashScreenListener(this);
         mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -72,6 +65,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     }
 
     private void switchToPlayerMode() {
+        mHomeActivityView.showToolbar();
         switchFragment(TracklistFragment_.builder().build(), false,
                 R.id.activity_home_placeholder);
     }
