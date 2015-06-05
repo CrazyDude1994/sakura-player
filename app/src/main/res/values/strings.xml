@@ -21,4 +21,9 @@
     <string name="invalid_password_or_login">Не верный пароль либо логин</string>
     <string name="open_drawer">open_drawer</string>
     <string name="close_drawer">close_drawer</string>
+    <string name="home">Главная</string>
+    <string name="tracks">Треки</string>
+    <string name="artists">Исполнители</string>
+    <string name="albums">Альбомы</string>
+    <string name="playlists">Плейлисты</string>
 </resources>

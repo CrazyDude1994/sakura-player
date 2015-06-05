@@ -26,4 +26,6 @@
     <dimen name="list_element_height">72dp</dimen>
     <dimen name="dialog_content_padding">24dp</dimen>
     <dimen name="dialog_title_margin_bottom">20dp</dimen>
+    <dimen name="navigation_header_size">200dp</dimen>
+    <dimen name="toolbar_shadow_height">5dp</dimen>
 </resources>

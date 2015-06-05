@@ -14,6 +14,7 @@ import com.crazydude.sakuraplayer.R;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
@@ -49,26 +50,30 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
         mOnAfterSplashScreen = listener;
     }
 
+    @UiThread
     public void showToolbar() {
         mToolbar.setVisibility(View.VISIBLE);
     }
 
+    @UiThread
     public void hideToolbar() {
         mToolbar.setVisibility(View.INVISIBLE);
     }
 
     private void initToolbar() {
         mActivity.setSupportActionBar(mToolbar);
-        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mActivity.getSupportActionBar().setHomeButtonEnabled(true);
+//        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initNavigationDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, mToolbar,
                 R.string.open_drawer, R.string.close_drawer);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
     }
 
+    @UiThread
     public void hideSplashScreen(final int duration) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

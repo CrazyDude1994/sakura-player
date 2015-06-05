@@ -19,9 +19,15 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconP
 
     static final int[] ICONS = new int[]{R.drawable.ic_audiotrack_selector, R.drawable.ic_piano_selector,
             R.drawable.ic_album_selector, R.drawable.ic_playlists_selector};
+    static final String[] TITLES = new String[]{"Треки", "Исполнители", "Альбомы", "Плейлисты"};
 
     public TracklistPagerAdapter(FragmentManager fm) {
         super(fm);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return TITLES[position];
     }
 
     @Override
