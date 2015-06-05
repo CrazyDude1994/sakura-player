@@ -9,6 +9,8 @@ import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment;
+import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
@@ -61,7 +63,12 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
             switchFragment(LastfmTutorialFragment_.builder().build(), false, R.id.activity_home_placeholder);
         } else {
             switchToPlayerMode();
+//            switchFragment(RecommendsFragment_.builder().build(), false, R.id.activity_home_placeholder);
         }
+    }
+
+    public HomeActivityView getHomeActivityView() {
+        return mHomeActivityView;
     }
 
     private void switchToPlayerMode() {

@@ -57,5 +57,6 @@ dependencies {
     compile 'com.andraskindler.parallaxviewpager:parallaxviewpager:0.3.1'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.android.support:design:22.2.0'
+    compile 'com.pnikosis:materialish-progress:1.5'
     compile project(':viewpagerindicator')
 }

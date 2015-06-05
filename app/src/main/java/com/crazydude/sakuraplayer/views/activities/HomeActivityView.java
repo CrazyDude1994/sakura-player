@@ -37,6 +37,7 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @ViewById(R.id.navigation_drawer)
     DrawerLayout mDrawerLayout;
 
+
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 

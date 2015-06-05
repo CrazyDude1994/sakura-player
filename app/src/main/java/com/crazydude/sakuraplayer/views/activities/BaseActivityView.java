@@ -23,6 +23,9 @@ public class BaseActivityView {
     @ViewById(R.id.activity_home_progressbar)
     View mProgressBar;
 
+    @ViewById(R.id.activity_home_placeholder_progressbar)
+    View mContentProgressBar;
+
     @UiThread
     public void showProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -31,6 +34,16 @@ public class BaseActivityView {
     @UiThread
     public void hideProgressBar() {
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @UiThread
+    public void showContentProgressBar() {
+        mContentProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @UiThread
+    public void hideContentProgressBar() {
+        mContentProgressBar.setVisibility(View.GONE);
     }
 
     @UiThread

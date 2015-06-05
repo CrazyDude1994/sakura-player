@@ -2,14 +2,17 @@ package com.crazydude.sakuraplayer.managers;
 
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
-import com.crazydude.sakuraplayer.interfaces.Callbacks;
+import com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 import com.crazydude.sakuraplayer.interfaces.LastfmInterface;
+import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
+import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.TreeMap;
 
@@ -25,6 +28,9 @@ public class LastfmApiManager {
     @Bean
     Utils mUtils;
 
+    @Pref
+    Preferences_ mPreferences;
+
     LastfmInterface mLastfmInterface;
 
     public LastfmApiManager() {
@@ -37,7 +43,7 @@ public class LastfmApiManager {
     }
 
     @Background
-    public void login(String username, String password, Callbacks.OnResponseListener callback) {
+    public void login(String username, String password, OnResponseListener<SessionResponse> callback) {
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.put("username", username);
         treeMap.put("password", password);
@@ -59,7 +65,40 @@ public class LastfmApiManager {
                 callback.onNetworkError(error.getMessage());
             }
         }
+    }
 
+    @Background
+    public void getRecommendedArtists(int page, int limit, OnResponseListener<RecommendationsResponse> callback) {
+        String session = getUserSession();
+        if (!session.isEmpty()) {
+            TreeMap<String, String> treeMap = new TreeMap<>();
+            treeMap.put("page", Integer.toString(page));
+            treeMap.put("limit", Integer.toString(limit));
+            treeMap.put("method", "user.getRecommendedArtists");
+            treeMap.put("sk", session);
+            String apiSig = mUtils.getSignature(treeMap);
+            try {
+                RecommendationsResponse response = mLastfmInterface.getRecommendedArtists(page, limit,
+                        Constants.LASTFM_API_KEY, apiSig, session);
+                checkForErrors(response);
+                if (callback != null) {
+                    callback.onSuccess(response);
+                }
+            } catch (LastfmError lastfmError) {
+                if (callback != null) {
+                    callback.onLastfmError(lastfmError.getMessage(),
+                            lastfmError.getCode());
+                }
+            } catch (RetrofitError error) {
+                if (callback != null) {
+                    callback.onNetworkError(error.getMessage());
+                }
+            }
+        }
+    }
+
+    private String getUserSession() {
+        return mPreferences.lastfmToken().getOr("");
     }
 
     private void checkForErrors(ErrorResponse response) throws LastfmError {

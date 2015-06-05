@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -16,8 +17,10 @@ public class TracklistFragment extends BaseFragment {
     @Bean
     TracklistFragmentView mTracklistFragmentView;
 
+    @Bean
+    LastfmApiManager mLastfmApiManager;
+
     @AfterViews
     void initViews() {
-
     }
 }

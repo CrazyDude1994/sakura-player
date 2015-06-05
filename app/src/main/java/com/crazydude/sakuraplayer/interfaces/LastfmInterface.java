@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.interfaces;
 
+import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.POST;
 
 /**
@@ -22,4 +24,13 @@ public interface LastfmInterface {
                    @Field("password") String password,
                    @Field("api_key") String apiKey,
                    @Field("api_sig") String apiSig);
+
+    @FormUrlEncoded
+    @POST("/?method=user.getRecommendedArtists&format=json")
+    RecommendationsResponse getRecommendedArtists(@Field("page") int page,
+                                                  @Field("limit") int limit,
+                                                  @Field("api_key") String apiKey,
+                                                  @Field("api_sig") String api_sig,
+                                                  @Field("sk") String session);
+
 }
