@@ -2,14 +2,14 @@ package com.crazydude.sakuraplayer.gui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.Toolbar;
+import android.support.design.widget.NavigationView;
+import android.view.MenuItem;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment;
 import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
@@ -33,13 +33,16 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener
 @EActivity(R.layout.activity_home)
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
-        OnResponseListener<SessionResponse> {
+        OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener {
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
 
     @Bean
     HomeActivityView mHomeActivityView;
+
+    @ViewById(R.id.activity_home_navigation_view)
+    NavigationView mNavigationView;
 
     @Pref
     Preferences_ mPrefs;
@@ -54,7 +57,9 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     void initViews() {
         mHomeActivityView.setOnAfterSplashScreenListener(this);
         mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
+
 
     @Override
     public void onAfterSplashScreen() {
@@ -63,7 +68,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
             switchFragment(LastfmTutorialFragment_.builder().build(), false, R.id.activity_home_placeholder);
         } else {
             switchToPlayerMode();
-//            switchFragment(RecommendsFragment_.builder().build(), false, R.id.activity_home_placeholder);
         }
     }
 
@@ -125,5 +129,17 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
                 mHomeActivityView.showInfoDialog(getString(R.string.error), message);
                 break;
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.navigation_menu_recommends:
+                switchFragment(RecommendsFragment_.builder().build(), false, R.id.activity_home_placeholder);
+                break;
+        }
+
+        mHomeActivityView.closeNavigationDrawer();
+        return true;
     }
 }

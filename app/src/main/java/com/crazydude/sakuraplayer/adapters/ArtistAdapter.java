@@ -32,7 +32,7 @@ public class ArtistAdapter extends BaseAdapter<ArtistModel> {
         artistView.setContent(getData(position));
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private ArtistView mAristView;
 

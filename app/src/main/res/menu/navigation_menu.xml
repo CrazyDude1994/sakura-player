@@ -4,6 +4,10 @@
         <item
             android:id="@+id/navigation_menu_home"
             android:title="@string/home" />
+
+        <item
+            android:id="@+id/navigation_menu_recommends"
+            android:title="@string/recommendations" />
     </group>
 
     <group android:checkableBehavior="single">

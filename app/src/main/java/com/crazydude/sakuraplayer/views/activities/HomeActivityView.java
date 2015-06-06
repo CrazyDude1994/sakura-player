@@ -37,7 +37,6 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @ViewById(R.id.navigation_drawer)
     DrawerLayout mDrawerLayout;
 
-
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -63,8 +62,6 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
 
     private void initToolbar() {
         mActivity.setSupportActionBar(mToolbar);
-        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
-//        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initNavigationDrawer() {
@@ -86,6 +83,10 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
                 anim.start();
             }
         }, duration);
+    }
+
+    public void closeNavigationDrawer() {
+        mDrawerLayout.closeDrawers();
     }
 
     @Override

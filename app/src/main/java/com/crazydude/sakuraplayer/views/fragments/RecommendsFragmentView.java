@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 
@@ -9,4 +10,8 @@ import org.androidannotations.annotations.EBean;
 @EBean
 public class RecommendsFragmentView extends BaseFragmentView {
 
+    @AfterViews
+    void initViews() {
+
+    }
 }
