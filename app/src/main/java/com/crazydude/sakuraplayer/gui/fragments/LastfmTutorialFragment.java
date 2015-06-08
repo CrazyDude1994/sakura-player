@@ -60,7 +60,7 @@ public class LastfmTutorialFragment extends BaseFragment implements ViewPager.On
             mLastfmTutorialCompletedListener = (OnLastfmTutorialCompletedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement " + mLastfmTutorialCompletedListener.getClass().getSimpleName());
+                    + " must implement " + OnLastfmTutorialCompletedListener.class.getSimpleName());
         }
     }
 

@@ -7,13 +7,14 @@ import android.widget.ImageView;
 
 import com.crazydude.sakuraplayer.gui.views.RecommendedArtistView;
 import com.crazydude.sakuraplayer.gui.views.RecommendedArtistView_;
+import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.squareup.picasso.Picasso;
 
 /**
  * Created by Crazy on 06.06.2015.
  */
-public class RecommendsAdapter extends BaseAdapter<RecommendationsResponse.Recommendations.Artist> {
+public class RecommendsAdapter extends BaseAdapter<ArtistResponse> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -24,7 +25,7 @@ public class RecommendsAdapter extends BaseAdapter<RecommendationsResponse.Recom
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RecommendationsResponse.Recommendations.Artist data = getData(position);
+        ArtistResponse data = getData(position);
         ViewHolder viewHolder = ((ViewHolder) holder);
         RecommendedArtistView recommendedArtistView = viewHolder.getView();
         recommendedArtistView.setContent(data);

@@ -7,7 +7,6 @@ import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -37,12 +36,19 @@ public interface Callbacks {
 
     public interface OnLastfmLoginListener {
         public void onLastfmLogin(String login, String password);
+
         public void onLastfmRegister();
     }
 
     public interface OnResponseListener<T extends ErrorResponse> {
         public void onSuccess(T response);
+
         public void onLastfmError(String message, Integer code);
+
         public void onNetworkError(String message);
+    }
+
+    public interface OnSelectedArtistListener {
+        public void onSelectedArtist(String name, String mbid);
     }
 }

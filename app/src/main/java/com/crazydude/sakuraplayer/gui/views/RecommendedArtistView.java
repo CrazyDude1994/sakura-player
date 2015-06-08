@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 
 import org.androidannotations.annotations.EViewGroup;
@@ -31,7 +32,7 @@ public class RecommendedArtistView extends RelativeLayout {
         return mImageView;
     }
 
-    public void setContent(RecommendationsResponse.Recommendations.Artist data) {
+    public void setContent(ArtistResponse data) {
         mArtistName.setText(data.getName());
     }
 }

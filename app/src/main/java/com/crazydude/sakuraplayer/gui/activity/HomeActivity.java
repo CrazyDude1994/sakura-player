@@ -12,9 +12,11 @@ import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
+import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
@@ -22,6 +24,7 @@ import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
@@ -33,7 +36,8 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener
 @EActivity(R.layout.activity_home)
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
-        OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener {
+        OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
+        Callbacks.OnSelectedArtistListener {
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -141,5 +145,10 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
         mHomeActivityView.closeNavigationDrawer();
         return true;
+    }
+
+
+    @Override
+    public void onSelectedArtist(String name, String mbid) {
     }
 }

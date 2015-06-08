@@ -5,6 +5,7 @@ import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 import com.crazydude.sakuraplayer.interfaces.LastfmInterface;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
+import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
@@ -93,6 +94,34 @@ public class LastfmApiManager {
                 if (callback != null) {
                     callback.onNetworkError(error.getMessage());
                 }
+            }
+        }
+    }
+
+    @Background
+    public void getArtistInfo(String name, String mbid, String lang,
+                       OnResponseListener<ArtistInfoResponse> callback) {
+        TreeMap<String, String> treeMap = new TreeMap<>();
+        treeMap.put("name", name);
+        treeMap.put("mbid", mbid);
+        treeMap.put("lang", lang);
+        treeMap.put("method", "artist.getInfo");
+        String apiSig = mUtils.getSignature(treeMap);
+        try {
+            ArtistInfoResponse response = mLastfmInterface.getArtistInfo(name, mbid, lang,
+                    Constants.LASTFM_API_KEY, apiSig);
+            checkForErrors(response);
+            if (callback != null) {
+                callback.onSuccess(response);
+            }
+        } catch (LastfmError lastfmError) {
+            if (callback != null) {
+                callback.onLastfmError(lastfmError.getMessage(),
+                        lastfmError.getCode());
+            }
+        } catch (RetrofitError error) {
+            if (callback != null) {
+                callback.onNetworkError(error.getMessage());
             }
         }
     }
