@@ -1,13 +1,13 @@
 package com.crazydude.sakuraplayer.gui.views;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.models.net.ArtistResponse;
-import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
@@ -34,5 +34,11 @@ public class RecommendedArtistView extends RelativeLayout {
 
     public void setContent(ArtistResponse data) {
         mArtistName.setText(data.getName());
+    }
+
+    public void setTextColors(int textColor, int textBackground) {
+        mArtistName.setTextColor(textColor);
+        GradientDrawable drawable = (GradientDrawable) mArtistName.getBackground();
+        drawable.setColor(textBackground);
     }
 }

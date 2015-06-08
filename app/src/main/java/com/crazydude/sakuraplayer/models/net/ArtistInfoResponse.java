@@ -32,6 +32,10 @@ public class ArtistInfoResponse extends ErrorResponse {
             return bio;
         }
 
+        public Tags getTags() {
+            return tags;
+        }
+
         public class Stats {
 
             private int listeners;

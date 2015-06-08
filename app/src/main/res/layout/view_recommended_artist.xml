@@ -12,25 +12,16 @@
         android:scaleType="centerCrop"
         tools:background="@color/black" />
 
-    <FrameLayout
+
+    <TextView
+        android:id="@+id/view_recommended_artist_name"
+        style="@style/Text.ArtistTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_artist_name_gradient" />
-
-        <TextView
-            android:id="@+id/view_recommended_artist_name"
-            style="@style/Text.ArtistTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ui_elements_padding"
-            android:textColor="@color/white"
-            tools:text="Sum 41" />
-    </FrameLayout>
-
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_artist_name_gradient"
+        android:padding="@dimen/ui_elements_padding"
+        android:textColor="@color/white"
+        tools:text="Sum 41" />
 
 </RelativeLayout>

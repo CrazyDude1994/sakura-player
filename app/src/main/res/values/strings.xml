@@ -27,4 +27,5 @@
     <string name="albums">Альбомы</string>
     <string name="playlists">Плейлисты</string>
     <string name="recommendations">Рекомендации</string>
+    <string name="similiar_artists">Похожие исполнители:</string>
 </resources>

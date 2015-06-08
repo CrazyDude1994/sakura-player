@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
+import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
@@ -16,7 +17,6 @@ import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
-import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
@@ -24,7 +24,6 @@ import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
@@ -63,7 +62,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
         mNavigationView.setNavigationItemSelectedListener(this);
     }
-
 
     @Override
     public void onAfterSplashScreen() {
@@ -150,5 +148,9 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onSelectedArtist(String name, String mbid) {
+        switchFragment(ArtistFragment_.builder()
+                .artistName(name)
+                .mbid(mbid)
+                .build(), true, R.id.activity_home_placeholder);
     }
 }
