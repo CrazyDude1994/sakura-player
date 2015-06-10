@@ -47,6 +47,10 @@ public class TracklistAllFragmentView extends BaseFragmentView {
                 mRecyclerView));
     }
 
+    public TrackModel getData(int position) {
+        return mTracklistAdapter.getData(position);
+    }
+
     @UiThread
     public void setTrackList(List<TrackModel> tracks) {
         mTracklistAdapter.setData(tracks);

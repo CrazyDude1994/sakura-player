@@ -51,4 +51,8 @@ public interface Callbacks {
     public interface OnSelectedArtistListener {
         public void onSelectedArtist(String name, String mbid);
     }
+
+    public interface OnSelectedTrackListener {
+        public void onSelectedTrack(TrackModel track);
+    }
 }

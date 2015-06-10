@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
@@ -35,7 +36,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     @Bean
     TrackProvider mTrackProvider;
 
-    private PlayerFragment mPlayerFragment;
+    private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
 
     @AfterViews
     void initViews() {
@@ -51,5 +52,12 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
 
     @Override
     public void onClick(View view, int position) {
+        mOnSelectedTrackListener.onSelectedTrack(mTracklistAllFragmentView.getData(position));
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mOnSelectedTrackListener = (Callbacks.OnSelectedTrackListener) activity;
     }
 }

@@ -60,5 +60,6 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.5'
     compile 'org.apmem.tools:layouts:1.9@aar'
     compile 'com.android.support:palette-v7:21.0.0'
+    compile 'org.adw.library:discrete-seekbar:1.0.0'
     compile project(':viewpagerindicator')
 }

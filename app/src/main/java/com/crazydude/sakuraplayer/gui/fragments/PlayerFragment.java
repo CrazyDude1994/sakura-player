@@ -13,7 +13,8 @@ import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
 
-import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
@@ -21,15 +22,21 @@ import org.androidannotations.annotations.FragmentArg;
 @EFragment(R.layout.fragment_player)
 public class PlayerFragment extends BaseFragment implements ServiceConnection {
 
-    private PlayerBinder mBinder;
-    private PlayerView mPlayerView;
+    @Bean
+    PlayerView mPlayerView;
 
-    @AfterInject
+    @FragmentArg
+    String songPath;
+
+    private PlayerBinder mBinder;
+
+    @AfterViews
     void init() {
         Intent intent = new Intent(getActivity(), PlayerService_.class);
         getActivity().bindService(intent, this, Context.BIND_AUTO_CREATE);
-
-        mPlayerView = new PlayerView();
+        if (songPath != null && !songPath.isEmpty()) {
+            playMusic(Uri.parse(songPath));
+        }
     }
 
     @Click({R.id.fragment_player_button_play, R.id.fragment_player_button_next,

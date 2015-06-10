@@ -11,12 +11,14 @@ import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
@@ -36,7 +38,7 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
         OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
-        Callbacks.OnSelectedArtistListener {
+        Callbacks.OnSelectedArtistListener, Callbacks.OnSelectedTrackListener {
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -152,5 +154,12 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
                 .artistName(name)
                 .mbid(mbid)
                 .build(), true, R.id.activity_home_placeholder);
+    }
+
+    @Override
+    public void onSelectedTrack(TrackModel track) {
+        if (track != null) {
+            switchFragment(PlayerFragment_.builder().songPath(track.getTrackPath()).build(), true, R.id.activity_home_placeholder);
+        }
     }
 }
