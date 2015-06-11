@@ -4,12 +4,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.IBinder;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
+import com.crazydude.sakuraplayer.models.TrackModel;
+import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
 
@@ -17,7 +18,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.FragmentArg;
 
 @EFragment(R.layout.fragment_player)
 public class PlayerFragment extends BaseFragment implements ServiceConnection {
@@ -25,17 +25,13 @@ public class PlayerFragment extends BaseFragment implements ServiceConnection {
     @Bean
     PlayerView mPlayerView;
 
-    @FragmentArg
-    String songPath;
-
     private PlayerBinder mBinder;
+    private TrackModel mCurrentTrack;
 
     @AfterViews
     void init() {
-        Intent intent = new Intent(getActivity(), PlayerService_.class);
-        getActivity().bindService(intent, this, Context.BIND_AUTO_CREATE);
-        if (songPath != null && !songPath.isEmpty()) {
-            playMusic(Uri.parse(songPath));
+        if (mCurrentTrack != null) {
+            playMusic(mCurrentTrack);
         }
     }
 
@@ -69,9 +65,21 @@ public class PlayerFragment extends BaseFragment implements ServiceConnection {
         }
     }
 
-    public void playMusic(Uri file) {
-        if (mBinder != null) {
-            mBinder.play(file.getPath());
+    public void setData(TrackModel data) {
+        mCurrentTrack = data;
+    }
+
+    public void playMusic(TrackModel model) {
+        if (mBinder == null) {
+            Intent intent = new Intent(getActivity(), PlayerService_.class);
+            if (model != null) {
+                mPlayerView.setData(model);
+                intent.setAction(PlayerService.ACTION_PLAY);
+                intent.putExtra(PlayerService.EXTRA_PATH, model.getTrackPath());
+            }
+            getActivity().bindService(intent, this, Context.BIND_AUTO_CREATE);
+        } else {
+            mBinder.play(model.getTrackPath());
         }
     }
 
@@ -92,5 +100,12 @@ public class PlayerFragment extends BaseFragment implements ServiceConnection {
 
     public void prevTrack() {
 
+    }
+
+    public boolean isPlaying() {
+        if (mBinder != null) {
+            return mBinder.isPlaying();
+        }
+        return false;
     }
 }

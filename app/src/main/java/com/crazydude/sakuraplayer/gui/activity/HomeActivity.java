@@ -3,6 +3,7 @@ package com.crazydude.sakuraplayer.gui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
 import com.crazydude.sakuraplayer.R;
@@ -11,6 +12,7 @@ import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
@@ -18,6 +20,8 @@ import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.services.PlayerService_;
@@ -57,6 +61,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Bean
     LastfmApiManager mLastfmApiManager;
+
+    private PlayerFragment mPlayerFragment;
 
     @AfterViews
     void initViews() {
@@ -159,7 +165,12 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onSelectedTrack(TrackModel track) {
         if (track != null) {
-            switchFragment(PlayerFragment_.builder().songPath(track.getTrackPath()).build(), true, R.id.activity_home_placeholder);
+            mHomeActivityView.hideToolbarShadow();
+            if (mPlayerFragment == null) {
+                mPlayerFragment = PlayerFragment_.builder().build();
+            }
+            switchFragment(mPlayerFragment, true, R.id.activity_home_placeholder);
+            mPlayerFragment.setData(track);
         }
     }
 }

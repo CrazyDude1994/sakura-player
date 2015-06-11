@@ -24,6 +24,9 @@
         </activity>
 
         <service android:name=".services.PlayerService_" />
+
+        <meta-data android:name="AA_DB_NAME" android:value="database.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
     </application>
 
 </manifest>

@@ -34,6 +34,9 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @ViewById(R.id.activity_home_toolbar)
     Toolbar mToolbar;
 
+    @ViewById(R.id.activity_home_toolbar_shadow)
+    View mToolbarShadow;
+
     @ViewById(R.id.navigation_drawer)
     DrawerLayout mDrawerLayout;
 
@@ -58,6 +61,16 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @UiThread
     public void hideToolbar() {
         mToolbar.setVisibility(View.INVISIBLE);
+    }
+
+    @UiThread
+    public void showToolbarShadow() {
+        mToolbarShadow.setVisibility(View.VISIBLE);
+    }
+
+    @UiThread
+    public void hideToolbarShadow() {
+        mToolbarShadow.setVisibility(View.GONE);
     }
 
     private void initToolbar() {
