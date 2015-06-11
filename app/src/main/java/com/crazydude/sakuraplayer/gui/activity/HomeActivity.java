@@ -1,7 +1,11 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
@@ -20,6 +24,7 @@ import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -27,6 +32,7 @@ import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
@@ -42,7 +48,8 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
         OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
-        Callbacks.OnSelectedArtistListener, Callbacks.OnSelectedTrackListener {
+        Callbacks.OnSelectedArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
+        Callbacks.OnPlayerListener {
 
     @Bean
     MusicLibraryManager mMusicLibraryManager;
@@ -63,6 +70,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     LastfmApiManager mLastfmApiManager;
 
     private PlayerFragment mPlayerFragment;
+    private PlayerBinder mBinder;
 
     @AfterViews
     void initViews() {
@@ -71,9 +79,15 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
+    @AfterInject
+    void init() {
+        startService(PlayerService_.intent(this).get());
+        Intent intent = new Intent(this, PlayerService_.class);
+        bindService(intent, this, Context.BIND_AUTO_CREATE);
+    }
+
     @Override
     public void onAfterSplashScreen() {
-        PlayerService_.intent(this).start();
         if (!mPrefs.isTutorialCompleted().get()) {
             switchFragment(LastfmTutorialFragment_.builder().build(), false, R.id.activity_home_placeholder);
         } else {
@@ -171,6 +185,49 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
             }
             switchFragment(mPlayerFragment, true, R.id.activity_home_placeholder);
             mPlayerFragment.setData(track);
+            mBinder.play(track.getTrackPath());
         }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        mBinder = (PlayerBinder) service;
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        mBinder = null;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBinder != null) {
+            unbindService(this);
+            mBinder = null;
+        }
+    }
+
+    @Override
+    public void onPauseOrResume() {
+        if (mBinder.isPlaying()) {
+            mBinder.pause();
+        } else {
+            mBinder.resume();
+        }
+    }
+
+    @Override
+    public void onNext() {
+    }
+
+    @Override
+    public void onPrevious() {
+
+    }
+
+    @Override
+    public void onSeek(int progress) {
+        mBinder.seek(progress);
     }
 }

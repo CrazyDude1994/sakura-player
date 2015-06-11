@@ -33,6 +33,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     private MediaPlayer mMediaPlayer;
     private PlayerBinder mBinder;
+    private static int NOTIFICATION_ID = 1337;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -63,7 +64,17 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
                     break;
             }
         }
+        setupForegroundNotification();
         return START_STICKY;
+    }
+
+    private void setupForegroundNotification() {
+        Notification notification = new Notification.Builder(getApplicationContext())
+                .setSmallIcon(R.drawable.ic_equalizer)
+                .setContentTitle("Sakura Player")
+                .setContentText("Playing...")
+                .build();
+        startForeground(NOTIFICATION_ID, notification);
     }
 
     private void setupPlayer() {

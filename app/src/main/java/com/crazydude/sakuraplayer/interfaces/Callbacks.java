@@ -55,4 +55,11 @@ public interface Callbacks {
     public interface OnSelectedTrackListener {
         public void onSelectedTrack(TrackModel track);
     }
+
+    public interface OnPlayerListener {
+        public void onPauseOrResume();
+        public void onNext();
+        public void onPrevious();
+        public void onSeek(int progress);
+    }
 }
