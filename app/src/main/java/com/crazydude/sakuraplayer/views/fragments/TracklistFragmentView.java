@@ -1,11 +1,16 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistPagerAdapter;
+import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.androidannotations.annotations.AfterViews;
@@ -26,13 +31,18 @@ public class TracklistFragmentView extends BaseFragmentView {
     TabPageIndicator mTablistIndicator;
 
     @RootContext
-    FragmentActivity mContext;
-
-    private PagerAdapter mPagerAdapter;
+    Context mContext;
+    private TracklistPagerAdapter mPagerAdapter;
 
     @AfterViews
     void initViews() {
-        mPagerAdapter = new TracklistPagerAdapter(mContext.getSupportFragmentManager());
+
+    }
+
+    public void initViewPager(BaseFragment parentFragment) {
+        if (mPagerAdapter == null) {
+            mPagerAdapter = new TracklistPagerAdapter(parentFragment.getChildFragmentManager());
+        }
         mViewPager.setAdapter(mPagerAdapter);
 
         mTablistIndicator.setViewPager(mViewPager);

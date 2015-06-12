@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.services;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -11,7 +12,10 @@ import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
+import com.crazydude.sakuraplayer.models.TrackModel;
 
 import org.androidannotations.annotations.EService;
 
@@ -22,7 +26,7 @@ import java.io.IOException;
  */
 @EService
 public class PlayerService extends Service implements MediaPlayer.OnErrorListener,
-        MediaPlayer.OnPreparedListener, MediaPlayer.OnSeekCompleteListener {
+        MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = PlayerService.class.getSimpleName();
 
@@ -30,6 +34,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public static final String ACTION_PAUSE = "com.crazydude.sakuraplayer.PAUSE";
     public static final String ACTION_RESUME = "com.crazydude.sakuraplayer.RESUME";
     public static final String ACTION_SEEK = "com.crazydude.sakuraplayer.SEKK";
+    public static final String ACTION_STOP = "com.crazydude.sakuraplayer.STOP";
 
     public static final String EXTRA_PATH = "extra_path";
     public static final String EXTRA_DURATION = "extra_duration";
@@ -39,6 +44,8 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     private PlayerBinder mBinder;
     private static int NOTIFICATION_ID = 1337;
     private Handler mSyncSeekbar;
+    private PlaylistModel mPlaylist = new PlaylistModel(null, "Current");
+    private int mCurrentTrackIndex;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -65,21 +72,26 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
             switch (intent.getAction()) {
                 case ACTION_PLAY:
                     String path = intent.getStringExtra(EXTRA_PATH);
-                    playMusic(path);
+//                    playMusic();
                     break;
             }
         }
-        setupForegroundNotification();
         return START_STICKY;
     }
 
-    private void setupForegroundNotification() {
+    private void setupForegroundNotification(TrackModel model) {
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, HomeActivity.class), 0);
         Notification notification = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.drawable.ic_equalizer)
-                .setContentTitle("Sakura Player")
-                .setContentText("Playing...")
+                .setSmallIcon(R.drawable.ic_equalizer_animated)
+                .setContentTitle(model.getTrackName())
+                .setContentText(model.getArtist().getArtistName())
+                .setContentIntent(pendingIntent)
                 .build();
         startForeground(NOTIFICATION_ID, notification);
+    }
+
+    private void stopForeground() {
+        stopForeground(true);
     }
 
     private void setupPlayer() {
@@ -94,15 +106,24 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnErrorListener(this);
-        mMediaPlayer.setOnSeekCompleteListener(this);
+        mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
     }
 
-    public void playMusic(String path) {
+    public void playMusic(PlaylistModel playlist) {
+        mCurrentTrackIndex = 0;
+        mPlaylist = playlist;
+        if (playlist.getTracks().size() > 0) {
+            playMusic(playlist.getTracks().get(mCurrentTrackIndex));
+        }
+    }
+
+    private void playMusic(TrackModel track) {
         setupPlayer();
+        setupForegroundNotification(track);
         try {
             mMediaPlayer.reset();
-            mMediaPlayer.setDataSource(path);
+            mMediaPlayer.setDataSource(track.getTrackPath());
             mMediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,14 +146,19 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     }
 
     public void stopMusic() {
-        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+        if (mMediaPlayer != null) {
+            sendBroadcast(ACTION_STOP);
             mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+            stopForeground();
         }
     }
 
     public void pauseMusic() {
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
+            stopForeground();
             sendBroadcast(ACTION_PAUSE);
         }
     }
@@ -140,8 +166,16 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public void resumeMusic() {
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
+            setupForegroundNotification(getCurrentTrack());
             sendBroadcast(ACTION_RESUME);
         }
+    }
+
+    public TrackModel getCurrentTrack() {
+        if (mCurrentTrackIndex < mPlaylist.getTracks().size()) {
+            return mPlaylist.getTracks().get(mCurrentTrackIndex);
+        }
+        return null;
     }
 
     public void seekMusic(int progress) {
@@ -158,9 +192,22 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         }
     }
 
-    @Override
-    public void onSeekComplete(MediaPlayer mp) {
+    public void setLoopMode(boolean isLoop) {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.setLooping(isLoop);
+        }
+    }
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if (mMediaPlayer != null && !mMediaPlayer.isLooping()) {
+            mCurrentTrackIndex++;
+            if (mCurrentTrackIndex < mPlaylist.getTracks().size()) {
+                playMusic(mPlaylist.getTracks().get(mCurrentTrackIndex));
+            } else {
+                stopMusic();
+            }
+        }
     }
 
     private class SyncSeekbarThread implements Runnable {

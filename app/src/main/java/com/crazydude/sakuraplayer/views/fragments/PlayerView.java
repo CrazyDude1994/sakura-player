@@ -46,13 +46,26 @@ public class PlayerView {
 
     @UiThread
     public void setData(TrackModel data) {
-        mArtistName.setText(data.getArtist().getArtistName());
-        mSongName.setText(data.getTrackName());
+        if (data != null) {
+            mArtistName.setText(data.getArtist().getArtistName());
+            mSongName.setText(data.getTrackName());
+        } else {
+            mArtistName.setText("");
+            mSongName.setText("");
+        }
     }
 
     @UiThread
     public void setProgress(int progress, int duration) {
         mDiscreteSeekBar.setMax(duration);
         mDiscreteSeekBar.setProgress(progress);
+    }
+
+    @UiThread
+    public void setStopped() {
+        mDiscreteSeekBar.setProgress(0);
+        mDiscreteSeekBar.setMax(0);
+        setPaused();
+        setData(null);
     }
 }

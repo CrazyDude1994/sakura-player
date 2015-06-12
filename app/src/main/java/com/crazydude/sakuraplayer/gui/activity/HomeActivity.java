@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
 import com.crazydude.sakuraplayer.R;
@@ -25,7 +24,6 @@ import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
-import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
@@ -38,6 +36,8 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.util.ArrayList;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
@@ -82,8 +82,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @AfterInject
     void init() {
         startService(PlayerService_.intent(this).get());
-        Intent intent = new Intent(this, PlayerService_.class);
-        bindService(intent, this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -185,8 +183,14 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
             }
             switchFragment(mPlayerFragment, true, R.id.activity_home_placeholder);
             mPlayerFragment.setData(track);
-            mBinder.play(track.getTrackPath());
+            mBinder.play(generateSingleTrackPlaylist(track));
         }
+    }
+
+    private PlaylistModel generateSingleTrackPlaylist(TrackModel model) {
+        ArrayList<TrackModel> tracks = new ArrayList<>();
+        tracks.add(model);
+        return new PlaylistModel(tracks, "Current");
     }
 
     @Override
@@ -200,6 +204,13 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, PlayerService_.class);
+        bindService(intent, this, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (mBinder != null) {
@@ -210,10 +221,12 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onPauseOrResume() {
-        if (mBinder.isPlaying()) {
-            mBinder.pause();
-        } else {
-            mBinder.resume();
+        if (mBinder != null) {
+            if (mBinder.isPlaying()) {
+                mBinder.pause();
+            } else {
+                mBinder.resume();
+            }
         }
     }
 

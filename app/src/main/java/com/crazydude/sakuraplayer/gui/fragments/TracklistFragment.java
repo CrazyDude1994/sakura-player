@@ -22,5 +22,6 @@ public class TracklistFragment extends BaseFragment {
 
     @AfterViews
     void initViews() {
+        mTracklistFragmentView.initViewPager(this);
     }
 }

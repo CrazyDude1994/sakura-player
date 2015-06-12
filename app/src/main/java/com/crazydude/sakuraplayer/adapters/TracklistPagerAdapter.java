@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
@@ -20,9 +22,12 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconP
     static final int[] ICONS = new int[]{R.drawable.ic_audiotrack_selector, R.drawable.ic_piano_selector,
             R.drawable.ic_album_selector, R.drawable.ic_playlists_selector};
     static final String[] TITLES = new String[]{"Треки", "Исполнители", "Альбомы", "Плейлисты"};
+    
+    FragmentManager mFragmentManager;
 
     public TracklistPagerAdapter(FragmentManager fm) {
         super(fm);
+        mFragmentManager = fm;
     }
 
     @Override
@@ -44,7 +49,6 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconP
         }
         return null;
     }
-
 
     @Override
     public int getIconResId(int index) {

@@ -43,6 +43,9 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
             mPlayerView.setPlaying();
             mPlayerView.setData(mCurrentTrack);
         }
+    }
+
+    private void registerReceiver() {
         if (mPlayerBroadcastReceiver == null) {
             mPlayerBroadcastReceiver = new PlayerBroadcastReceiver();
         }
@@ -51,7 +54,24 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         intentFilter.addAction(PlayerService.ACTION_PAUSE);
         intentFilter.addAction(PlayerService.ACTION_RESUME);
         intentFilter.addAction(PlayerService.ACTION_SEEK);
+        intentFilter.addAction(PlayerService.ACTION_STOP);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPlayerBroadcastReceiver, intentFilter);
+    }
+
+    private void unRegisterReceiver() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPlayerBroadcastReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unRegisterReceiver();
     }
 
     @Click({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
@@ -110,6 +130,10 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
                     if (!mIsInTouchMode) {
                         mPlayerView.setProgress(progress, duration);
                     }
+                    break;
+                case PlayerService.ACTION_STOP:
+                    mPlayerView.setStopped();
+                    break;
             }
         }
     }
