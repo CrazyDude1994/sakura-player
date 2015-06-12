@@ -37,6 +37,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public static final String ACTION_STOP = "com.crazydude.sakuraplayer.STOP";
 
     public static final String EXTRA_PATH = "extra_path";
+    public static final String EXTRA_TRACK_ID = "extra_track_id";
     public static final String EXTRA_DURATION = "extra_duration";
     public static final String EXTRA_PROGRESS = "extra_progress";
 
@@ -208,6 +209,10 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
                 stopMusic();
             }
         }
+    }
+
+    public PlaylistModel getCurrentPlaylist() {
+        return mPlaylist;
     }
 
     private class SyncSeekbarThread implements Runnable {

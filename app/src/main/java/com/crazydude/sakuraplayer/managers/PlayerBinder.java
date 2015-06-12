@@ -3,6 +3,7 @@ package com.crazydude.sakuraplayer.managers;
 import android.os.Binder;
 
 import com.crazydude.sakuraplayer.models.PlaylistModel;
+import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.services.PlayerService;
 
 /**
@@ -30,6 +31,14 @@ public class PlayerBinder extends Binder {
 
     public void pause() {
         mPlayerService.pauseMusic();
+    }
+
+    public TrackModel getCurrentTrack() {
+        return mPlayerService.getCurrentTrack();
+    }
+
+    public PlaylistModel getCurrentPlaylist() {
+        return mPlayerService.getCurrentPlaylist();
     }
 
     public void resume() {
