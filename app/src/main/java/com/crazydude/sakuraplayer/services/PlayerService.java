@@ -1,23 +1,21 @@
 package com.crazydude.sakuraplayer.services;
 
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
-import com.crazydude.sakuraplayer.models.TrackModel;
 
 import org.androidannotations.annotations.EService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by CrazyDude on 09.04.2015.
@@ -29,11 +27,18 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     private static final String TAG = PlayerService.class.getSimpleName();
 
     public static final String ACTION_PLAY = "com.crazydude.sakuraplayer.PLAY";
+    public static final String ACTION_PAUSE = "com.crazydude.sakuraplayer.PAUSE";
+    public static final String ACTION_RESUME = "com.crazydude.sakuraplayer.RESUME";
+    public static final String ACTION_SEEK = "com.crazydude.sakuraplayer.SEKK";
+
     public static final String EXTRA_PATH = "extra_path";
+    public static final String EXTRA_DURATION = "extra_duration";
+    public static final String EXTRA_PROGRESS = "extra_progress";
 
     private MediaPlayer mMediaPlayer;
     private PlayerBinder mBinder;
     private static int NOTIFICATION_ID = 1337;
+    private Handler mSyncSeekbar;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -81,6 +86,11 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
         }
+        if (mSyncSeekbar != null) {
+            mSyncSeekbar = null;
+        }
+        mSyncSeekbar = new Handler();
+        mSyncSeekbar.postDelayed(new SyncSeekbarThread(), 500);
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnErrorListener(this);
@@ -97,6 +107,11 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendBroadcast(String action) {
+        Intent intent = new Intent(action);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 
     @Override
@@ -118,12 +133,14 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     public void pauseMusic() {
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
+            sendBroadcast(ACTION_PAUSE);
         }
     }
 
     public void resumeMusic() {
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
+            sendBroadcast(ACTION_RESUME);
         }
     }
 
@@ -144,5 +161,22 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     @Override
     public void onSeekComplete(MediaPlayer mp) {
 
+    }
+
+    private class SyncSeekbarThread implements Runnable {
+        @Override
+        public void run() {
+            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                int position = mMediaPlayer.getCurrentPosition();
+                int duration = mMediaPlayer.getDuration();
+                Intent intent = new Intent(ACTION_SEEK);
+                intent.putExtra(EXTRA_DURATION, duration);
+                intent.putExtra(EXTRA_PROGRESS, position);
+                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+            }
+            if (mSyncSeekbar != null) {
+                mSyncSeekbar.postDelayed(this, 500);
+            }
+        }
     }
 }

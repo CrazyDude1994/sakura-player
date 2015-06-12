@@ -23,6 +23,7 @@ public class PlayerBinder extends Binder {
         mPlayerService.stopMusic();
     }
     public void seek(int progress) {
+        mPlayerService.seekMusic(progress);
     }
 
     public void pause() {
