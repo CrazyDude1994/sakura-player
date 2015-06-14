@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistPagerAdapter;
+import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
+import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.androidannotations.annotations.AfterViews;
@@ -36,7 +38,7 @@ public class TracklistFragmentView extends BaseFragmentView {
 
     @AfterViews
     void initViews() {
-
+        showToolbarShadow();
     }
 
     public void initViewPager(BaseFragment parentFragment) {

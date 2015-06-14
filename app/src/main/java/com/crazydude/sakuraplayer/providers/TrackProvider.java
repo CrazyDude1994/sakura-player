@@ -39,4 +39,12 @@ public class TrackProvider {
             listener.onArtistsLoaded(models);
         }
     }
+
+    @Background
+    public void loadAllTracksByArtist(String artistName, OnTracksLoadedListener listener) {
+        ArrayList<TrackModel> models = mMusicLibraryManager.getTracksByArtist(artistName);
+        if (listener != null && models != null) {
+            listener.onTrackLoaded(models);
+        }
+    }
 }

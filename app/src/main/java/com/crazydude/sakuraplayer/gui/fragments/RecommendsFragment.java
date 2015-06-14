@@ -26,7 +26,7 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
     @Bean
     LastfmApiManager mLastfmApiManager;
 
-    private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
+    private Callbacks.OnSelectedLastfmArtistListener mOnSelectedLastfmArtistListener;
 
     @AfterViews
     void initViews() {
@@ -55,16 +55,16 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mOnSelectedArtistListener = (Callbacks.OnSelectedArtistListener) activity;
+            mOnSelectedLastfmArtistListener = (Callbacks.OnSelectedLastfmArtistListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement " + Callbacks.OnSelectedArtistListener.class.getSimpleName());
+                    + " must implement " + Callbacks.OnSelectedLastfmArtistListener.class.getSimpleName());
         }
     }
 
     @Override
     public void onClick(View view, int position) {
         ArtistResponse data = mRecommendsFragmentView.getData(position);
-        mOnSelectedArtistListener.onSelectedArtist(data.getName(), data.getMbid());
+        mOnSelectedLastfmArtistListener.onSelecteLastfmArtist(data.getName(), data.getMbid());
     }
 }

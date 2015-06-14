@@ -3,6 +3,7 @@ package com.crazydude.sakuraplayer.interfaces;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 
@@ -19,7 +20,7 @@ public interface Callbacks {
     }
 
     public interface OnTracksLoadedListener {
-        public void onTrackLoaded(List<TrackModel> tracks);
+        public void onTrackLoaded(ArrayList<TrackModel> tracks);
     }
 
     public interface RecyclerViewClickListener {
@@ -48,12 +49,16 @@ public interface Callbacks {
         public void onNetworkError(String message);
     }
 
-    public interface OnSelectedArtistListener {
-        public void onSelectedArtist(String name, String mbid);
+    public interface OnSelectedLastfmArtistListener {
+        public void onSelecteLastfmArtist(String name, String mbid);
     }
 
     public interface OnSelectedTrackListener {
         public void onSelectedTrack(TrackModel track);
+    }
+
+    public interface OnSelectedArtistListener {
+        public void onSelectedArtist(ArtistModel artist);
     }
 
     public interface OnPlayerListener {
@@ -61,5 +66,6 @@ public interface Callbacks {
         public void onNext();
         public void onPrevious();
         public void onSeek(int progress);
+        public void onSetPlaylist(PlaylistModel playlist);
     }
 }

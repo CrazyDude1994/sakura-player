@@ -23,10 +23,18 @@
             android:src="@drawable/splash_screen"
             tools:visibility="gone" />
 
+        <include
+            android:id="@+id/activity_home_view_player_widget"
+            layout="@layout/view_player_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
         <FrameLayout
             android:id="@+id/activity_home_placeholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@id/activity_home_view_player_widget"
             android:layout_below="@id/activity_home_toolbar_container">
 
             <com.pnikosis.materialishprogress.ProgressWheel

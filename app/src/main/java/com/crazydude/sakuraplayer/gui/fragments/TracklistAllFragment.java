@@ -18,6 +18,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
 
     @UiThread
     @Override
-    public void onTrackLoaded(List<TrackModel> tracks) {
+    public void onTrackLoaded(ArrayList<TrackModel> tracks) {
         mTracklistAllFragmentView.setTrackList(tracks);
         mTracklistAllFragmentView.setOnRecyclerClickListener(this);
     }

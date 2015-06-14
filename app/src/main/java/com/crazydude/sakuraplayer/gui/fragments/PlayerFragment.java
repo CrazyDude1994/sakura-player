@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
+import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
@@ -116,6 +117,14 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case PlayerService.ACTION_PLAY:
+                    String songName = intent.getStringExtra(PlayerService.EXTRA_SONG_NAME);
+                    String artistName = intent.getStringExtra(PlayerService.EXTRA_ARTIST_NAME);
+                    TrackModel trackModel = new TrackModel();
+                    ArtistModel artistModel = new ArtistModel();
+                    artistModel.setArtistName(artistName);
+                    trackModel.setTrackName(songName);
+                    trackModel.setArtist(artistModel);
+                    mPlayerView.setData(trackModel);
                     mPlayerView.setPlaying();
                     break;
                 case PlayerService.ACTION_PAUSE:

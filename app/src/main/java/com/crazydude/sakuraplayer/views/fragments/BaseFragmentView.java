@@ -24,4 +24,14 @@ public class BaseFragmentView {
     public void hideProgressBar() {
         mBaseActivity.getHomeActivityView().hideContentProgressBar();
     }
+
+    @UiThread
+    public void hideToolbarShadow() {
+        mBaseActivity.getHomeActivityView().hideToolbarShadow();
+    }
+
+    @UiThread
+    void showToolbarShadow() {
+        mBaseActivity.getHomeActivityView().showToolbarShadow();
+    }
 }

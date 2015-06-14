@@ -38,6 +38,8 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     public static final String EXTRA_PATH = "extra_path";
     public static final String EXTRA_TRACK_ID = "extra_track_id";
+    public static final String EXTRA_SONG_NAME = "extra_songname";
+    public static final String EXTRA_ARTIST_NAME = "extra_artistname";
     public static final String EXTRA_DURATION = "extra_duration";
     public static final String EXTRA_PROGRESS = "extra_progress";
 
@@ -126,6 +128,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(track.getTrackPath());
             mMediaPlayer.prepareAsync();
+            sendPlayBroadcast(track.getTrackName(), track.getArtist().getArtistName());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -133,6 +136,13 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     private void sendBroadcast(String action) {
         Intent intent = new Intent(action);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+    }
+
+    private void sendPlayBroadcast(String songName, String artistName) {
+        Intent intent = new Intent(ACTION_PLAY);
+        intent.putExtra(EXTRA_SONG_NAME, songName);
+        intent.putExtra(EXTRA_ARTIST_NAME, artistName);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 
@@ -173,8 +183,10 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     }
 
     public TrackModel getCurrentTrack() {
-        if (mCurrentTrackIndex < mPlaylist.getTracks().size()) {
-            return mPlaylist.getTracks().get(mCurrentTrackIndex);
+        if (mPlaylist.getTracks() != null) {
+            if (mCurrentTrackIndex < mPlaylist.getTracks().size()) {
+                return mPlaylist.getTracks().get(mCurrentTrackIndex);
+            }
         }
         return null;
     }

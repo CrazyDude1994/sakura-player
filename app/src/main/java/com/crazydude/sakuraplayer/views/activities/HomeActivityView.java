@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
 
@@ -40,6 +42,15 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @ViewById(R.id.navigation_drawer)
     DrawerLayout mDrawerLayout;
 
+    @ViewById(R.id.activity_home_view_player_widget)
+    RelativeLayout mPlayerWidget;
+
+    @ViewById(R.id.view_player_widget_artist)
+    TextView mPlayerWidgetArtist;
+
+    @ViewById(R.id.view_player_widget_song)
+    TextView mPlayerWidgetSong;
+
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -51,6 +62,22 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
 
     public void setOnAfterSplashScreenListener(OnAfterSplashScreenListener listener) {
         mOnAfterSplashScreen = listener;
+    }
+
+    @UiThread
+    public void setPlayerWidgetData(String songName, String artistName) {
+        mPlayerWidgetArtist.setText(artistName);
+        mPlayerWidgetSong.setText(songName);
+    }
+
+    @UiThread
+    public void showPlayerWidget() {
+        mPlayerWidget.setVisibility(View.VISIBLE);
+    }
+
+    @UiThread
+    public void hidePlayerWidget() {
+        mPlayerWidget.setVisibility(View.GONE);
     }
 
     @UiThread
@@ -82,6 +109,11 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
                 R.string.open_drawer, R.string.close_drawer);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+    }
+
+    @UiThread
+    public void hideSplashScreen() {
+        mSplashScreenImage.setVisibility(View.GONE);
     }
 
     @UiThread
