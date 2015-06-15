@@ -47,6 +47,12 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mRecommendsFragmentView.hideProgressBar();
+    }
+
+    @Override
     public void onNetworkError(String message) {
         mRecommendsFragmentView.hideProgressBar();
     }

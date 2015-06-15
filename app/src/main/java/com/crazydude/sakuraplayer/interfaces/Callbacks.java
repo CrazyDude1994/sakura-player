@@ -15,57 +15,59 @@ import java.util.List;
  */
 public interface Callbacks {
 
-    public interface OnAfterSplashScreenListener {
-        public void onAfterSplashScreen();
+    interface OnAfterSplashScreenListener {
+        void onAfterSplashScreen();
     }
 
-    public interface OnTracksLoadedListener {
-        public void onTrackLoaded(ArrayList<TrackModel> tracks);
+    interface OnTracksLoadedListener {
+        void onTrackLoaded(ArrayList<TrackModel> tracks);
     }
 
-    public interface RecyclerViewClickListener {
+    interface RecyclerViewClickListener {
         void onClick(View view, int position);
     }
 
-    public interface OnArtistsLoadedListener {
-        public void onArtistsLoaded(ArrayList<ArtistModel> artists);
+    interface OnArtistsLoadedListener {
+        void onArtistsLoaded(ArrayList<ArtistModel> artists);
     }
 
-    public interface OnLastfmTutorialCompletedListener {
-        public void onTutorialCompleted(boolean isLoginToLastfm);
+    interface OnLastfmTutorialCompletedListener {
+        void onTutorialCompleted(boolean isLoginToLastfm);
     }
 
-    public interface OnLastfmLoginListener {
-        public void onLastfmLogin(String login, String password);
+    interface OnLastfmLoginListener {
+        void onLastfmLogin(String login, String password);
 
-        public void onLastfmRegister();
+        void onLastfmRegister();
     }
 
-    public interface OnResponseListener<T extends ErrorResponse> {
-        public void onSuccess(T response);
+    interface OnResponseListener<T extends ErrorResponse> {
+        void onSuccess(T response);
 
-        public void onLastfmError(String message, Integer code);
+        void onLastfmError(String message, Integer code);
 
-        public void onNetworkError(String message);
+        void onNetworkError(String message);
     }
 
-    public interface OnSelectedLastfmArtistListener {
-        public void onSelecteLastfmArtist(String name, String mbid);
+    interface OnSelectedLastfmArtistListener {
+        void onSelecteLastfmArtist(String name, String mbid);
     }
 
-    public interface OnSelectedTrackListener {
-        public void onSelectedTrack(TrackModel track);
+    interface OnSelectedTrackListener {
+        void onSelectedTrack(TrackModel track);
     }
 
-    public interface OnSelectedArtistListener {
-        public void onSelectedArtist(ArtistModel artist);
+    interface OnSelectedArtistListener {
+        void onSelectedArtist(ArtistModel artist);
     }
 
-    public interface OnPlayerListener {
-        public void onPauseOrResume();
-        public void onNext();
-        public void onPrevious();
-        public void onSeek(int progress);
-        public void onSetPlaylist(PlaylistModel playlist);
+    interface OnPlayerListener {
+        void onPauseOrResume();
+        void onNext();
+        void onPrevious();
+        void onSeek(int progress);
+        void onSetPlaylist(PlaylistModel playlist);
+        void onSwitchShuffle(boolean isShuffle);
+        void onSwitchRepeat(boolean isRepeat);
     }
 }

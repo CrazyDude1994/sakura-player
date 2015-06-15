@@ -3,12 +3,11 @@ package com.crazydude.sakuraplayer.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.gui.views.RecommendedArtistView;
 import com.crazydude.sakuraplayer.gui.views.RecommendedArtistView_;
 import com.crazydude.sakuraplayer.models.net.ArtistResponse;
-import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -30,7 +29,11 @@ public class RecommendsAdapter extends BaseAdapter<ArtistResponse> {
         RecommendedArtistView recommendedArtistView = viewHolder.getView();
         recommendedArtistView.setContent(data);
         String imageUrl = data.getImages().get(3).getUrl();
-        Picasso.with(viewHolder.getContext()).load(imageUrl).into(recommendedArtistView.getmImageView());
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Picasso.with(viewHolder.getContext())
+                    .load(imageUrl)
+                    .into(recommendedArtistView.getmImageView());
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

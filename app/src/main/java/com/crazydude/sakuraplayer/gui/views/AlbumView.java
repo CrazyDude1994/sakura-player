@@ -26,6 +26,9 @@ public class AlbumView extends RelativeLayout {
     @ViewById(R.id.view_album_name)
     TextView mAlbumName;
 
+    @ViewById(R.id.view_album_date)
+    TextView mAlbumDate;
+
     public AlbumView(Context context) {
         super(context);
     }
@@ -33,6 +36,7 @@ public class AlbumView extends RelativeLayout {
     public void setData(AlbumResponse.Album data) {
         mArtistName.setText(data.getArtist().getName());
         mAlbumName.setText(data.getName());
+//        mAlbumDate.setText(data.get);
     }
 
     public ImageView getImageView() {

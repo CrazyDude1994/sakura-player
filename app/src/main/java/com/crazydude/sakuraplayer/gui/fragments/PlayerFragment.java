@@ -36,6 +36,8 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
     private PlayerBroadcastReceiver mPlayerBroadcastReceiver;
     private boolean mIsInTouchMode = false;
     private int mSeekProgress = 0;
+    private boolean mIsShuffled = false;
+    private boolean mIsRepeated = false;
 
     @AfterViews
     void init() {
@@ -76,11 +78,29 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
     }
 
     @Click({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
-            R.id.fragment_player_button_prev})
+            R.id.fragment_player_button_prev, R.id.fragment_player_button_shuffle,
+            R.id.fragment_player_button_repeat})
     void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_player_button_play:
                 mOnPlayerListener.onPauseOrResume();
+                break;
+            case R.id.fragment_player_button_next:
+                mOnPlayerListener.onNext();
+                break;
+            case R.id.fragment_player_button_prev:
+                mOnPlayerListener.onPrevious();
+                break;
+            case R.id.fragment_player_button_shuffle:
+                mIsShuffled = !mIsShuffled;
+                mOnPlayerListener.onSwitchShuffle(mIsShuffled);
+                mPlayerView.setShuffleMode(mIsShuffled);
+                break;
+            case R.id.fragment_player_button_repeat:
+                mIsRepeated = !mIsRepeated;
+                mOnPlayerListener.onSwitchRepeat(mIsRepeated);
+                mPlayerView.setRepeatMode(mIsRepeated);
+                break;
         }
     }
 

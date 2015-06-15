@@ -30,6 +30,12 @@ public class PlayerView {
     @ViewById(R.id.fragment_player_button_play)
     ImageButton mPlayButton;
 
+    @ViewById(R.id.fragment_player_button_repeat)
+    ImageButton mRepeatButton;
+
+    @ViewById(R.id.fragment_player_button_shuffle)
+    ImageButton mShuffleButton;
+
     @AfterViews
     void initViews() {
     }
@@ -42,6 +48,25 @@ public class PlayerView {
     @UiThread
     public void setPaused() {
         mPlayButton.setImageResource(R.drawable.ic_play_arrow);
+    }
+
+    @UiThread
+    public void setRepeatMode(boolean isRepeat) {
+        if (isRepeat) {
+            mRepeatButton.setImageResource(R.drawable.ic_repeat_activated);
+        } else {
+            mRepeatButton.setImageResource(R.drawable.ic_repeat);
+        }
+    }
+
+    @UiThread
+    public void setShuffleMode(boolean isShuffle) {
+        if (isShuffle) {
+            mShuffleButton.setImageResource(R.drawable.ic_shuffle_activated);
+        } else {
+            mShuffleButton.setImageResource(R.drawable.ic_shuffle);
+        }
+
     }
 
     @UiThread

@@ -20,6 +20,7 @@ import com.crazydude.sakuraplayer.models.TrackModel;
 import org.androidannotations.annotations.EService;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by CrazyDude on 09.04.2015.
@@ -49,6 +50,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     private Handler mSyncSeekbar;
     private PlaylistModel mPlaylist = new PlaylistModel(null, "Current");
     private int mCurrentTrackIndex;
+    private boolean mIsInRandomMode = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -211,16 +213,44 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         }
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        if (mMediaPlayer != null && !mMediaPlayer.isLooping()) {
-            mCurrentTrackIndex++;
-            if (mCurrentTrackIndex < mPlaylist.getTracks().size()) {
+    public void setRandomMode(boolean isInRandom) {
+        mIsInRandomMode = isInRandom;
+    }
+
+    public void playNext() {
+        playNextSong(false);
+    }
+
+    public void playPrevious() {
+        playNextSong(true);
+    }
+
+    private void playNextSong(boolean isReverse) {
+        if (mMediaPlayer != null) {
+            if (!mMediaPlayer.isLooping()) {
+                if (mIsInRandomMode) {
+                    mCurrentTrackIndex = new Random().nextInt(mPlaylist.getTracks().size());
+                } else {
+                    if (isReverse) {
+                        mCurrentTrackIndex--;
+                        if (mCurrentTrackIndex <= 0) {
+                            mCurrentTrackIndex = mPlaylist.getTracks().size() - 1;
+                        }
+                    } else {
+                        mCurrentTrackIndex++;
+                        if (mCurrentTrackIndex >= mPlaylist.getTracks().size()) {
+                            mCurrentTrackIndex = 0;
+                        }
+                    }
+                }
                 playMusic(mPlaylist.getTracks().get(mCurrentTrackIndex));
-            } else {
-                stopMusic();
             }
         }
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        playNextSong(false);
     }
 
     public PlaylistModel getCurrentPlaylist() {

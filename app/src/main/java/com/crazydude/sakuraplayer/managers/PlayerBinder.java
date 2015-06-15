@@ -33,6 +33,22 @@ public class PlayerBinder extends Binder {
         mPlayerService.pauseMusic();
     }
 
+    public void next() {
+        mPlayerService.playNext();
+    }
+
+    public void previous() {
+        mPlayerService.playPrevious();
+    }
+
+    public void setRepeatMode(boolean isRepeat) {
+        mPlayerService.setLoopMode(isRepeat);
+    }
+
+    public void setShuffleMode(boolean isShuffle) {
+        mPlayerService.setRandomMode(isShuffle);
+    }
+
     public TrackModel getCurrentTrack() {
         return mPlayerService.getCurrentTrack();
     }

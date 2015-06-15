@@ -304,11 +304,16 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onNext() {
+        if (mBinder != null) {
+            mBinder.next();
+        }
     }
 
     @Override
     public void onPrevious() {
-
+        if (mBinder != null) {
+            mBinder.previous();
+        }
     }
 
     @Override
@@ -343,6 +348,20 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     void onPlayerWidgetClick() {
         if (mBinder != null) {
             switchToPlayerWithData(mBinder.getCurrentTrack());
+        }
+    }
+
+    @Override
+    public void onSwitchShuffle(boolean isShuffle) {
+        if (mBinder != null) {
+            mBinder.setShuffleMode(isShuffle);
+        }
+    }
+
+    @Override
+    public void onSwitchRepeat(boolean isRepeat) {
+        if (mBinder != null) {
+            mBinder.setRepeatMode(isRepeat);
         }
     }
 

@@ -2,12 +2,14 @@ package com.crazydude.sakuraplayer.views.activities;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -51,6 +53,9 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @ViewById(R.id.view_player_widget_song)
     TextView mPlayerWidgetSong;
 
+    @ViewById(R.id.view_player_widget_equalizer_image)
+    ImageView mEqualizerImage;
+
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -73,6 +78,8 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @UiThread
     public void showPlayerWidget() {
         mPlayerWidget.setVisibility(View.VISIBLE);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mEqualizerImage.getBackground();
+        animationDrawable.start();
     }
 
     @UiThread
