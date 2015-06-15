@@ -33,4 +33,5 @@
     <dimen name="tag_padding_left_right">8dp</dimen>
     <dimen name="fragment_artist_image_height">200dp</dimen>
     <dimen name="fragment_artist_recycler_top_margin">16dp</dimen>
+    <dimen name="card_view_padding">8dp</dimen>
 </resources>

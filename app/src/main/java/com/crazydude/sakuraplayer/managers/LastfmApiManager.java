@@ -5,6 +5,7 @@ import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 import com.crazydude.sakuraplayer.interfaces.LastfmInterface;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
+import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
@@ -110,6 +111,29 @@ public class LastfmApiManager {
         try {
             ArtistInfoResponse response = mLastfmInterface.getArtistInfo(name, mbid, lang,
                     Constants.LASTFM_API_KEY, apiSig);
+            checkForErrors(response);
+            if (callback != null) {
+                callback.onSuccess(response);
+            }
+        } catch (LastfmError lastfmError) {
+            if (callback != null) {
+                callback.onLastfmError(lastfmError.getMessage(),
+                        lastfmError.getCode());
+            }
+        } catch (RetrofitError error) {
+            if (callback != null) {
+                callback.onNetworkError(error.getMessage());
+            }
+        }
+    }
+
+    @Background
+    public void getNewReleases(String username, OnResponseListener<AlbumResponse> callback) {
+        if (username == null) {
+            username = mPreferences.lastfmUsername().get();
+        }
+        try {
+            AlbumResponse response = mLastfmInterface.getNewReleases(username, Constants.LASTFM_API_KEY);
             checkForErrors(response);
             if (callback != null) {
                 callback.onSuccess(response);

@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.interfaces;
 
+import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
@@ -35,4 +36,9 @@ public interface LastfmInterface {
                                      @Field("lang") String lang,
                                      @Field("api_key") String apiKey,
                                      @Field("api_sig") String apiSig);
+
+    @FormUrlEncoded
+    @POST("/?method=user.getNewReleases&format=json")
+    AlbumResponse getNewReleases(@Field("user") String username,
+                                 @Field("api_key") String apiKey);
 }

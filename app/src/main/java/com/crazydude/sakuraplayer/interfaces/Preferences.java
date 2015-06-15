@@ -18,4 +18,7 @@ public interface Preferences {
 
     @DefaultString("")
     String lastfmToken();
+
+    @DefaultString("")
+    String lastfmUsername();
 }

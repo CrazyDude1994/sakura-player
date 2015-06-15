@@ -8,6 +8,9 @@
         <item
             android:id="@+id/navigation_menu_recommends"
             android:title="@string/recommendations" />
+
+        <item android:id="@+id/navigation_menu_new_releases"
+            android:title="@string/new_releases"/>
     </group>
 
     <group android:checkableBehavior="single">

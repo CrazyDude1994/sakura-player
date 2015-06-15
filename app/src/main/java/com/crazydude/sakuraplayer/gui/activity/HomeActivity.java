@@ -18,6 +18,7 @@ import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.LastReleasesFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmArtistFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
@@ -141,6 +142,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     public void onSuccess(SessionResponse response) {
         mHomeActivityView.hideProgressBar();
         mPrefs.lastfmToken().put(response.getSession().getKey());
+        mPrefs.lastfmUsername().put(response.getSession().getName());
         switchToPlayerMode();
     }
 
@@ -193,6 +195,11 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         switch (menuItem.getItemId()) {
             case R.id.navigation_menu_recommends:
                 switchFragment(RecommendsFragment_.builder().build(), false,
+                        R.id.activity_home_placeholder);
+                mHomeActivityView.hidePlayerWidget();
+                break;
+            case R.id.navigation_menu_new_releases:
+                switchFragment(LastReleasesFragment_.builder().build(), false,
                         R.id.activity_home_placeholder);
                 mHomeActivityView.hidePlayerWidget();
                 break;
