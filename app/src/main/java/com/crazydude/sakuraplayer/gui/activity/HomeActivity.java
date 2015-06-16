@@ -29,12 +29,12 @@ import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
-import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
+import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
@@ -62,7 +62,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener, FragmentManager.OnBackStackChangedListener {
 
     @Bean
-    MusicLibraryManager mMusicLibraryManager;
+    TrackProvider mTrackProvider;
 
     @Bean
     HomeActivityView mHomeActivityView;
@@ -365,14 +365,13 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         }
     }
 
-    private class PlayerBroadcastReceiver extends BroadcastReceiver {
+    private class PlayerBroadcastReceiver extends BroadcastReceiver implements Callbacks.OnTracksLoadedListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case PlayerService.ACTION_PLAY:
-                    String songName = intent.getStringExtra(PlayerService.EXTRA_SONG_NAME);
-                    String artistName = intent.getStringExtra(PlayerService.EXTRA_ARTIST_NAME);
-                    mHomeActivityView.setPlayerWidgetData(songName, artistName);
+                    long id = intent.getLongExtra(PlayerService.EXTRA_TRACK_ID, 0);
+                    mTrackProvider.loadTrackById(id, this);
                     break;
                 case PlayerService.ACTION_PAUSE:
                     break;
@@ -383,6 +382,15 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
                 case PlayerService.ACTION_STOP:
                     mHomeActivityView.hidePlayerWidget();
                     break;
+            }
+        }
+
+        @Override
+        public void onTrackLoaded(ArrayList<TrackModel> tracks) {
+            if (!tracks.isEmpty()) {
+                TrackModel trackModel = tracks.get(0);
+                mHomeActivityView.setPlayerWidgetData(trackModel.getTrackName(),
+                        trackModel.getArtist().getArtistName());
             }
         }
     }

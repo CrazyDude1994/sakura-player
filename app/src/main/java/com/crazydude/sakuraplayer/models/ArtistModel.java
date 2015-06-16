@@ -10,13 +10,13 @@ import com.activeandroid.annotation.Table;
 public class ArtistModel {
 
     @Column(name = "Name")
-    private String mArtistName;
+    private String artistName;
 
     public String getArtistName() {
-        return mArtistName;
+        return artistName;
     }
 
     public void setArtistName(String mArtistName) {
-        this.mArtistName = mArtistName;
+        this.artistName = mArtistName;
     }
 }

@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
@@ -35,6 +36,9 @@ public class PlayerView {
 
     @ViewById(R.id.fragment_player_button_shuffle)
     ImageButton mShuffleButton;
+
+    @ViewById(R.id.fragment_player_image)
+    ImageView mAlbumArt;
 
     @AfterViews
     void initViews() {
@@ -74,9 +78,11 @@ public class PlayerView {
         if (data != null) {
             mArtistName.setText(data.getArtist().getArtistName());
             mSongName.setText(data.getTrackName());
+            mAlbumArt.setImageBitmap(data.getAlbum().getAlbumArt());
         } else {
             mArtistName.setText("");
             mSongName.setText("");
+            mAlbumArt.setImageBitmap(null);
         }
     }
 

@@ -12,6 +12,7 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
 
@@ -22,11 +23,16 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
+
 @EFragment(R.layout.fragment_player)
 public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnProgressChangeListener {
 
     @Bean
     PlayerView mPlayerView;
+
+    @Bean
+    TrackProvider mTrackProvider;
 
     @ViewById(R.id.fragment_player_seekbar)
     DiscreteSeekBar mDiscreteSeekBar;
@@ -132,20 +138,13 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         mOnPlayerListener.onSeek(mSeekProgress);
     }
 
-    private class PlayerBroadcastReceiver extends BroadcastReceiver {
+    private class PlayerBroadcastReceiver extends BroadcastReceiver implements Callbacks.OnTracksLoadedListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case PlayerService.ACTION_PLAY:
-                    String songName = intent.getStringExtra(PlayerService.EXTRA_SONG_NAME);
-                    String artistName = intent.getStringExtra(PlayerService.EXTRA_ARTIST_NAME);
-                    TrackModel trackModel = new TrackModel();
-                    ArtistModel artistModel = new ArtistModel();
-                    artistModel.setArtistName(artistName);
-                    trackModel.setTrackName(songName);
-                    trackModel.setArtist(artistModel);
-                    mPlayerView.setData(trackModel);
-                    mPlayerView.setPlaying();
+                    long id = intent.getLongExtra(PlayerService.EXTRA_TRACK_ID, 0);
+                    mTrackProvider.loadTrackById(id, this);
                     break;
                 case PlayerService.ACTION_PAUSE:
                     mPlayerView.setPaused();
@@ -163,6 +162,14 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
                 case PlayerService.ACTION_STOP:
                     mPlayerView.setStopped();
                     break;
+            }
+        }
+
+        @Override
+        public void onTrackLoaded(ArrayList<TrackModel> tracks) {
+            if (!tracks.isEmpty()) {
+                mPlayerView.setData(tracks.get(0)); // get first track from the list
+                mPlayerView.setPlaying();
             }
         }
     }

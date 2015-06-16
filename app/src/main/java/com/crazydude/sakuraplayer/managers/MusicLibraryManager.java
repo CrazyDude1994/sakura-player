@@ -3,8 +3,11 @@ package com.crazydude.sakuraplayer.managers;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 
+import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
@@ -12,7 +15,6 @@ import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created by CrazyDude on 11.04.2015.
@@ -30,6 +32,20 @@ public class MusicLibraryManager {
         String selection = MediaStore.Audio.Media.IS_MUSIC + " = ?";
         String[] selectionArgs = {
                 "1"
+        };
+
+        return getTracks(selection, selectionArgs);
+    }
+
+    public ArrayList<TrackModel> getTrackById(long id) {
+        String[] projection = {
+                MediaStore.Audio.Media.DATA
+        };
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " = ? AND "
+                + MediaStore.Audio.Media._ID + " = ?";
+        String[] selectionArgs = {
+                "1",
+                Long.toString(id)
         };
 
         return getTracks(selection, selectionArgs);
@@ -64,10 +80,11 @@ public class MusicLibraryManager {
         ArrayList<TrackModel> result = new ArrayList<>();
         ContentResolver contentResolver = mContext.getContentResolver();
         String[] projection = {
-                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.ALBUM_ID,
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.DATA
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media._ID
         };
         Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection, selection, selectionArgs, null);
@@ -78,14 +95,39 @@ public class MusicLibraryManager {
                 artistModel.setArtistName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
                 model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
                 model.setArtist(artistModel);
+                model.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
                 model.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                model.setAlbumName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+                long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                AlbumModel albumModel = getAlbumById(id);
+                model.setAlbum(albumModel);
                 result.add(model);
             }
         }
 
         cursor.close();
         return result;
+    }
+
+    private AlbumModel getAlbumById(long id) {
+        AlbumModel albumModel = null;
+        ContentResolver contentResolver = mContext.getContentResolver();
+        String[] projection = {
+                MediaStore.Audio.AlbumColumns.ALBUM,
+                MediaStore.Audio.AlbumColumns.ALBUM_ART,
+        };
+        String selection = "_ID = ?";
+        String[] selectionArgs = {Long.toString(id)};
+        Cursor cursor = contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection,
+                selection, selectionArgs, null);
+        if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM));
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM_ART));
+            albumModel = new AlbumModel();
+            albumModel.setAlbumArt(path);
+            albumModel.setName(name);
+        }
+        cursor.close();
+        return albumModel;
     }
 
     private ArrayList<ArtistModel> getArtists(String selection, String[] selectionArgs) {

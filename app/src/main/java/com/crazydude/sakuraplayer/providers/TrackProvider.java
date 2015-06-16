@@ -47,4 +47,12 @@ public class TrackProvider {
             listener.onTrackLoaded(models);
         }
     }
+
+    @Background
+    public void loadTrackById(long trackId, OnTracksLoadedListener listener) {
+        ArrayList<TrackModel> models = mMusicLibraryManager.getTrackById(trackId);
+        if (listener != null && models != null) {
+            listener.onTrackLoaded(models);
+        }
+    }
 }

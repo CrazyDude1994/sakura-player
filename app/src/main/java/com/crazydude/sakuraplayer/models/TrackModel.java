@@ -11,43 +11,53 @@ import com.activeandroid.annotation.Table;
 public class TrackModel extends Model {
 
     @Column(name = "Artist")
-    private ArtistModel mArtist;
+    private ArtistModel artist;
     @Column(name = "SongName")
-    private String mTrackName;
-    @Column(name = "AlbumName")
-    private String mAlbumName;
+    private String trackName;
     @Column(name = "Path")
-    private String mTrackPath;
+    private String trackPath;
+    @Column(name = "Album")
+    private AlbumModel album;
+    @Column(name = "Track_ID")
+    private long trackId;
+
+    public long getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(long trackId) {
+        this.trackId = trackId;
+    }
+
+    public AlbumModel getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(AlbumModel album) {
+        this.album = album;
+    }
 
     public ArtistModel getArtist() {
-        return mArtist;
+        return artist;
     }
 
     public void setArtist(ArtistModel mArtist) {
-        this.mArtist = mArtist;
+        this.artist = mArtist;
     }
 
     public String getTrackName() {
-        return mTrackName;
+        return trackName;
     }
 
     public void setTrackName(String mTrackName) {
-        this.mTrackName = mTrackName;
-    }
-
-    public String getAlbumName() {
-        return mAlbumName;
-    }
-
-    public void setAlbumName(String mAlbumName) {
-        this.mAlbumName = mAlbumName;
+        this.trackName = mTrackName;
     }
 
     public void setTrackPath(String trackPath) {
-        this.mTrackPath = trackPath;
+        this.trackPath = trackPath;
     }
 
     public String getTrackPath() {
-        return mTrackPath;
+        return trackPath;
     }
 }

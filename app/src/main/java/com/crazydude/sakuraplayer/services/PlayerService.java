@@ -39,8 +39,6 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     public static final String EXTRA_PATH = "extra_path";
     public static final String EXTRA_TRACK_ID = "extra_track_id";
-    public static final String EXTRA_SONG_NAME = "extra_songname";
-    public static final String EXTRA_ARTIST_NAME = "extra_artistname";
     public static final String EXTRA_DURATION = "extra_duration";
     public static final String EXTRA_PROGRESS = "extra_progress";
 
@@ -130,7 +128,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(track.getTrackPath());
             mMediaPlayer.prepareAsync();
-            sendPlayBroadcast(track.getTrackName(), track.getArtist().getArtistName());
+            sendPlayBroadcast(track.getTrackId());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,10 +139,9 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 
-    private void sendPlayBroadcast(String songName, String artistName) {
+    private void sendPlayBroadcast(long trackId) {
         Intent intent = new Intent(ACTION_PLAY);
-        intent.putExtra(EXTRA_SONG_NAME, songName);
-        intent.putExtra(EXTRA_ARTIST_NAME, artistName);
+        intent.putExtra(EXTRA_TRACK_ID, trackId);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 
