@@ -1,5 +1,7 @@
 package com.crazydude.sakuraplayer.providers;
 
+import com.activeandroid.Model;
+import com.activeandroid.query.Select;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -21,12 +23,9 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedList
 @EBean
 public class TrackProvider {
 
-    @Bean
-    MusicLibraryManager mMusicLibraryManager;
-
     @Background
     public void loadAllTracks(OnTracksLoadedListener listener) {
-        ArrayList<TrackModel> models = mMusicLibraryManager.getAllTracks();
+        ArrayList<TrackModel> models = ((ArrayList) new Select().from(TrackModel.class).execute());
         if (listener != null && models != null) {
             listener.onTrackLoaded(models);
         }
@@ -34,7 +33,7 @@ public class TrackProvider {
 
     @Background
     public void loadAllArtists(OnArtistsLoadedListener listener) {
-        ArrayList<ArtistModel> models = mMusicLibraryManager.getArtistList();
+        ArrayList<ArtistModel> models = ((ArrayList) new Select().from(ArtistModel.class).execute());
         if (listener != null && models != null) {
             listener.onArtistsLoaded(models);
         }
@@ -42,7 +41,14 @@ public class TrackProvider {
 
     @Background
     public void loadAllTracksByArtist(String artistName, OnTracksLoadedListener listener) {
-        ArrayList<TrackModel> models = mMusicLibraryManager.getTracksByArtist(artistName);
+        ArtistModel artistModel = new Select()
+                .from(ArtistModel.class)
+                .where("Name = ?", artistName)
+                .executeSingle();
+        ArrayList<TrackModel> models = ((ArrayList) new Select()
+                .from(TrackModel.class)
+                .where("Artist = ?", artistModel.getId())
+                .execute());
         if (listener != null && models != null) {
             listener.onTrackLoaded(models);
         }
@@ -50,9 +56,12 @@ public class TrackProvider {
 
     @Background
     public void loadTrackById(long trackId, OnTracksLoadedListener listener) {
-        ArrayList<TrackModel> models = mMusicLibraryManager.getTrackById(trackId);
-        if (listener != null && models != null) {
-            listener.onTrackLoaded(models);
+        TrackModel model = new Select()
+                .from(TrackModel.class)
+                .where("Track_ID = ?", trackId)
+                .executeSingle();
+        if (listener != null && model != null) {
+            listener.onTrackLoaded(model);
         }
     }
 }

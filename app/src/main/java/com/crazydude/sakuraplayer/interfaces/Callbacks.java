@@ -20,7 +20,12 @@ public interface Callbacks {
     }
 
     interface OnTracksLoadedListener {
+        void onTrackLoaded(TrackModel trackModel);
         void onTrackLoaded(ArrayList<TrackModel> tracks);
+    }
+
+    interface Updatable {
+        void onUpdate();
     }
 
     interface RecyclerViewClickListener {

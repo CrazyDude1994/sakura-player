@@ -74,4 +74,9 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
         PlaylistModel playlistModel = new PlaylistModel(mTrackModels, "Current");
         mOnPlayerListener.onSetPlaylist(playlistModel);
     }
+
+    @Override
+    public void onTrackLoaded(TrackModel trackModel) {
+
+    }
 }

@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 
 import com.crazydude.sakuraplayer.R;
@@ -29,6 +32,7 @@ import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
@@ -48,6 +52,7 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
@@ -59,7 +64,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
         OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
         Callbacks.OnSelectedLastfmArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
-        Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener, FragmentManager.OnBackStackChangedListener {
+        Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener,
+        FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener, MediaScannerConnection.OnScanCompletedListener {
 
     @Bean
     TrackProvider mTrackProvider;
@@ -78,6 +84,9 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Bean
     LastfmApiManager mLastfmApiManager;
+
+    @Bean
+    MusicLibraryManager mMusicLibraryManager;
 
     private PlayerFragment mPlayerFragment;
     private PlayerBinder mBinder;
@@ -365,6 +374,24 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         }
     }
 
+    @Override
+    public void onRefresh() {
+        mUtils.triggerMediaScan(this);
+    }
+
+    @Override
+    public void onScanCompleted(String path, Uri uri) {
+        mMusicLibraryManager.generateDatabase();
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment instanceof Callbacks.Updatable) {
+                    ((Callbacks.Updatable) fragment).onUpdate();
+                }
+            }
+        }
+    }
+
     private class PlayerBroadcastReceiver extends BroadcastReceiver implements Callbacks.OnTracksLoadedListener {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -387,11 +414,12 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
         @Override
         public void onTrackLoaded(ArrayList<TrackModel> tracks) {
-            if (!tracks.isEmpty()) {
-                TrackModel trackModel = tracks.get(0);
-                mHomeActivityView.setPlayerWidgetData(trackModel.getTrackName(),
-                        trackModel.getArtist().getArtistName());
-            }
+        }
+
+        @Override
+        public void onTrackLoaded(TrackModel trackModel) {
+            mHomeActivityView.setPlayerWidgetData(trackModel.getTrackName(),
+                    trackModel.getArtist().getArtistName());
         }
     }
 }

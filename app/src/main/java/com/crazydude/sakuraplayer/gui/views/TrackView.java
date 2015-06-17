@@ -35,7 +35,9 @@ public class TrackView extends RelativeLayout {
     }
 
     public void setContent(TrackModel data) {
-        mTrackArtist.setText(data.getArtist().getArtistName());
+        if (data.getArtist() != null) {
+            mTrackArtist.setText(data.getArtist().getArtistName());
+        }
         mSongName.setText(data.getTrackName());
         //mTrackSongDuration.setText();
     }

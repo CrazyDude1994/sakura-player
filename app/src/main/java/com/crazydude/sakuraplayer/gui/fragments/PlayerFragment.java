@@ -10,7 +10,6 @@ import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
-import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
@@ -167,10 +166,12 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
 
         @Override
         public void onTrackLoaded(ArrayList<TrackModel> tracks) {
-            if (!tracks.isEmpty()) {
-                mPlayerView.setData(tracks.get(0)); // get first track from the list
-                mPlayerView.setPlaying();
-            }
+        }
+
+        @Override
+        public void onTrackLoaded(TrackModel trackModel) {
+            mPlayerView.setData(trackModel); // get first track from the list
+            mPlayerView.setPlaying();
         }
     }
 }
