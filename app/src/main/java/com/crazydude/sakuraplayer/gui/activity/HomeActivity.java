@@ -65,7 +65,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
         Callbacks.OnSelectedLastfmArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
         Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener,
-        FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener, MediaScannerConnection.OnScanCompletedListener {
+        FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener, MediaScannerConnection.OnScanCompletedListener, Callbacks.Updatable {
 
     @Bean
     TrackProvider mTrackProvider;
@@ -381,7 +381,11 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onScanCompleted(String path, Uri uri) {
-        mMusicLibraryManager.generateDatabase();
+        mTrackProvider.updateMusicDatabase(this);
+    }
+
+    @Override
+    public void onUpdate() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {
