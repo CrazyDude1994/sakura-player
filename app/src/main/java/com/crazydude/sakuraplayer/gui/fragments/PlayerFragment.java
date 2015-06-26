@@ -9,11 +9,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.events.PlayerEvent;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
+import com.squareup.otto.Subscribe;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.androidannotations.annotations.AfterViews;
@@ -38,7 +40,6 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
 
     private TrackModel mCurrentTrack;
     private Callbacks.OnPlayerListener mOnPlayerListener;
-    private PlayerBroadcastReceiver mPlayerBroadcastReceiver;
     private boolean mIsInTouchMode = false;
     private int mSeekProgress = 0;
     private boolean mIsShuffled = false;
@@ -51,35 +52,6 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
             mPlayerView.setPlaying();
             mPlayerView.setData(mCurrentTrack);
         }
-    }
-
-    private void registerReceiver() {
-        if (mPlayerBroadcastReceiver == null) {
-            mPlayerBroadcastReceiver = new PlayerBroadcastReceiver();
-        }
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(PlayerService.ACTION_PLAY);
-        intentFilter.addAction(PlayerService.ACTION_PAUSE);
-        intentFilter.addAction(PlayerService.ACTION_RESUME);
-        intentFilter.addAction(PlayerService.ACTION_SEEK);
-        intentFilter.addAction(PlayerService.ACTION_STOP);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPlayerBroadcastReceiver, intentFilter);
-    }
-
-    private void unRegisterReceiver() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPlayerBroadcastReceiver);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        registerReceiver();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unRegisterReceiver();
     }
 
     @Click({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
@@ -137,41 +109,33 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         mOnPlayerListener.onSeek(mSeekProgress);
     }
 
-    private class PlayerBroadcastReceiver extends BroadcastReceiver implements Callbacks.OnTracksLoadedListener {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case PlayerService.ACTION_PLAY:
-                    long id = intent.getLongExtra(PlayerService.EXTRA_TRACK_ID, 0);
-                    mTrackProvider.loadTrackById(id, this);
-                    break;
-                case PlayerService.ACTION_PAUSE:
-                    mPlayerView.setPaused();
-                    break;
-                case PlayerService.ACTION_RESUME:
-                    mPlayerView.setPlaying();
-                    break;
-                case PlayerService.ACTION_SEEK:
-                    int duration = intent.getIntExtra(PlayerService.EXTRA_DURATION, 0);
-                    int progress = intent.getIntExtra(PlayerService.EXTRA_PROGRESS, 0);
-                    if (!mIsInTouchMode) {
-                        mPlayerView.setProgress(progress, duration);
-                    }
-                    break;
-                case PlayerService.ACTION_STOP:
-                    mPlayerView.setStopped();
-                    break;
-            }
+    @Subscribe
+    public void onPlayerPlaybackEvent(PlayerEvent.PlayerPlaybackEvent event) {
+        mPlayerView.setData(event.getTrackModel());
+        switch (event.getAction()) {
+            case PLAY:
+                mPlayerView.setPlaying();
+                break;
+            case STOP:
+                mPlayerView.setStopped();
+                break;
+            case PAUSE:
+                mPlayerView.setPaused();
+                break;
+            case NEXT:
+                break;
+            case PREV:
+                break;
+            case RESUME:
+                mPlayerView.setPlaying();
+                break;
         }
+    }
 
-        @Override
-        public void onTrackLoaded(ArrayList<TrackModel> tracks) {
-        }
-
-        @Override
-        public void onTrackLoaded(TrackModel trackModel) {
-            mPlayerView.setData(trackModel); // get first track from the list
-            mPlayerView.setPlaying();
+    @Subscribe
+    public void onPlayerSeekEvent(PlayerEvent.PlayerSeekEvent event) {
+        if (!mIsInTouchMode) {
+            mPlayerView.setProgress(event.getProgress(), event.getDuration());
         }
     }
 }

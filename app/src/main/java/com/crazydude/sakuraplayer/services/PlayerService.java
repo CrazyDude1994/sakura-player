@@ -12,10 +12,13 @@ import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.events.PlayerEvent;
 import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.crazydude.sakuraplayer.providers.BusProvider;
+import com.squareup.otto.Bus;
 
 import org.androidannotations.annotations.EService;
 
@@ -39,8 +42,6 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     public static final String EXTRA_PATH = "extra_path";
     public static final String EXTRA_TRACK_ID = "extra_track_id";
-    public static final String EXTRA_DURATION = "extra_duration";
-    public static final String EXTRA_PROGRESS = "extra_progress";
 
     private MediaPlayer mMediaPlayer;
     private PlayerBinder mBinder;
@@ -49,6 +50,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     private PlaylistModel mPlaylist = new PlaylistModel(null, "Current");
     private int mCurrentTrackIndex;
     private boolean mIsInRandomMode = false;
+    private Bus bus = BusProvider.getInstance();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -121,6 +123,23 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         }
     }
 
+    private void postPlaybackEvent(
+            PlayerEvent.PlayerPlaybackEvent.PlaybackAction action, TrackModel trackModel) {
+        PlayerEvent.PlayerPlaybackEvent playerPlaybackEvent = new PlayerEvent.
+                PlayerPlaybackEvent();
+        playerPlaybackEvent.setAction(action);
+        playerPlaybackEvent.setTrackModel(trackModel);
+        bus.post(playerPlaybackEvent);
+    }
+
+    private void postSeekEvent(int duration, int progress, TrackModel trackModel) {
+        PlayerEvent.PlayerSeekEvent seekEvent = new PlayerEvent.PlayerSeekEvent();
+        seekEvent.setTrackModel(trackModel);
+        seekEvent.setDuration(duration);
+        seekEvent.setProgress(progress);
+        bus.post(seekEvent);
+    }
+
     private void playMusic(TrackModel track) {
         setupPlayer();
         setupForegroundNotification(track);
@@ -128,21 +147,12 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(track.getTrackPath());
             mMediaPlayer.prepareAsync();
-            sendPlayBroadcast(track.getTrackId());
+            PlayerEvent.PlayerPlaybackEvent playerPlaybackEvent = new PlayerEvent.
+                    PlayerPlaybackEvent();
+            postPlaybackEvent(PlayerEvent.PlayerPlaybackEvent.PlaybackAction.PLAY, track);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void sendBroadcast(String action) {
-        Intent intent = new Intent(action);
-        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
-    }
-
-    private void sendPlayBroadcast(long trackId) {
-        Intent intent = new Intent(ACTION_PLAY);
-        intent.putExtra(EXTRA_TRACK_ID, trackId);
-        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
     }
 
     @Override
@@ -157,7 +167,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     public void stopMusic() {
         if (mMediaPlayer != null) {
-            sendBroadcast(ACTION_STOP);
+            postPlaybackEvent(PlayerEvent.PlayerPlaybackEvent.PlaybackAction.STOP, getCurrentTrack());
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -169,7 +179,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
             stopForeground();
-            sendBroadcast(ACTION_PAUSE);
+            postPlaybackEvent(PlayerEvent.PlayerPlaybackEvent.PlaybackAction.PAUSE, getCurrentTrack());
         }
     }
 
@@ -177,7 +187,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
             setupForegroundNotification(getCurrentTrack());
-            sendBroadcast(ACTION_RESUME);
+            postPlaybackEvent(PlayerEvent.PlayerPlaybackEvent.PlaybackAction.RESUME, getCurrentTrack());
         }
     }
 
@@ -260,10 +270,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                 int position = mMediaPlayer.getCurrentPosition();
                 int duration = mMediaPlayer.getDuration();
-                Intent intent = new Intent(ACTION_SEEK);
-                intent.putExtra(EXTRA_DURATION, duration);
-                intent.putExtra(EXTRA_PROGRESS, position);
-                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+                postSeekEvent(duration, position, getCurrentTrack());
             }
             if (mSyncSeekbar != null) {
                 mSyncSeekbar.postDelayed(this, 500);

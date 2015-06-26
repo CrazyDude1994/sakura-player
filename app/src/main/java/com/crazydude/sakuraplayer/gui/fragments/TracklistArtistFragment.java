@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.events.UpdateLibraryEvent;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
+import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -16,7 +18,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created by Crazy on 27.05.2015.
@@ -59,5 +60,10 @@ public class TracklistArtistFragment extends BaseFragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mOnSelectedArtistListener = (Callbacks.OnSelectedArtistListener) activity;
+    }
+
+    @Subscribe
+    public void onUpdate(UpdateLibraryEvent event) {
+        mTrackProvider.loadAllArtists(this);
     }
 }

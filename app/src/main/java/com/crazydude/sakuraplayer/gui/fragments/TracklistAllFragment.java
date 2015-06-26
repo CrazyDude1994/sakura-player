@@ -1,21 +1,18 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Utils;
-import com.crazydude.sakuraplayer.gui.activity.BaseActivity;
-import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
+import com.crazydude.sakuraplayer.events.UpdateLibraryEvent;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
+import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -23,14 +20,13 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by CrazyDude on 13.04.2015.
  */
 @EFragment(R.layout.fragment_tracklist_alltracks)
 public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener,
-        Callbacks.RecyclerViewClickListener, Callbacks.Updatable {
+        Callbacks.RecyclerViewClickListener {
 
     @Bean
     TracklistAllFragmentView mTracklistAllFragmentView;
@@ -79,8 +75,8 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
         mOnRefreshListener = (SwipeRefreshLayout.OnRefreshListener) activity;
     }
 
-    @Override
-    public void onUpdate() {
+    @Subscribe
+    public void onUpdate(UpdateLibraryEvent event) {
         mTrackProvider.loadAllTracks(this);
     }
 }

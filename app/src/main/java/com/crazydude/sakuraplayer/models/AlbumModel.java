@@ -19,6 +19,7 @@ public class AlbumModel extends Model {
     private ArtistModel artist;
     @Column(name = "Name")
     private String name;
+    @Column(name = "AlbumArt")
     private String albumArt;
 
     public String getName() {
@@ -37,7 +38,11 @@ public class AlbumModel extends Model {
         return bitmap;
     }
 
-    public void setAlbumArt(String path) {
+    public String getAlbumArtPath() {
+        return albumArt;
+    }
+
+    public void setAlbumArtPath(String path) {
         this.albumArt = path;
     }
 

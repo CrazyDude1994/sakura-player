@@ -20,6 +20,7 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
+import com.crazydude.sakuraplayer.events.PlayerEvent;
 import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastReleasesFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmArtistFragment_;
@@ -42,6 +43,7 @@ import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
+import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
@@ -65,7 +67,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
         Callbacks.OnSelectedLastfmArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
         Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener,
-        FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener, MediaScannerConnection.OnScanCompletedListener, Callbacks.Updatable {
+        FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener,
+        MediaScannerConnection.OnScanCompletedListener {
 
     @Bean
     TrackProvider mTrackProvider;
@@ -90,7 +93,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     private PlayerFragment mPlayerFragment;
     private PlayerBinder mBinder;
-    private PlayerBroadcastReceiver mPlayerBroadcastReceiver;
 
     @AfterViews
     void initViews() {
@@ -166,23 +168,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     public void onNetworkError(String message) {
         mHomeActivityView.hideProgressBar();
         mHomeActivityView.showInfoDialog(getString(R.string.network_error), message);
-    }
-
-    private void registerReceiver() {
-        if (mPlayerBroadcastReceiver == null) {
-            mPlayerBroadcastReceiver = new PlayerBroadcastReceiver();
-        }
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(PlayerService.ACTION_PLAY);
-        intentFilter.addAction(PlayerService.ACTION_PAUSE);
-        intentFilter.addAction(PlayerService.ACTION_RESUME);
-        intentFilter.addAction(PlayerService.ACTION_SEEK);
-        intentFilter.addAction(PlayerService.ACTION_STOP);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mPlayerBroadcastReceiver, intentFilter);
-    }
-
-    private void unregisterReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mPlayerBroadcastReceiver);
     }
 
     @Override
@@ -289,18 +274,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver();
-    }
-
-    @Override
     public void onPauseOrResume() {
         if (mBinder != null) {
             if (mBinder.isPlaying()) {
@@ -381,49 +354,20 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onScanCompleted(String path, Uri uri) {
-        mTrackProvider.updateMusicDatabase(this);
+        mTrackProvider.updateMusicDatabase();
     }
 
-    @Override
-    public void onUpdate() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if (fragments != null) {
-            for (Fragment fragment : fragments) {
-                if (fragment != null && fragment instanceof Callbacks.Updatable) {
-                    ((Callbacks.Updatable) fragment).onUpdate();
-                }
-            }
-        }
-    }
 
-    private class PlayerBroadcastReceiver extends BroadcastReceiver implements Callbacks.OnTracksLoadedListener {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case PlayerService.ACTION_PLAY:
-                    long id = intent.getLongExtra(PlayerService.EXTRA_TRACK_ID, 0);
-                    mTrackProvider.loadTrackById(id, this);
-                    break;
-                case PlayerService.ACTION_PAUSE:
-                    break;
-                case PlayerService.ACTION_RESUME:
-                    break;
-                case PlayerService.ACTION_SEEK:
-                    break;
-                case PlayerService.ACTION_STOP:
-                    mHomeActivityView.hidePlayerWidget();
-                    break;
-            }
-        }
-
-        @Override
-        public void onTrackLoaded(ArrayList<TrackModel> tracks) {
-        }
-
-        @Override
-        public void onTrackLoaded(TrackModel trackModel) {
-            mHomeActivityView.setPlayerWidgetData(trackModel.getTrackName(),
-                    trackModel.getArtist().getArtistName());
+    @Subscribe
+    public void onPlaybackEvent(PlayerEvent.PlayerPlaybackEvent event) {
+        switch (event.getAction()) {
+            case PLAY:
+                mHomeActivityView.setPlayerWidgetData(event.getTrackModel().getTrackName(),
+                        event.getTrackModel().getArtist().getArtistName());
+                break;
+            case STOP:
+                mHomeActivityView.hidePlayerWidget();
+                break;
         }
     }
 }

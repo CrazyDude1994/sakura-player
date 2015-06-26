@@ -56,12 +56,6 @@ public class MusicLibraryManager {
                     AlbumModel albumModel;
                     ArtistModel artistModel;
 
-                    if (albumSet.containsKey(albumId)) {
-                        albumModel = albumSet.get(albumId);
-                    } else {
-                        albumModel = getAlbumById(albumId);
-                        albumSet.put(albumId, albumModel);
-                    }
 
                     if (artistSet.containsKey(artistId)) {
                         artistModel = artistSet.get(artistId);
@@ -70,12 +64,20 @@ public class MusicLibraryManager {
                         artistSet.put(artistId, artistModel);
                     }
 
-                    model.setAlbum(albumModel);
-                    model.setArtist(artistModel);
+                    if (albumSet.containsKey(albumId)) {
+                        albumModel = albumSet.get(albumId);
+                    } else {
+                        albumModel = getAlbumById(albumId);
+                        albumSet.put(albumId, albumModel);
+                    }
 
                     if (albumModel != null) {
                         albumModel.setArtist(artistModel);
+                        albumModel.save();
                     }
+
+                    model.setAlbum(albumModel);
+                    model.setArtist(artistModel);
 
                     model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
                     model.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
@@ -111,7 +113,7 @@ public class MusicLibraryManager {
             String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM));
             String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM_ART));
             albumModel = new AlbumModel();
-            albumModel.setAlbumArt(path);
+            albumModel.setAlbumArtPath(path);
             albumModel.setName(name);
             albumModel.save();
         }

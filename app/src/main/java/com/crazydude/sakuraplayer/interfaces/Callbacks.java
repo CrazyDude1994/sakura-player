@@ -24,10 +24,6 @@ public interface Callbacks {
         void onTrackLoaded(ArrayList<TrackModel> tracks);
     }
 
-    interface Updatable {
-        void onUpdate();
-    }
-
     interface RecyclerViewClickListener {
         void onClick(View view, int position);
     }
