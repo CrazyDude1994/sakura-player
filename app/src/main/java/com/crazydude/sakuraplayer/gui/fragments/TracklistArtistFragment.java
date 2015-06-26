@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
@@ -37,10 +38,12 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
     private ArrayList<ArtistModel> mArtistModels;
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
     @AfterViews
     void initViews() {
         mTrackProvider.loadAllArtists(this);
+        mTracklistArtistFragmentView.setOnRefreshListener(mOnRefreshListener);
     }
 
     @UiThread
@@ -49,6 +52,8 @@ public class TracklistArtistFragment extends BaseFragment implements
         mArtistModels = artists;
         mTracklistArtistFragmentView.setArtistList(artists);
         mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
+        mTracklistArtistFragmentView.hideProgressBar();
+        mTracklistArtistFragmentView.setRefreshing(false);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class TracklistArtistFragment extends BaseFragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mOnSelectedArtistListener = (Callbacks.OnSelectedArtistListener) activity;
+        mOnRefreshListener = (SwipeRefreshLayout.OnRefreshListener) activity;
     }
 
     @Subscribe

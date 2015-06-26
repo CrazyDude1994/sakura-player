@@ -25,7 +25,7 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.RecyclerViewClickL
  * Created by Crazy on 16.05.2015.
  */
 @EBean
-public class TracklistAllFragmentView extends BaseFragmentView {
+public class TracklistAllFragmentView extends BaseRefreshingView {
 
     @ViewById(R.id.fragment_tracklist_alltracks_recycler)
     RecyclerView mRecyclerView;
@@ -46,18 +46,9 @@ public class TracklistAllFragmentView extends BaseFragmentView {
         mRecyclerView.setAdapter(mTracklistAdapter);
     }
 
-    @UiThread
-    public void setRefreshing(boolean isRefreshing) {
-        mSwipeRefreshLayout.setRefreshing(isRefreshing);
-    }
-
     public void setOnRecyclerClickListener(RecyclerViewClickListener listener) {
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
                 mRecyclerView));
-    }
-
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
-        mSwipeRefreshLayout.setOnRefreshListener(listener);
     }
 
     public TrackModel getData(int position) {
@@ -67,5 +58,10 @@ public class TracklistAllFragmentView extends BaseFragmentView {
     @UiThread
     public void setTrackList(List<TrackModel> tracks) {
         mTracklistAdapter.setData(tracks);
+    }
+
+    @Override
+    public void injectSwipeRefreshLayout() {
+        super.mSwipeRefreshLayout = mSwipeRefreshLayout;
     }
 }
