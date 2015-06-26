@@ -23,6 +23,17 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedList
 @EBean
 public class TrackProvider {
 
+    @Bean
+    MusicLibraryManager mMusicLibraryManager;
+
+    @Background
+    public void updateMusicDatabase(Callbacks.Updatable listener) {
+        mMusicLibraryManager.generateDatabase();
+        if (listener != null) {
+            listener.onUpdate();
+        }
+    }
+
     @Background
     public void loadAllTracks(OnTracksLoadedListener listener) {
         ArrayList<TrackModel> models = ((ArrayList) new Select().from(TrackModel.class).execute());
