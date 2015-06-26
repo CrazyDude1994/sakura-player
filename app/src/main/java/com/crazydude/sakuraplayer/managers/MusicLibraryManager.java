@@ -53,7 +53,9 @@ public class MusicLibraryManager {
                 model.setAlbum(albumModel);
                 model.setArtist(artistModel);
 
-                albumModel.setArtist(artistModel);
+                if (albumModel != null) {
+                    albumModel.setArtist(artistModel);
+                }
 
                 model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
                 model.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
