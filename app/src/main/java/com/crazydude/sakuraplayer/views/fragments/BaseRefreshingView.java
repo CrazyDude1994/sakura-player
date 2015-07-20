@@ -2,6 +2,9 @@ package com.crazydude.sakuraplayer.views.fragments;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.squareup.otto.Subscribe;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.UiThread;

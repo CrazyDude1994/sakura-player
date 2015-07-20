@@ -6,7 +6,8 @@ import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Utils;
-import com.crazydude.sakuraplayer.events.UpdateLibraryEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -76,7 +77,12 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     }
 
     @Subscribe
-    public void onUpdate(UpdateLibraryEvent event) {
+    public void onUpdate(UpdateLibraryCompletedEvent event) {
         mTrackProvider.loadAllTracks(this);
+    }
+
+    @Subscribe
+    public void onUpdateStarted(UpdateLibraryStartedEvent event) {
+        mTracklistAllFragmentView.setRefreshing(true);
     }
 }

@@ -1,18 +1,14 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 
@@ -40,7 +36,6 @@ import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
-import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.services.PlayerService_;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.squareup.otto.Subscribe;
@@ -52,9 +47,6 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
@@ -98,6 +90,11 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     void initViews() {
         SakuraPlayerApplication application = (SakuraPlayerApplication) getApplication();
         mHomeActivityView.setOnAfterSplashScreenListener(this);
+
+        if (!mPrefs.isTutorialCompleted().get()) {
+            mUtils.triggerMediaScan(this);
+        }
+
         if (application.isIsSplashscreenShown() == false) {
             mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
             application.setIsSplashscreenShown(true);
@@ -216,7 +213,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     public void onSelectedTrack(TrackModel track) {
         if (track != null) {
             switchToPlayerWithData(track);
-            mBinder.play(generateSingleTrackPlaylist(track));
+            mBinder.play(mUtils.generateSingleTrackPlaylist(track));
         }
     }
 
@@ -229,12 +226,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         if (data != null) {
             mPlayerFragment.setData(data);
         }
-    }
-
-    private PlaylistModel generateSingleTrackPlaylist(TrackModel model) {
-        ArrayList<TrackModel> tracks = new ArrayList<>();
-        tracks.add(model);
-        return new PlaylistModel(tracks, "Current");
     }
 
     @Override
@@ -356,7 +347,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     public void onScanCompleted(String path, Uri uri) {
         mTrackProvider.updateMusicDatabase();
     }
-
 
     @Subscribe
     public void onPlaybackEvent(PlayerEvent.PlayerPlaybackEvent event) {

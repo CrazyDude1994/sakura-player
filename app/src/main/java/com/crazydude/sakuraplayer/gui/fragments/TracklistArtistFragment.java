@@ -5,7 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.events.UpdateLibraryEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -69,7 +70,12 @@ public class TracklistArtistFragment extends BaseFragment implements
     }
 
     @Subscribe
-    public void onUpdate(UpdateLibraryEvent event) {
+    public void onUpdate(UpdateLibraryCompletedEvent event) {
         mTrackProvider.loadAllArtists(this);
+    }
+
+    @Subscribe
+    public void onUpdateStarted(UpdateLibraryStartedEvent event) {
+        mTracklistArtistFragmentView.setRefreshing(true);
     }
 }

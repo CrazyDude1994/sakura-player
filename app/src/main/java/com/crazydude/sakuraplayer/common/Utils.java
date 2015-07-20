@@ -8,15 +8,19 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
+import com.crazydude.sakuraplayer.models.TrackModel;
+import com.crazydude.sakuraplayer.providers.BusProvider;
+
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.TreeMap;
-
-import retrofit.mime.MimeUtil;
 
 /**
  * Created by CrazyDude on 14.03.2015.
@@ -53,6 +57,12 @@ public class Utils {
         return convertToHex(md5hash);
     }
 
+    public PlaylistModel generateSingleTrackPlaylist(TrackModel model) {
+        ArrayList<TrackModel> tracks = new ArrayList<>();
+        tracks.add(model);
+        return new PlaylistModel(tracks, "Current");
+    }
+
     public void triggerMediaScan(MediaScannerConnection.OnScanCompletedListener listener) {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
                 Uri.parse("file://" + Environment.getExternalStorageDirectory())));
@@ -61,6 +71,7 @@ public class Utils {
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
         intentFilter.addDataScheme("file");
         context.registerReceiver(receiver, intentFilter);
+        BusProvider.getInstance().post(new UpdateLibraryStartedEvent());
     }
 
     private class MediaScanCompletedReceiver extends BroadcastReceiver {

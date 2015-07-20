@@ -1,7 +1,7 @@
 package com.crazydude.sakuraplayer.providers;
 
 import com.activeandroid.query.Select;
-import com.crazydude.sakuraplayer.events.UpdateLibraryEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -27,7 +27,7 @@ public class TrackProvider {
     @Background
     public void updateMusicDatabase() {
         mMusicLibraryManager.generateDatabase();
-        BusProvider.getInstance().post(new UpdateLibraryEvent());
+        BusProvider.getInstance().post(new UpdateLibraryCompletedEvent());
     }
 
     @Background

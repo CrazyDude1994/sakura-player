@@ -21,6 +21,10 @@ public class PlayerBinder extends Binder {
         mPlayerService.playMusic(playlist);
     }
 
+    public void play(PlaylistModel playlist, int startAt) {
+        mPlayerService.playMusic(playlist, startAt);
+    }
+
     public void stop() {
         mPlayerService.stopMusic();
     }

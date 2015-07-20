@@ -9,7 +9,6 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
@@ -117,6 +116,15 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     public void playMusic(PlaylistModel playlist) {
         mCurrentTrackIndex = 0;
+        playCurrentMusic(playlist);
+    }
+
+    public void playMusic(PlaylistModel playlist, int startAt) {
+        mCurrentTrackIndex = startAt;
+        playCurrentMusic(playlist);
+    }
+
+    private void playCurrentMusic(PlaylistModel playlist) {
         mPlaylist = playlist;
         if (playlist.getTracks().size() > 0) {
             playMusic(playlist.getTracks().get(mCurrentTrackIndex));
