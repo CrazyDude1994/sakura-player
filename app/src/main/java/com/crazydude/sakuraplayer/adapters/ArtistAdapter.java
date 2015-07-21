@@ -15,34 +15,14 @@ import org.androidannotations.annotations.RootContext;
  * Created by Crazy on 27.05.2015.
  */
 @EBean
-public class ArtistAdapter extends BaseAdapter<ArtistModel> {
+public class ArtistAdapter extends BaseAdapter<ArtistModel, ArtistView> {
 
     @RootContext
     Context mContext;
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<ArtistView> onCreateViewHolder(ViewGroup parent, int viewType) {
         ArtistView artistView = ArtistView_.build(mContext);
-        return new ViewHolder(artistView);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ArtistView artistView = ((ViewHolder) holder).getView();
-        artistView.setContent(getData(position));
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private ArtistView mAristView;
-
-        public ViewHolder(ArtistView artistView) {
-            super(artistView);
-            this.mAristView = artistView;
-        }
-
-        public ArtistView getView() {
-            return mAristView;
-        }
+        return new BaseViewHolder<>(artistView);
     }
 }

@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import org.androidannotations.annotations.Click;
@@ -16,7 +17,7 @@ import org.androidannotations.annotations.ViewById;
  * Created by Crazy on 16.05.2015.
  */
 @EViewGroup(R.layout.view_track)
-public class TrackView extends RelativeLayout {
+public class TrackView extends RelativeLayout implements DataView<TrackModel> {
 
     @ViewById(R.id.view_track_artist)
     TextView mTrackArtist;

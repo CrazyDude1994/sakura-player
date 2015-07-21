@@ -13,47 +13,23 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by Crazy on 06.06.2015.
  */
-public class RecommendsAdapter extends BaseAdapter<ArtistResponse> {
+public class RecommendsAdapter extends BaseAdapter<ArtistResponse, RecommendedArtistView> {
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<RecommendedArtistView> onCreateViewHolder(ViewGroup parent, int viewType) {
         RecommendedArtistView recommendedArtistView = RecommendedArtistView_.build(parent.getContext());
-        ViewHolder viewHolder = new ViewHolder(recommendedArtistView, parent.getContext());
-        return viewHolder;
+        return new BaseViewHolder<>(recommendedArtistView);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(BaseViewHolder<RecommendedArtistView> holder, int position) {
         ArtistResponse data = getData(position);
-        ViewHolder viewHolder = ((ViewHolder) holder);
-        RecommendedArtistView recommendedArtistView = viewHolder.getView();
-        recommendedArtistView.setContent(data);
+        holder.getView().setContent(data);
         String imageUrl = data.getImages().get(3).getUrl();
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            Picasso.with(viewHolder.getContext())
+            Picasso.with(holder.getView().getContext())
                     .load(imageUrl)
-                    .into(recommendedArtistView.getmImageView());
+                    .into(holder.getView().getmImageView());
         }
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private RecommendedArtistView mImageView;
-        private Context mContext;
-
-        public ViewHolder(RecommendedArtistView itemView, Context context) {
-            super(itemView);
-            mImageView = itemView;
-            mContext = context;
-        }
-
-        public Context getContext() {
-            return mContext;
-        }
-
-        public RecommendedArtistView getView() {
-            return mImageView;
-        }
-
     }
 }

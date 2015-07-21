@@ -5,6 +5,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 
 import org.androidannotations.annotations.EViewGroup;
@@ -14,7 +15,7 @@ import org.androidannotations.annotations.ViewById;
  * Created by Crazy on 27.05.2015.
  */
 @EViewGroup(R.layout.view_artist)
-public class ArtistView extends RelativeLayout {
+public class ArtistView extends RelativeLayout implements DataView<ArtistModel> {
 
     @ViewById(R.id.view_artist_name_text)
     TextView mArtistNameText;
