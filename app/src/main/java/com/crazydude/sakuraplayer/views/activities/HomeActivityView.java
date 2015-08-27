@@ -13,13 +13,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.models.TrackModel;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
+
+import java.io.File;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 
@@ -53,6 +60,12 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     @ViewById(R.id.view_player_widget_equalizer_image)
     ImageView mEqualizerImage;
 
+    @ViewById(R.id.view_player_widget_album_art)
+    CircularImageView mWidgetAlbumArt;
+
+    @ColorRes(R.color.accent)
+    int mAccentColor;
+
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -67,9 +80,19 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     }
 
     @UiThread
-    public void setPlayerWidgetData(String songName, String artistName) {
-        mPlayerWidgetArtist.setText(artistName);
-        mPlayerWidgetSong.setText(songName);
+    public void setPlayerWidgetData(TrackModel trackModel) {
+        mPlayerWidgetArtist.setText(trackModel.getArtist().getArtistName());
+        mPlayerWidgetSong.setText(trackModel.getTrackName());
+        if (trackModel.getAlbum() != null && trackModel.getAlbum().getAlbumArtPath() != null) {
+            File file = new File(trackModel.getAlbum().getAlbumArtPath());
+            Picasso.with(mContext)
+                    .load(file)
+                    .resizeDimen(R.dimen.list_rounded_image_width_height, R.dimen.list_rounded_image_width_height)
+                    .error(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor))
+                    .into(mWidgetAlbumArt);
+        } else {
+            mWidgetAlbumArt.setImageDrawable(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor));
+        }
     }
 
     @UiThread

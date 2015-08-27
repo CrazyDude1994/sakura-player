@@ -22,6 +22,9 @@ public class AlbumModel extends Model {
     @Column(name = "AlbumArt")
     private String albumArt;
 
+    private ArtistModel cachedArtist;
+    private List<TrackModel> cachedTracks;
+
     public String getName() {
         return name;
     }
@@ -39,11 +42,17 @@ public class AlbumModel extends Model {
     }
 
     public List<TrackModel> tracks() {
-        return getMany(TrackModel.class, "Album");
+        if (cachedTracks == null) {
+            cachedTracks = getMany(TrackModel.class, "Album");
+        }
+        return cachedTracks;
     }
 
     public ArtistModel getArtist() {
-        return artist;
+        if (cachedArtist == null) {
+            cachedArtist = artist;
+        }
+        return cachedArtist;
     }
 
     public void setArtist(ArtistModel mArtist) {

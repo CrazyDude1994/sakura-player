@@ -21,6 +21,9 @@ public class TrackModel extends Model {
     @Column(name = "Track_ID")
     private long trackId;
 
+    private AlbumModel cachedAlbumModel;
+    private ArtistModel cachedArtistModel;
+
     public long getTrackId() {
         return trackId;
     }
@@ -30,7 +33,10 @@ public class TrackModel extends Model {
     }
 
     public AlbumModel getAlbum() {
-        return album;
+        if (cachedAlbumModel == null) {
+            cachedAlbumModel = album;
+        }
+        return cachedAlbumModel;
     }
 
     public void setAlbum(AlbumModel album) {
@@ -38,7 +44,10 @@ public class TrackModel extends Model {
     }
 
     public ArtistModel getArtist() {
-        return artist;
+        if (cachedArtistModel == null) {
+            cachedArtistModel = artist;
+        }
+        return cachedArtistModel;
     }
 
     public void setArtist(ArtistModel mArtist) {

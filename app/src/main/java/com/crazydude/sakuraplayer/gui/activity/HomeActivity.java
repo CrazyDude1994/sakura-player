@@ -258,7 +258,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     private void updatePlayerWidget() {
         if (mBinder != null && mBinder.getCurrentTrack() != null && mBinder.isPlaying()) {
             TrackModel data = mBinder.getCurrentTrack();
-            mHomeActivityView.setPlayerWidgetData(data.getTrackName(), data.getArtist().getArtistName());
+            mHomeActivityView.setPlayerWidgetData(data);
         } else {
             mHomeActivityView.hidePlayerWidget();
         }
@@ -352,8 +352,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     public void onPlaybackEvent(PlayerEvent.PlayerPlaybackEvent event) {
         switch (event.getAction()) {
             case PLAY:
-                mHomeActivityView.setPlayerWidgetData(event.getTrackModel().getTrackName(),
-                        event.getTrackModel().getArtist().getArtistName());
+                mHomeActivityView.setPlayerWidgetData(event.getTrackModel());
                 break;
             case STOP:
                 mHomeActivityView.hidePlayerWidget();

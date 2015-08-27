@@ -5,16 +5,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.squareup.picasso.Picasso;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
 
 import java.io.File;
 
@@ -48,6 +49,8 @@ public class PlayerView {
     @RootContext
     Context mContext;
 
+    @ColorRes(R.color.accent)
+    int mAccentColor;
 
     @UiThread
     public void setPlaying() {
@@ -80,15 +83,18 @@ public class PlayerView {
 
     @UiThread
     public void setData(TrackModel data) {
-        if (data != null) {
-            mArtistName.setText(data.getArtist().getArtistName());
-            mSongName.setText(data.getTrackName());
-            File file = new File(data.getAlbum().getAlbumArtPath());
-            Picasso.with(mContext).load(file).into(mAlbumArt);
+        mArtistName.setText(data.getArtist().getArtistName());
+        mSongName.setText(data.getTrackName());
+
+        if (data.getAlbum() != null && data.getAlbum().getAlbumArtPath() != null) {
+            File albumArtFile = new File(data.getAlbum().getAlbumArtPath());
+            Picasso.with(mContext)
+                    .load(albumArtFile)
+                    .error(TextDrawable.builder().buildRect(data.getTrackName(), mAccentColor))
+                    .noPlaceholder()
+                    .into(mAlbumArt);
         } else {
-            mArtistName.setText("");
-            mSongName.setText("");
-            mAlbumArt.setImageDrawable(null);
+            mAlbumArt.setImageDrawable(TextDrawable.builder().buildRect(data.getTrackName().substring(0, 1), mAccentColor));
         }
     }
 

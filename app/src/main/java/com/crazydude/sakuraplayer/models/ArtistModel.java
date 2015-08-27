@@ -4,7 +4,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,8 +15,13 @@ public class ArtistModel extends Model {
     @Column(name = "Name")
     private String artistName;
 
+    private List<AlbumModel> cachedAlbums;
+
     public List<AlbumModel> getAlbums() {
-        return getMany(AlbumModel.class, "Artist");
+        if (cachedAlbums == null) {
+            cachedAlbums = getMany(AlbumModel.class, "Artist");
+        }
+        return cachedAlbums;
     }
 
     public String getArtistName() {
