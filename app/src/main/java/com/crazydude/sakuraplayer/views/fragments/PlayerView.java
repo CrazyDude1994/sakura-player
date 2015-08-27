@@ -1,17 +1,22 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.squareup.picasso.Picasso;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
+import java.io.File;
 
 /**
  * Created by Crazy on 15.05.2015.
@@ -40,9 +45,9 @@ public class PlayerView {
     @ViewById(R.id.fragment_player_image)
     ImageView mAlbumArt;
 
-    @AfterViews
-    void initViews() {
-    }
+    @RootContext
+    Context mContext;
+
 
     @UiThread
     public void setPlaying() {
@@ -78,11 +83,12 @@ public class PlayerView {
         if (data != null) {
             mArtistName.setText(data.getArtist().getArtistName());
             mSongName.setText(data.getTrackName());
-            mAlbumArt.setImageBitmap(data.getAlbum().getAlbumArt());
+            File file = new File(data.getAlbum().getAlbumArtPath());
+            Picasso.with(mContext).load(file).into(mAlbumArt);
         } else {
             mArtistName.setText("");
             mSongName.setText("");
-            mAlbumArt.setImageBitmap(null);
+            mAlbumArt.setImageDrawable(null);
         }
     }
 

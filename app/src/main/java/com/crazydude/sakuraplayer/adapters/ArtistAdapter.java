@@ -1,15 +1,18 @@
 package com.crazydude.sakuraplayer.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.gui.views.ArtistView;
 import com.crazydude.sakuraplayer.gui.views.ArtistView_;
+import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
+
+import java.io.File;
 
 /**
  * Created by Crazy on 27.05.2015.

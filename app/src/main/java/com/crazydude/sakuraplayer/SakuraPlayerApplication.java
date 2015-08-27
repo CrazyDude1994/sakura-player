@@ -1,11 +1,6 @@
 package com.crazydude.sakuraplayer;
 
-import com.crazydude.sakuraplayer.common.Utils;
-import com.crazydude.sakuraplayer.interfaces.Preferences_;
-
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EApplication;
-import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -27,11 +22,11 @@ public class SakuraPlayerApplication extends com.activeandroid.app.Application {
         );
     }
 
-    public void setIsSplashscreenShown(boolean mIsSplashscreenShown) {
-        this.mIsSplashscreenShown = mIsSplashscreenShown;
-    }
-
     public boolean isIsSplashscreenShown() {
         return mIsSplashscreenShown;
+    }
+
+    public void setIsSplashscreenShown(boolean mIsSplashscreenShown) {
+        this.mIsSplashscreenShown = mIsSplashscreenShown;
     }
 }

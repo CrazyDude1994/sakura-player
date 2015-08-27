@@ -38,8 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/fragment_player_seekbar"
-        android:layout_below="@id/fragment_player_header"
-        android:src="@drawable/ic_shuffle" />
+        android:layout_below="@id/fragment_player_header" />
 
     <LinearLayout
         android:id="@+id/fragment_player_controls"

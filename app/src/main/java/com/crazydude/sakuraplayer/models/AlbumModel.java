@@ -30,14 +30,6 @@ public class AlbumModel extends Model {
         this.name = name;
     }
 
-    public Bitmap getAlbumArt() {
-        Bitmap bitmap = null;
-        if (albumArt != null && !albumArt.isEmpty()) {
-            bitmap = BitmapFactory.decodeFile(albumArt);
-        }
-        return bitmap;
-    }
-
     public String getAlbumArtPath() {
         return albumArt;
     }

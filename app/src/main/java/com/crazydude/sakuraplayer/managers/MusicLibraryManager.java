@@ -56,7 +56,6 @@ public class MusicLibraryManager {
                     AlbumModel albumModel;
                     ArtistModel artistModel;
 
-
                     if (artistSet.containsKey(artistId)) {
                         artistModel = artistSet.get(artistId);
                     } else {
