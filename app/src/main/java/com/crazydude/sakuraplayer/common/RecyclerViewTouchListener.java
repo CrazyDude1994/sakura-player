@@ -52,6 +52,5 @@ public class RecyclerViewTouchListener extends GestureDetector.SimpleOnGestureLi
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
     }
 }

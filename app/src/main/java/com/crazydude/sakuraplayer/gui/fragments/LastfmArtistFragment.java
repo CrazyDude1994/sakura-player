@@ -85,7 +85,7 @@ public class LastfmArtistFragment extends BaseFragment implements
     @Override
     public void onClick(View view, int position) {
         ArtistResponse data = mRecommendsFragmentView.getData(position);
-        mOnSelectedLastfmArtistListener.onSelecteLastfmArtist(data.getName(), data.getMbid());
+        mOnSelectedLastfmArtistListener.onSelectedLastfmArtist(data.getName(), data.getMbid());
     }
 
     @Override

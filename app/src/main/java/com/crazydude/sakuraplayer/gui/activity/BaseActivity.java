@@ -19,28 +19,6 @@ public class BaseActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    public void switchFragment(BaseFragment fragment, boolean isAddToBackstack, int containerId) {
-        String fragmentTag = fragment.getClass().getSimpleName();
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(containerId, fragment, fragmentTag);
-        if (isAddToBackstack) {
-            fragmentTransaction.addToBackStack(fragmentTag);
-        }
-        fragmentTransaction.commit();
-    }
-
-    public void addFragment(BaseFragment fragment, boolean isAddToBackstack, int containerId) {
-        String fragmentTag = fragment.getClass().getSimpleName();
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(containerId, fragment, fragmentTag);
-        if (isAddToBackstack) {
-            fragmentTransaction.addToBackStack(fragmentTag);
-        }
-        fragmentTransaction.commit();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();

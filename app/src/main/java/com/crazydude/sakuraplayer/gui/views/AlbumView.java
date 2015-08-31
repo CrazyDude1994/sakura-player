@@ -15,7 +15,7 @@ import org.androidannotations.annotations.ViewById;
 /**
  * Created by kartavtsev.s on 15.06.2015.
  */
-@EViewGroup(R.layout.view_album)
+@EViewGroup(R.layout.view_new_releases_album)
 public class AlbumView extends RelativeLayout implements DataView<AlbumResponse.Album> {
 
     @ViewById(R.id.view_album_image)

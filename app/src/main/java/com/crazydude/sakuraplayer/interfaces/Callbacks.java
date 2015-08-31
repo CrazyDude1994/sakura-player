@@ -51,7 +51,7 @@ public interface Callbacks {
     }
 
     interface OnSelectedLastfmArtistListener {
-        void onSelecteLastfmArtist(String name, String mbid);
+        void onSelectedLastfmArtist(String name, String mbid);
     }
 
     interface OnSelectedTrackListener {
