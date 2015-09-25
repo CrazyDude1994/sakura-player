@@ -1,28 +1,20 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment_;
-import com.viewpagerindicator.IconPagerAdapter;
 
 /**
  * Created by Crazy on 18.05.2015.
  */
-public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconPagerAdapter {
+public class TracklistPagerAdapter extends FragmentPagerAdapter {
 
-    static final int[] ICONS = new int[]{R.drawable.ic_audiotrack_selector, R.drawable.ic_piano_selector,
-            R.drawable.ic_album_selector, R.drawable.ic_playlists_selector};
     static final String[] TITLES = new String[]{"Треки", "Исполнители", "Альбомы", "Плейлисты"};
-    
+
     FragmentManager mFragmentManager;
 
     public TracklistPagerAdapter(FragmentManager fm) {
@@ -51,13 +43,8 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter implements IconP
     }
 
     @Override
-    public int getIconResId(int index) {
-        return ICONS[index];
-    }
-
-    @Override
     public int getCount() {
-        return ICONS.length;
+        return TITLES.length;
     }
 
 }
