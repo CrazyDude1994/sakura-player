@@ -28,6 +28,7 @@ android {
         exclude 'META-INF/NOTICE'
     }
 }
+
 apt {
     arguments {
         androidManifestFile variant.outputs[0].processResources.manifestFile
@@ -36,9 +37,8 @@ apt {
 }
 
 dependencies {
-    //AA
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    //butterknife
+    compile 'com.jakewharton:butterknife:7.0.1'
 
     //Android support
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
@@ -48,6 +48,12 @@ dependencies {
     compile "com.android.support:design:$supportLibraryVersion"
     compile "com.android.support:palette-v7:$supportLibraryVersion"
 
+    //Dagger
+    apt 'com.google.dagger:dagger-compiler:2.0.1'
+    compile 'com.google.dagger:dagger:2.0.1'
+
+    compile 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'org.projectlombok:lombok:1.16.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.github.traex.rippleeffect:library:1.3'

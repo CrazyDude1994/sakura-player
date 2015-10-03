@@ -3,7 +3,6 @@ package com.crazydude.sakuraplayer.adapters;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.gui.views.AlbumView;
-import com.crazydude.sakuraplayer.gui.views.AlbumView_;
 import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 import com.squareup.picasso.Picasso;
 
@@ -14,7 +13,7 @@ public class NewReleasesAdapter extends BaseAdapter<AlbumResponse.Album, AlbumVi
 
     @Override
     public BaseViewHolder<AlbumView> onCreateViewHolder(ViewGroup parent, int viewType) {
-        AlbumView albumView = AlbumView_.build(parent.getContext());
+        AlbumView albumView = new AlbumView(mContext);
         return new BaseViewHolder<>(albumView);
     }
 

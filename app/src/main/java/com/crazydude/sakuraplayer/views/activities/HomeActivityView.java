@@ -19,57 +19,59 @@ import com.crazydude.sakuraplayer.models.TrackModel;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.ColorRes;
-
 import java.io.File;
+
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindColor;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
 public class HomeActivityView extends BaseActivityView implements Animator.AnimatorListener {
 
-    @RootContext
+    @Inject
     AppCompatActivity mActivity;
 
-    @ViewById(R.id.activity_home_splash_screen)
+    @Bind(R.id.activity_home_splash_screen)
     View mSplashScreenImage;
 
-    @ViewById(R.id.activity_home_toolbar)
+    @Bind(R.id.activity_home_toolbar)
     Toolbar mToolbar;
 
-    @ViewById(R.id.navigation_drawer)
+    @Bind(R.id.navigation_drawer)
     DrawerLayout mDrawerLayout;
 
-    @ViewById(R.id.activity_home_view_player_widget)
+    @Bind(R.id.activity_home_view_player_widget)
     RelativeLayout mPlayerWidget;
 
-    @ViewById(R.id.view_player_widget_artist)
+    @Bind(R.id.view_player_widget_artist)
     TextView mPlayerWidgetArtist;
 
-    @ViewById(R.id.view_player_widget_song)
+    @Bind(R.id.view_player_widget_song)
     TextView mPlayerWidgetSong;
 
-    @ViewById(R.id.view_player_widget_equalizer_image)
+    @Bind(R.id.view_player_widget_equalizer_image)
     ImageView mEqualizerImage;
 
-    @ViewById(R.id.view_player_widget_album_art)
+    @Bind(R.id.view_player_widget_album_art)
     CircularImageView mWidgetAlbumArt;
 
-    @ColorRes(R.color.accent)
+    @BindColor(R.color.accent)
     int mAccentColor;
 
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    @AfterViews
+    public HomeActivityView() {
+        super();
+
+        initViews();
+    }
+
     void initViews() {
         initToolbar();
         initNavigationDrawer();
@@ -79,7 +81,6 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
         mOnAfterSplashScreen = listener;
     }
 
-    @UiThread
     public void setPlayerWidgetData(TrackModel trackModel) {
         mPlayerWidgetArtist.setText(trackModel.getArtist().getArtistName());
         mPlayerWidgetSong.setText(trackModel.getTrackName());
@@ -95,36 +96,30 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
         }
     }
 
-    @UiThread
     public void showPlayerWidget() {
         mPlayerWidget.setVisibility(View.VISIBLE);
         AnimationDrawable animationDrawable = (AnimationDrawable) mEqualizerImage.getBackground();
         animationDrawable.start();
     }
 
-    @UiThread
     public void hidePlayerWidget() {
         mPlayerWidget.setVisibility(View.GONE);
     }
 
-    @UiThread
     public void showToolbar() {
         mToolbar.setVisibility(View.VISIBLE);
     }
 
-    @UiThread
     public void hideToolbar() {
         mToolbar.setVisibility(View.INVISIBLE);
     }
 
     @Deprecated
-    @UiThread
     public void showToolbarShadow() {
 
     }
 
     @Deprecated
-    @UiThread
     public void hideToolbarShadow() {
 
     }
@@ -140,12 +135,10 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
         mDrawerToggle.syncState();
     }
 
-    @UiThread
     public void hideSplashScreen() {
         mSplashScreenImage.setVisibility(View.GONE);
     }
 
-    @UiThread
     public void hideSplashScreen(final int duration) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

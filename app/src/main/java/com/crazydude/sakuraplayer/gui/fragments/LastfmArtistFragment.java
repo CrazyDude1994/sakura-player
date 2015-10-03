@@ -1,8 +1,12 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
@@ -13,37 +17,36 @@ import com.crazydude.sakuraplayer.views.fragments.LastfmArtistFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
 import com.squareup.picasso.Picasso;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.FragmentArg;
-import org.androidannotations.annotations.UiThread;
+import javax.inject.Inject;
 
 /**
  * Created by kartavtsev.s on 08.06.2015.
  */
-@EFragment(R.layout.fragment_lastfm_artist)
 public class LastfmArtistFragment extends BaseFragment implements
         Callbacks.OnResponseListener<ArtistInfoResponse>, Callbacks.RecyclerViewClickListener {
 
-    @Bean
+    @Inject
     LastfmArtistFragmentView mLastfmArtistFragmentView;
 
-    @Bean
+    @Inject
     RecommendsFragmentView mRecommendsFragmentView;
 
-    @FragmentArg
     String artistName;
 
-    @FragmentArg
     String mbid;
 
-    @Bean
+    @Inject
     LastfmApiManager mLastfmApiManager;
 
     private Callbacks.OnSelectedLastfmArtistListener mOnSelectedLastfmArtistListener;
 
-    @AfterViews
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_lastfm_artist, container, false);
+    }
+
     void initViews() {
         mLastfmArtistFragmentView.showProgressBar();
         mRecommendsFragmentView.setOnRecyclerClickListener(this);
@@ -54,7 +57,6 @@ public class LastfmArtistFragment extends BaseFragment implements
         mLastfmApiManager.getArtistInfo(artistName, mbid, "ru", this);
     }
 
-    @UiThread
     void loadArtistImage(String url) {
         Picasso.with(getActivity())
                 .load(url)

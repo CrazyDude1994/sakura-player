@@ -1,8 +1,6 @@
 package com.crazydude.sakuraplayer.gui.views;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,33 +10,31 @@ import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.github.siyamed.shapeimageview.CircularImageView;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.ColorRes;
-
 import java.io.File;
-import java.util.Random;
+
+import butterknife.Bind;
+import butterknife.BindColor;
+import butterknife.ButterKnife;
 
 /**
  * Created by Crazy on 27.05.2015.
  */
-@EViewGroup(R.layout.view_artist)
 public class ArtistView extends RelativeLayout implements DataView<ArtistModel> {
 
-    @ViewById(R.id.view_artist_name_text)
+    @Bind(R.id.view_artist_name_text)
     TextView mArtistNameText;
 
-    @ViewById(R.id.view_artist_image)
+    @Bind(R.id.view_artist_image)
     CircularImageView mImageView;
 
-    @ColorRes(R.color.accent)
+    @BindColor(R.color.accent)
     int mCircleColor;
 
     public ArtistView(Context context) {
         super(context);
+        ButterKnife.bind(this);
     }
 
     public void setContent(ArtistModel data) {

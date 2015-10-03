@@ -5,8 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment;
 
 /**
  * Created by Crazy on 18.05.2015.
@@ -31,13 +30,14 @@ public class TracklistPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return TracklistAllFragment_.builder().build();
+                return new TracklistAllFragment();
             case 1:
-                return TracklistArtistFragment_.builder().build();
+                return new TracklistAllFragment();
             case 2:
-                return TracklistAllFragment_.builder().build();
+                return new TracklistAllFragment();
             case 3:
-                return TracklistAllFragment_.builder().build();
+                return new TracklistAllFragment();
+
         }
         return null;
     }

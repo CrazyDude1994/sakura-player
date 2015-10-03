@@ -1,8 +1,12 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
@@ -14,40 +18,41 @@ import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
 import com.squareup.otto.Subscribe;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * Created by Crazy on 27.05.2015.
  */
-@EFragment(R.layout.fragment_tracklist_artist)
 public class TracklistArtistFragment extends BaseFragment implements
         Callbacks.OnArtistsLoadedListener, Callbacks.RecyclerViewClickListener {
 
-    @Bean
+    @Inject
     TracklistArtistFragmentView mTracklistArtistFragmentView;
 
-    @Bean
+    @Inject
     MusicLibraryManager mMusicLibraryManager;
 
-    @Bean
+    @Inject
     TrackProvider mTrackProvider;
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
     private ArrayList<ArtistModel> mArtistModels;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
-    @AfterViews
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initViews();
+        return inflater.inflate(R.layout.fragment_tracklist_artist, container, false);
+    }
+
     void initViews() {
         mTrackProvider.loadAllArtists(this);
         mTracklistArtistFragmentView.setOnRefreshListener(mOnRefreshListener);
     }
 
-    @UiThread
     @Override
     public void onArtistsLoaded(ArrayList<ArtistModel> artists) {
         mArtistModels = artists;

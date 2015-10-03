@@ -1,26 +1,33 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialTextFragmentView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.FragmentArg;
+import javax.inject.Inject;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-@EFragment(R.layout.fragment_lastfm_tutorial_text)
 public class LastfmTutorialTextFragment extends BaseFragment {
 
-    @Bean
+    @Inject
     LastfmTutorialTextFragmentView mLastfmTutorialTextFragmentView;
 
-    @FragmentArg
     String tutorialText;
 
-    @AfterViews
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initViews();
+        return inflater.inflate(R.layout.fragment_lastfm_tutorial_text, container, false);
+    }
+
     void initViews() {
         mLastfmTutorialTextFragmentView.setTutorialText(tutorialText);
     }

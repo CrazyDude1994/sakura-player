@@ -1,55 +1,64 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
 import android.content.Context;
-import android.support.v4.app.FragmentTransaction;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
-import com.crazydude.sakuraplayer.providers.BusProvider;
+import com.crazydude.sakuraplayer.SakuraPlayerApplication;
+import com.crazydude.sakuraplayer.di.components.ActivityComponent;
+import com.crazydude.sakuraplayer.di.components.DaggerActivityComponent;
+import com.squareup.otto.Bus;
 
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by Crazy on 24.05.2015.
  */
-public class BaseActivity extends AppCompatActivity {
+@Getter
+@Accessors(prefix = "m")
+abstract public class BaseActivity extends AppCompatActivity {
+
+    @Inject
+    Bus mBus;
+
+    ActivityComponent mActivityComponent;
+
+    public SakuraPlayerApplication getSakuraPlayerApplication() {
+        return (SakuraPlayerApplication) getApplication();
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    public void switchFragment(BaseFragment fragment, boolean isAddToBackstack, int containerId) {
-        String fragmentTag = fragment.getClass().getSimpleName();
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(containerId, fragment, fragmentTag);
-        if (isAddToBackstack) {
-            fragmentTransaction.addToBackStack(fragmentTag);
-        }
-        fragmentTransaction.commit();
-    }
-
-    public void addFragment(BaseFragment fragment, boolean isAddToBackstack, int containerId) {
-        String fragmentTag = fragment.getClass().getSimpleName();
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(containerId, fragment, fragmentTag);
-        if (isAddToBackstack) {
-            fragmentTransaction.addToBackStack(fragmentTag);
-        }
-        fragmentTransaction.commit();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        BusProvider.getInstance().register(this);
+        mBus.register(this);
     }
 
     @Override
     protected void onPause() {
-        BusProvider.getInstance().unregister(this);
+        mBus.unregister(this);
         super.onPause();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
+        injectDependencies();
+    }
+
+    protected void injectDependencies() {
+        mActivityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(getSakuraPlayerApplication().getApplicationComponent())
+                .build();
     }
 }

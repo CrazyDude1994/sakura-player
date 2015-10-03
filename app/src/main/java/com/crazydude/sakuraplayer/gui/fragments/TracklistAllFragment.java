@@ -1,8 +1,12 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Utils;
@@ -15,42 +19,43 @@ import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.squareup.otto.Subscribe;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * Created by CrazyDude on 13.04.2015.
  */
-@EFragment(R.layout.fragment_tracklist_alltracks)
 public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener,
         Callbacks.RecyclerViewClickListener {
 
-    @Bean
+    @Inject
     TracklistAllFragmentView mTracklistAllFragmentView;
 
-    @Bean
+    @Inject
     MusicLibraryManager mMusicLibraryManager;
 
-    @Bean
+    @Inject
     Utils utils;
 
-    @Bean
+    @Inject
     TrackProvider mTrackProvider;
 
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
-    @AfterViews
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initViews();
+        return inflater.inflate(R.layout.fragment_tracklist_alltracks, container, false);
+    }
+
     void initViews() {
         mTrackProvider.loadAllTracks(this);
         mTracklistAllFragmentView.setOnRefreshListener(mOnRefreshListener);
     }
 
-    @UiThread
     @Override
     public void onTrackLoaded(ArrayList<TrackModel> tracks) {
         mTracklistAllFragmentView.setTrackList(tracks);

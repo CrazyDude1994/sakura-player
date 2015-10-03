@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,83 +19,91 @@ import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
-import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.LastReleasesFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.LastfmArtistFragment_;
+import com.crazydude.sakuraplayer.features.Feature;
+import com.crazydude.sakuraplayer.features.FeatureIsNullException;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.NavigationDrawerFeature;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
-import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment_;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment;
-import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment_;
-import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment_;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
-import com.crazydude.sakuraplayer.interfaces.Preferences_;
+import com.crazydude.sakuraplayer.interfaces.FeatureProvider;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.managers.NavigationManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
-import com.crazydude.sakuraplayer.services.PlayerService_;
+import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.squareup.otto.Subscribe;
 
-import org.androidannotations.annotations.AfterInject;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.sharedpreferences.Pref;
+import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.OnClick;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+import static com.crazydude.sakuraplayer.common.Constants.FragmentsEnum.TracklistFragment;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmTutorialCompletedListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 
-@EActivity(R.layout.activity_home)
+@Accessors(prefix = "m")
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
         OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
         OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
         Callbacks.OnSelectedLastfmArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
         Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener,
         FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener,
-        MediaScannerConnection.OnScanCompletedListener {
+        MediaScannerConnection.OnScanCompletedListener, FeatureProvider {
 
-    @Bean
+    @Inject
     TrackProvider mTrackProvider;
 
-    @Bean
+    @Getter
+    @Inject
     HomeActivityView mHomeActivityView;
 
-    @ViewById(R.id.activity_home_navigation_view)
+    @Inject
+    NavigationManager mNavigationManager;
+
+    @Bind(R.id.activity_home_navigation_view)
     NavigationView mNavigationView;
 
-    @Pref
-    Preferences_ mPrefs;
-
-    @Bean
+    @Inject
     Utils mUtils;
 
-    @Bean
+    @Inject
     LastfmApiManager mLastfmApiManager;
 
-    @Bean
+    @Inject
     MusicLibraryManager mMusicLibraryManager;
 
     private PlayerFragment mPlayerFragment;
     private PlayerBinder mBinder;
 
-    @AfterViews
-    void initViews() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
+        init();
+        initViews();
+    }
+
+    private void initViews() {
         SakuraPlayerApplication application = (SakuraPlayerApplication) getApplication();
         mHomeActivityView.setOnAfterSplashScreenListener(this);
 
-        if (!mPrefs.isTutorialCompleted().get()) {
+        /*if (!mPrefs.isTutorialCompleted().get()) {
             mUtils.triggerMediaScan(this);
-        }
+        }*/
 
         if (application.isIsSplashscreenShown() == false) {
             mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
@@ -105,34 +115,28 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    @AfterInject
     void init() {
-        startService(PlayerService_.intent(this).get());
+//        startService(PlayerService_.intent(this).get());
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
     public void onAfterSplashScreen() {
-        if (!mPrefs.isTutorialCompleted().get()) {
-            switchFragment(LastfmTutorialFragment_.builder().build(), false, R.id.activity_home_placeholder);
+/*        if (!mPrefs.isTutorialCompleted().get()) {
+            mNavigationManager.switchFragment(LastfmTutorialFragment, true);
         } else {
             switchToPlayerMode();
-        }
-    }
-
-    public HomeActivityView getHomeActivityView() {
-        return mHomeActivityView;
+        }*/
     }
 
     private void switchToPlayerMode() {
         mHomeActivityView.showToolbar();
-        switchFragment(TracklistFragment_.builder().build(), false,
-                R.id.activity_home_placeholder);
+        mNavigationManager.switchFragment(TracklistFragment, false);
     }
 
     @Override
     public void onTutorialCompleted(boolean isLoginToLastfm) {
-        mPrefs.isTutorialCompleted().put(true);
+//        mPrefs.isTutorialCompleted().put(true);
         if (isLoginToLastfm) {
             new LastfmLoginFragment().show(getFragmentManager(), "");
         } else {
@@ -149,8 +153,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onSuccess(SessionResponse response) {
         mHomeActivityView.hideProgressBar();
-        mPrefs.lastfmToken().put(response.getSession().getKey());
-        mPrefs.lastfmUsername().put(response.getSession().getName());
+/*        mPrefs.lastfmToken().put(response.getSession().getKey());
+        mPrefs.lastfmUsername().put(response.getSession().getName());*/
         switchToPlayerMode();
     }
 
@@ -185,13 +189,13 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.navigation_menu_recommends:
-                switchFragment(RecommendsFragment_.builder().build(), false,
-                        R.id.activity_home_placeholder);
+/*                switchFragment(RecommendsFragment_.builder().build(), false,
+                        R.id.activity_home_placeholder);*/
                 mHomeActivityView.hidePlayerWidget();
                 break;
             case R.id.navigation_menu_new_releases:
-                switchFragment(LastReleasesFragment_.builder().build(), false,
-                        R.id.activity_home_placeholder);
+/*                switchFragment(LastReleasesFragment_.builder().build(), false,
+                        R.id.activity_home_placeholder);*/
                 mHomeActivityView.hidePlayerWidget();
                 break;
         }
@@ -203,10 +207,10 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onSelecteLastfmArtist(String name, String mbid) {
-        switchFragment(LastfmArtistFragment_.builder()
+/*        switchFragment(LastfmArtistFragment_.builder()
                 .artistName(name)
                 .mbid(mbid)
-                .build(), true, R.id.activity_home_placeholder);
+                .build(), true, R.id.activity_home_placeholder);*/
     }
 
     @Override
@@ -220,9 +224,9 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     private void switchToPlayerWithData(TrackModel data) {
         mHomeActivityView.hideToolbarShadow();
         if (mPlayerFragment == null) {
-            mPlayerFragment = PlayerFragment_.builder().build();
+            mPlayerFragment = new PlayerFragment();
         }
-        switchFragment(mPlayerFragment, true, R.id.activity_home_placeholder);
+//        switchFragment(mPlayerFragment, true, R.id.activity_home_placeholder);
         if (data != null) {
             mPlayerFragment.setData(data);
         }
@@ -242,7 +246,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, PlayerService_.class);
+        Intent intent = new Intent(this, PlayerService.class);
         bindService(intent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -304,8 +308,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onSelectedArtist(ArtistModel artist) {
-        switchFragment(ArtistFragment_.builder().artistName(artist.getArtistName()).build(), true,
-                R.id.activity_home_placeholder);
+/*        switchFragment(ArtistFragment_.builder().artistName(artist.getArtistName()).build(), true,
+                R.id.activity_home_placeholder);*/
     }
 
     @Override
@@ -317,7 +321,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         }
     }
 
-    @Click(R.id.activity_home_view_player_widget)
+    @OnClick(R.id.activity_home_view_player_widget)
     void onPlayerWidgetClick() {
         if (mBinder != null) {
             switchToPlayerWithData(mBinder.getCurrentTrack());
@@ -358,5 +362,56 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
                 mHomeActivityView.hidePlayerWidget();
                 break;
         }
+    }
+
+    public void provideFeatures(@NonNull Features features) {
+        if (features == null) {
+            throw new FeatureIsNullException();
+        }
+        for (Feature feature : features.getFeatures()) {
+            switch (feature.getFeatureType()) {
+                case TOOLBAR:
+
+                    ToolbarFeature toolbarFeature = (ToolbarFeature) feature;
+
+                    if (toolbarFeature.isSetVisible()) {
+
+                    } else {
+
+                    }
+
+                    if (toolbarFeature.isBackButton()) {
+                    }
+
+                    if (toolbarFeature.getTitle() != null) {
+                    }
+
+                    if (toolbarFeature.getTitleRes() != null) {
+                    }
+                    break;
+
+                case NAVIGATION_DRAWER:
+                    if (((NavigationDrawerFeature) feature).isEnabled()) {
+                    }
+            }
+            break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        mNavigationManager.handleBackButtonPress();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mNavigationManager.storeCurrentFragment(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mNavigationManager.restoreCurrentFragment(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

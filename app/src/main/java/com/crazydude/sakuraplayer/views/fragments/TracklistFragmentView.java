@@ -1,6 +1,5 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
-import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
@@ -8,28 +7,26 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistPagerAdapter;
 import com.crazydude.sakuraplayer.gui.fragments.BaseFragment;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.ViewById;
+import butterknife.Bind;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
 public class TracklistFragmentView extends BaseFragmentView {
 
-    @ViewById(R.id.fragment_tracklist_viewpager)
+    @Bind(R.id.fragment_tracklist_viewpager)
     ViewPager mViewPager;
 
-    @ViewById(R.id.fragment_tracklist_tabs)
+    @Bind(R.id.fragment_tracklist_tabs)
     TabLayout mTabLayout;
 
-    @RootContext
-    Context mContext;
     private TracklistPagerAdapter mPagerAdapter;
 
-    @AfterViews
+    public TracklistFragmentView() {
+        super();
+        initViews();
+    }
+
     void initViews() {
         showToolbarShadow();
     }

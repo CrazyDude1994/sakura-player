@@ -4,19 +4,15 @@ import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 import com.crazydude.sakuraplayer.interfaces.LastfmInterface;
-import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
 
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.sharedpreferences.Pref;
-
 import java.util.TreeMap;
+
+import javax.inject.Inject;
 
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -24,14 +20,10 @@ import retrofit.RetrofitError;
 /**
  * Created by CrazyDude on 15.03.2015.
  */
-@EBean(scope = EBean.Scope.Singleton)
 public class LastfmApiManager {
 
-    @Bean
+    @Inject
     Utils mUtils;
-
-    @Pref
-    Preferences_ mPreferences;
 
     LastfmInterface mLastfmInterface;
 
@@ -44,7 +36,6 @@ public class LastfmApiManager {
         mLastfmInterface = restAdapter.create(LastfmInterface.class);
     }
 
-    @Background
     public void login(String username, String password, OnResponseListener<SessionResponse> callback) {
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.put("username", username);
@@ -69,7 +60,6 @@ public class LastfmApiManager {
         }
     }
 
-    @Background
     public void getRecommendedArtists(int page, int limit, OnResponseListener<RecommendationsResponse> callback) {
         String session = getUserSession();
         if (!session.isEmpty()) {
@@ -99,9 +89,8 @@ public class LastfmApiManager {
         }
     }
 
-    @Background
     public void getArtistInfo(String name, String mbid, String lang,
-                       OnResponseListener<ArtistInfoResponse> callback) {
+                              OnResponseListener<ArtistInfoResponse> callback) {
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.put("name", name);
         treeMap.put("mbid", mbid);
@@ -127,10 +116,9 @@ public class LastfmApiManager {
         }
     }
 
-    @Background
     public void getNewReleases(String username, OnResponseListener<AlbumResponse> callback) {
         if (username == null) {
-            username = mPreferences.lastfmUsername().get();
+//            username = mPreferences.lastfmUsername();
         }
         try {
             AlbumResponse response = mLastfmInterface.getNewReleases(username, Constants.LASTFM_API_KEY);
@@ -151,7 +139,8 @@ public class LastfmApiManager {
     }
 
     private String getUserSession() {
-        return mPreferences.lastfmToken().getOr("");
+//        return mPreferences.lastfmToken();
+        return "";
     }
 
     private void checkForErrors(ErrorResponse response) throws LastfmError {

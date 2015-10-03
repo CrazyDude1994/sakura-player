@@ -1,23 +1,25 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.interfaces.DataView;
 
-import org.androidannotations.api.view.HasViews;
-
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static android.support.v7.widget.RecyclerView.Adapter;
-import static android.support.v7.widget.RecyclerView.ViewHolder;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
 abstract class BaseAdapter<ModelType, ViewType extends View & DataView<ModelType>> extends
         Adapter<BaseViewHolder<ViewType>> {
+
+    @Inject
+    Context mContext;
 
     private List<ModelType> mData;
 

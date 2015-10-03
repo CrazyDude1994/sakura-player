@@ -1,35 +1,40 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
-import com.crazydude.sakuraplayer.interfaces.Callbacks;
-import com.crazydude.sakuraplayer.interfaces.Preferences_;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.sharedpreferences.Pref;
+import javax.inject.Inject;
 
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.*;
+import butterknife.OnClick;
+
+import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmTutorialCompletedListener;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-@EFragment(R.layout.fragment_lastfm_tutorial)
 public class LastfmTutorialFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
-    @Bean
+    @Inject
     LastfmTutorialFragmentView mLastfmTutorialFragmentView;
 
     private OnLastfmTutorialCompletedListener mLastfmTutorialCompletedListener;
 
-    @AfterViews
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initViews();
+        return inflater.inflate(R.layout.fragment_lastfm_tutorial, container, false);
+    }
+
     void initViews() {
         mLastfmTutorialFragmentView.addOnPageChangeListener(this);
     }
@@ -64,7 +69,7 @@ public class LastfmTutorialFragment extends BaseFragment implements ViewPager.On
         }
     }
 
-    @Click({R.id.fragment_lastfm_tutorial_login_button, R.id.fragment_lastfm_tutorial_cancel_button})
+    @OnClick({R.id.fragment_lastfm_tutorial_login_button, R.id.fragment_lastfm_tutorial_cancel_button})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.fragment_lastfm_tutorial_login_button:

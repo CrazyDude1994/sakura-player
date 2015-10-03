@@ -1,6 +1,5 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -19,55 +18,45 @@ import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.ColorRes;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.BindColor;
+
 /**
  * Created by kartavtsev.s on 08.06.2015.
  */
-@EBean
 public class LastfmArtistFragmentView extends BaseFragmentView implements Palette.PaletteAsyncListener,
         Target {
 
-    @RootContext
-    Context mContext;
-
-    @ViewById(R.id.fragment_lastfm_artist_image)
+    @Bind(R.id.fragment_lastfm_artist_image)
     ImageView mArtistImage;
 
-    @ViewById(R.id.fragment_lastfm_artist_name)
+    @Bind(R.id.fragment_lastfm_artist_name)
     TextView mArtistName;
 
-    @ViewById(R.id.fragment_lastfm_artist_tag_layout)
+    @Bind(R.id.fragment_lastfm_artist_tag_layout)
     FlowLayout mTagLayout;
 
-    @ViewById(R.id.fragment_lastfm_artist_header)
+    @Bind(R.id.fragment_lastfm_artist_header)
     RelativeLayout mHeaderLayout;
 
-    @ViewById(R.id.fragment_lastfm_artist_summary)
+    @Bind(R.id.fragment_lastfm_artist_summary)
     TextView mSummaryText;
 
-    @ViewById(R.id.fragment_lastfm_artist_layout)
+    @Bind(R.id.fragment_lastfm_artist_layout)
     LinearLayout mLinearLayout;
 
-    @ViewById(R.id.fragment_lastfm_artist_similar_text)
+    @Bind(R.id.fragment_lastfm_artist_similar_text)
     TextView mSimilarText;
 
-    @ColorRes(R.color.white)
+    @BindColor(R.color.white)
     int mWhiteColor;
 
     private ArrayList<TextView> mTagsViews = new ArrayList<>();
 
-    @AfterViews
-    void initViews() {
-    }
 
     private TextView generateTagTextView(String text) {
         TextView textView = (TextView) LayoutInflater.from(mContext).inflate(R.layout.view_tag, null);
@@ -82,7 +71,6 @@ public class LastfmArtistFragmentView extends BaseFragmentView implements Palett
         return textView;
     }
 
-    @UiThread
     public void setData(ArtistInfoResponse data) {
         mArtistName.setText(data.getArtist().getName());
         mSummaryText.setText(Html.fromHtml(data.getArtist().getBio().getSummary()));
@@ -93,12 +81,10 @@ public class LastfmArtistFragmentView extends BaseFragmentView implements Palett
         }
     }
 
-    @UiThread
     public void showContent() {
         mLinearLayout.setVisibility(View.VISIBLE);
     }
 
-    @UiThread
     public void hideContent() {
         mLinearLayout.setVisibility(View.GONE);
     }

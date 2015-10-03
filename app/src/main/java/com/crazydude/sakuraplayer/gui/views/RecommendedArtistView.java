@@ -10,23 +10,23 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 
-import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.ViewById;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Crazy on 06.06.2015.
  */
-@EViewGroup(R.layout.view_recommended_artist)
 public class RecommendedArtistView extends RelativeLayout implements DataView<ArtistResponse> {
 
-    @ViewById(R.id.view_recommended_artist_image)
+    @Bind(R.id.view_recommended_artist_image)
     ImageView mImageView;
 
-    @ViewById(R.id.view_recommended_artist_name)
+    @Bind(R.id.view_recommended_artist_name)
     TextView mArtistName;
 
     public RecommendedArtistView(Context context) {
         super(context);
+        ButterKnife.bind(this);
     }
 
     public ImageView getmImageView() {

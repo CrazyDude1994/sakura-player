@@ -1,37 +1,41 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
+
 import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
 public class BaseFragmentView {
 
-    @RootContext
-    HomeActivity mBaseActivity;
+    @Inject
+    HomeActivity mActivity;
 
-    @UiThread
+    @Inject
+    Context mContext;
+
+    public BaseFragmentView() {
+        ButterKnife.bind(this, mActivity);
+    }
+
     public void showProgressBar() {
-        mBaseActivity.getHomeActivityView().showContentProgressBar();
+        mActivity.getHomeActivityView().showContentProgressBar();
     }
 
-    @UiThread
     public void hideProgressBar() {
-        mBaseActivity.getHomeActivityView().hideContentProgressBar();
+        mActivity.getHomeActivityView().hideContentProgressBar();
     }
 
-    @UiThread
     public void hideToolbarShadow() {
-        mBaseActivity.getHomeActivityView().hideToolbarShadow();
+        mActivity.getHomeActivityView().hideToolbarShadow();
     }
 
-    @UiThread
     void showToolbarShadow() {
-        mBaseActivity.getHomeActivityView().showToolbarShadow();
+        mActivity.getHomeActivityView().showToolbarShadow();
     }
 }

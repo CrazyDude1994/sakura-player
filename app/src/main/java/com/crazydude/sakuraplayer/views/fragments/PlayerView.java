@@ -1,6 +1,5 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
-import android.content.Context;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,58 +10,49 @@ import com.crazydude.sakuraplayer.models.TrackModel;
 import com.squareup.picasso.Picasso;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.ColorRes;
 
 import java.io.File;
+
+import butterknife.Bind;
+import butterknife.BindColor;
 
 /**
  * Created by Crazy on 15.05.2015.
  */
-@EBean
-public class PlayerView {
+public class PlayerView extends BaseFragmentView {
 
-    @ViewById(R.id.fragment_player_seekbar)
+    @Bind(R.id.fragment_player_seekbar)
     DiscreteSeekBar mDiscreteSeekBar;
 
-    @ViewById(R.id.fragment_player_artist_name)
+    @Bind(R.id.fragment_player_artist_name)
     TextView mArtistName;
 
-    @ViewById(R.id.fragment_player_song_name)
+    @Bind(R.id.fragment_player_song_name)
     TextView mSongName;
 
-    @ViewById(R.id.fragment_player_button_play)
+    @Bind(R.id.fragment_player_button_play)
     ImageButton mPlayButton;
 
-    @ViewById(R.id.fragment_player_button_repeat)
+    @Bind(R.id.fragment_player_button_repeat)
     ImageButton mRepeatButton;
 
-    @ViewById(R.id.fragment_player_button_shuffle)
+    @Bind(R.id.fragment_player_button_shuffle)
     ImageButton mShuffleButton;
 
-    @ViewById(R.id.fragment_player_image)
+    @Bind(R.id.fragment_player_image)
     ImageView mAlbumArt;
 
-    @RootContext
-    Context mContext;
-
-    @ColorRes(R.color.accent)
+    @BindColor(R.color.accent)
     int mAccentColor;
 
-    @UiThread
     public void setPlaying() {
         mPlayButton.setImageResource(R.drawable.ic_pause);
     }
 
-    @UiThread
     public void setPaused() {
         mPlayButton.setImageResource(R.drawable.ic_play_arrow);
     }
 
-    @UiThread
     public void setRepeatMode(boolean isRepeat) {
         if (isRepeat) {
             mRepeatButton.setImageResource(R.drawable.ic_repeat_activated);
@@ -71,7 +61,6 @@ public class PlayerView {
         }
     }
 
-    @UiThread
     public void setShuffleMode(boolean isShuffle) {
         if (isShuffle) {
             mShuffleButton.setImageResource(R.drawable.ic_shuffle_activated);
@@ -81,7 +70,6 @@ public class PlayerView {
 
     }
 
-    @UiThread
     public void setData(TrackModel data) {
         mArtistName.setText(data.getArtist().getArtistName());
         mSongName.setText(data.getTrackName());
@@ -98,13 +86,11 @@ public class PlayerView {
         }
     }
 
-    @UiThread
     public void setProgress(int progress, int duration) {
         mDiscreteSeekBar.setMax(duration);
         mDiscreteSeekBar.setProgress(progress);
     }
 
-    @UiThread
     public void setStopped() {
         mDiscreteSeekBar.setProgress(0);
         mDiscreteSeekBar.setMax(0);

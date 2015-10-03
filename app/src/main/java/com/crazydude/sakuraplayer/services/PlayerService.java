@@ -16,18 +16,16 @@ import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.providers.BusProvider;
 import com.squareup.otto.Bus;
-
-import org.androidannotations.annotations.EService;
 
 import java.io.IOException;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 /**
  * Created by CrazyDude on 09.04.2015.
  */
-@EService
 public class PlayerService extends Service implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
@@ -49,7 +47,9 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
     private PlaylistModel mPlaylist = new PlaylistModel(null, "Current");
     private int mCurrentTrackIndex;
     private boolean mIsInRandomMode = false;
-    private Bus bus = BusProvider.getInstance();
+
+    @Inject
+    Bus mBus;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -137,7 +137,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
                 PlayerPlaybackEvent();
         playerPlaybackEvent.setAction(action);
         playerPlaybackEvent.setTrackModel(trackModel);
-        bus.post(playerPlaybackEvent);
+        mBus.post(playerPlaybackEvent);
     }
 
     private void postSeekEvent(int duration, int progress, TrackModel trackModel) {
@@ -145,7 +145,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         seekEvent.setTrackModel(trackModel);
         seekEvent.setDuration(duration);
         seekEvent.setProgress(progress);
-        bus.post(seekEvent);
+        mBus.post(seekEvent);
     }
 
     private void playMusic(TrackModel track) {

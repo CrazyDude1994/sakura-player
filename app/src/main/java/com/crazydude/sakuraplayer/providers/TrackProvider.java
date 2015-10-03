@@ -5,12 +5,11 @@ import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
-
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EBean;
+import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnArtistsLoadedListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedListener;
@@ -18,19 +17,19 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedList
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
 public class TrackProvider {
 
-    @Bean
+    @Inject
     MusicLibraryManager mMusicLibraryManager;
 
-    @Background
+    @Inject
+    Bus mBus;
+
     public void updateMusicDatabase() {
         mMusicLibraryManager.generateDatabase();
-        BusProvider.getInstance().post(new UpdateLibraryCompletedEvent());
+        mBus.post(new UpdateLibraryCompletedEvent());
     }
 
-    @Background
     public void loadAllTracks(OnTracksLoadedListener listener) {
         ArrayList<TrackModel> models = ((ArrayList) new Select().from(TrackModel.class).execute());
         if (listener != null && models != null) {
@@ -38,7 +37,6 @@ public class TrackProvider {
         }
     }
 
-    @Background
     public void loadAllArtists(OnArtistsLoadedListener listener) {
         ArrayList<ArtistModel> models = ((ArrayList) new Select().from(ArtistModel.class).execute());
         if (listener != null && models != null) {
@@ -46,7 +44,6 @@ public class TrackProvider {
         }
     }
 
-    @Background
     public void loadAllTracksByArtist(String artistName, OnTracksLoadedListener listener) {
         ArtistModel artistModel = new Select()
                 .from(ArtistModel.class)
@@ -61,7 +58,6 @@ public class TrackProvider {
         }
     }
 
-    @Background
     public void loadTrackById(long trackId, OnTracksLoadedListener listener) {
         TrackModel model = new Select()
                 .from(TrackModel.class)

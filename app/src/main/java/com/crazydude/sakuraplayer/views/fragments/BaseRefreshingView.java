@@ -2,27 +2,22 @@ package com.crazydude.sakuraplayer.views.fragments;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
-import com.squareup.otto.Subscribe;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.UiThread;
-
 /**
  * Created by kartavtsev.s on 26.06.2015.
  */
-@EBean
 abstract public class BaseRefreshingView extends BaseFragmentView {
 
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @AfterViews
-    void initBaseViews() {
+    public BaseRefreshingView() {
+        super();
+        initBaseViews();
+    }
+
+    private void initBaseViews() {
         injectSwipeRefreshLayout();
     }
 
-    @UiThread
     public void setRefreshing(boolean isRefreshing) {
         mSwipeRefreshLayout.setRefreshing(isRefreshing);
     }

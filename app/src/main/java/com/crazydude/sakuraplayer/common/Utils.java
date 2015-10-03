@@ -11,10 +11,7 @@ import android.os.Environment;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.providers.BusProvider;
-
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
+import com.squareup.otto.Bus;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -22,14 +19,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import javax.inject.Inject;
+
 /**
  * Created by CrazyDude on 14.03.2015.
  */
-@EBean(scope = EBean.Scope.Singleton)
 public class Utils {
 
-    @RootContext
-    Context context;
+    @Inject
+    Context mContext;
+
+    @Inject
+    Bus mBus;
 
     private static String convertToHex(byte[] data) {
         StringBuffer buf = new StringBuffer();
@@ -64,14 +65,14 @@ public class Utils {
     }
 
     public void triggerMediaScan(MediaScannerConnection.OnScanCompletedListener listener) {
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
                 Uri.parse("file://" + Environment.getExternalStorageDirectory())));
         MediaScanCompletedReceiver receiver = new MediaScanCompletedReceiver(listener);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
         intentFilter.addDataScheme("file");
-        context.registerReceiver(receiver, intentFilter);
-        BusProvider.getInstance().post(new UpdateLibraryStartedEvent());
+        mContext.registerReceiver(receiver, intentFilter);
+        mBus.post(new UpdateLibraryStartedEvent());
     }
 
     private class MediaScanCompletedReceiver extends BroadcastReceiver {

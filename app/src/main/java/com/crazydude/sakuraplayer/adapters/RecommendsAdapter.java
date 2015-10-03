@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.gui.views.RecommendedArtistView;
-import com.crazydude.sakuraplayer.gui.views.RecommendedArtistView_;
 import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 import com.squareup.picasso.Picasso;
 
@@ -17,7 +16,7 @@ public class RecommendsAdapter extends BaseAdapter<ArtistResponse, RecommendedAr
 
     @Override
     public BaseViewHolder<RecommendedArtistView> onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecommendedArtistView recommendedArtistView = RecommendedArtistView_.build(parent.getContext());
+        RecommendedArtistView recommendedArtistView = new RecommendedArtistView(mContext);
         return new BaseViewHolder<>(recommendedArtistView);
     }
 

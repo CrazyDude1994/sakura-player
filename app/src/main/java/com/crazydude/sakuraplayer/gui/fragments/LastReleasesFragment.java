@@ -1,28 +1,37 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 import com.crazydude.sakuraplayer.views.fragments.LastReleasesFragmentView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
+import javax.inject.Inject;
 
 /**
  * Created by kartavtsev.s on 15.06.2015.
  */
-@EFragment(R.layout.fragment_last_releases)
 public class LastReleasesFragment extends BaseFragment implements Callbacks.OnResponseListener<AlbumResponse> {
 
-    @Bean
+    @Inject
     LastReleasesFragmentView mLastReleasesFragmentView;
 
-    @Bean
+    @Inject
     LastfmApiManager mLastfmApiManager;
 
-    @AfterViews
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initLastReleases();
+        return inflater.inflate(R.layout.fragment_last_releases, container, false);
+    }
+
     void initLastReleases() {
         mLastfmApiManager.getNewReleases(null, this);
         mLastReleasesFragmentView.showProgressBar();

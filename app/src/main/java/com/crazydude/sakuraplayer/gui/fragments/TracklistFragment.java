@@ -1,28 +1,37 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
+import javax.inject.Inject;
 
 /**
  * Created by Crazy on 25.05.2015.
  */
-@EFragment(R.layout.fragment_tracklist)
 public class TracklistFragment extends BaseFragment {
 
-    @Bean
+    @Inject
     TracklistFragmentView mTracklistFragmentView;
 
-    @Bean
+    @Inject
     LastfmApiManager mLastfmApiManager;
 
-    @AfterViews
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initViews();
+        return inflater.inflate(R.layout.fragment_tracklist, container, false);
+    }
+
     void initViews() {
         mTracklistFragmentView.initViewPager(this);
     }
-
 }

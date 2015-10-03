@@ -1,44 +1,36 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.view.Gravity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
-import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
 import com.squareup.otto.Subscribe;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 
-@EFragment(R.layout.fragment_player)
+import butterknife.Bind;
+import butterknife.OnClick;
+
 public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnProgressChangeListener {
 
-    @Bean
+    @Inject
     PlayerView mPlayerView;
 
-    @Bean
+    @Inject
     TrackProvider mTrackProvider;
 
-    @ViewById(R.id.fragment_player_seekbar)
+    @Bind(R.id.fragment_player_seekbar)
     DiscreteSeekBar mDiscreteSeekBar;
 
     private TrackModel mCurrentTrack;
@@ -48,7 +40,13 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
     private boolean mIsShuffled = false;
     private boolean mIsRepeated = false;
 
-    @AfterViews
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        init();
+        return inflater.inflate(R.layout.fragment_player, container, false);
+    }
+
     void init() {
         mDiscreteSeekBar.setOnProgressChangeListener(this);
         if (mCurrentTrack != null) {
@@ -57,7 +55,7 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         }
     }
 
-    @Click({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
+    @OnClick({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
             R.id.fragment_player_button_prev, R.id.fragment_player_button_shuffle,
             R.id.fragment_player_button_repeat})
     void onClick(View v) {

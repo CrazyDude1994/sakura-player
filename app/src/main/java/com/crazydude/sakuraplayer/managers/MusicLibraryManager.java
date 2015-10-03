@@ -12,18 +12,16 @@ import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 /**
  * Created by CrazyDude on 11.04.2015.
  */
-@EBean(scope = EBean.Scope.Singleton)
 public class MusicLibraryManager {
 
-    @RootContext
+    @Inject
     Context mContext;
 
     public void generateDatabase() {

@@ -9,31 +9,30 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 
-import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.ViewById;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by kartavtsev.s on 15.06.2015.
  */
-@EViewGroup(R.layout.view_album)
 public class AlbumView extends RelativeLayout implements DataView<AlbumResponse.Album> {
 
-    @ViewById(R.id.view_album_image)
+    @Bind(R.id.view_album_image)
     ImageView mImageView;
 
-    @ViewById(R.id.view_album_artist_name)
+    @Bind(R.id.view_album_artist_name)
     TextView mArtistName;
 
-    @ViewById(R.id.view_album_name)
+    @Bind(R.id.view_album_name)
     TextView mAlbumName;
 
-    @ViewById(R.id.view_album_date)
+    @Bind(R.id.view_album_date)
     TextView mAlbumDate;
 
     public AlbumView(Context context) {
         super(context);
+        ButterKnife.bind(this);
     }
-
 
     public ImageView getImageView() {
         return mImageView;
