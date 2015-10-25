@@ -6,12 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.di.components.ActivityComponent;
-import com.crazydude.sakuraplayer.di.components.DaggerActivityComponent;
+import com.crazydude.sakuraplayer.di.components.DaggerApplicationComponent;
+import com.crazydude.sakuraplayer.di.modules.ActivityModule;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -52,13 +52,12 @@ abstract public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         injectDependencies();
     }
 
     protected void injectDependencies() {
-        mActivityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(getSakuraPlayerApplication().getApplicationComponent())
-                .build();
+        mActivityComponent = DaggerApplicationComponent.builder()
+                .build().provideActivityComponent(new ActivityModule(this));
+        mActivityComponent.inject(this);
     }
 }

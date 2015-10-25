@@ -1,8 +1,11 @@
 package com.crazydude.sakuraplayer.di.modules;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
+import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
+import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialTextFragmentView;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,7 +17,17 @@ import dagger.Provides;
 public class ViewModule {
 
     @Provides
-    public HomeActivityView provideHomeActivityView(Context context) {
-        return new HomeActivityView();
+    public HomeActivityView provideHomeActivityView(AppCompatActivity activity) {
+        return new HomeActivityView(activity);
+    }
+
+    @Provides
+    public LastfmTutorialFragmentView provideLastfmTutorialFragmentView(AppCompatActivity activity) {
+        return new LastfmTutorialFragmentView(activity);
+    }
+
+    @Provides
+    public LastfmTutorialTextFragmentView provideLastfmTutorialTextFragmentView() {
+        return new LastfmTutorialTextFragmentView();
     }
 }

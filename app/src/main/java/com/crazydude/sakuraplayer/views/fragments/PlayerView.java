@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,13 +14,15 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.BindColor;
 
 /**
  * Created by Crazy on 15.05.2015.
  */
-public class PlayerView extends BaseFragmentView {
+public class PlayerView {
 
     @Bind(R.id.fragment_player_seekbar)
     DiscreteSeekBar mDiscreteSeekBar;
@@ -44,6 +47,9 @@ public class PlayerView extends BaseFragmentView {
 
     @BindColor(R.color.accent)
     int mAccentColor;
+
+    @Inject
+    Context mContext;
 
     public void setPlaying() {
         mPlayButton.setImageResource(R.drawable.ic_pause);

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
@@ -48,7 +50,6 @@ public class LastfmArtistFragment extends BaseFragment implements
     }
 
     void initViews() {
-        mLastfmArtistFragmentView.showProgressBar();
         mRecommendsFragmentView.setOnRecyclerClickListener(this);
         loadArtistInfo(artistName, mbid);
     }
@@ -65,7 +66,6 @@ public class LastfmArtistFragment extends BaseFragment implements
 
     @Override
     public void onSuccess(ArtistInfoResponse response) {
-        mLastfmArtistFragmentView.hideProgressBar();
         mLastfmArtistFragmentView.showContent();
         mLastfmArtistFragmentView.setData(response);
         mRecommendsFragmentView.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -76,12 +76,10 @@ public class LastfmArtistFragment extends BaseFragment implements
 
     @Override
     public void onLastfmError(String message, Integer code) {
-        mLastfmArtistFragmentView.hideProgressBar();
     }
 
     @Override
     public void onNetworkError(String message) {
-        mLastfmArtistFragmentView.hideProgressBar();
     }
 
     @Override
@@ -99,5 +97,10 @@ public class LastfmArtistFragment extends BaseFragment implements
             throw new ClassCastException(activity.toString()
                     + " must implement " + Callbacks.OnSelectedLastfmArtistListener.class.getSimpleName());
         }
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

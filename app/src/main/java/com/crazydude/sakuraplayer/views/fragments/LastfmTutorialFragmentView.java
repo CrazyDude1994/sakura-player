@@ -2,8 +2,11 @@ package com.crazydude.sakuraplayer.views.fragments;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.graphics.Point;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -11,16 +14,20 @@ import android.widget.Button;
 import com.andraskindler.parallaxviewpager.ParallaxViewPager;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.LastfmTutorialPagerAdapter;
+import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.HashSet;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-public class LastfmTutorialFragmentView extends BaseFragmentView implements ViewPager.OnPageChangeListener {
+public class LastfmTutorialFragmentView implements ViewPager.OnPageChangeListener {
 
     @Bind(R.id.fragment_lastfm_tutorial_viewpager)
     ParallaxViewPager mViewPager;
@@ -37,16 +44,16 @@ public class LastfmTutorialFragmentView extends BaseFragmentView implements View
     @Bind(R.id.fragment_lastfm_tutorial_button_container)
     View mButtonContainer;
 
+    AppCompatActivity mActivity;
+
     private LastfmTutorialPagerAdapter mPagerAdapter;
     private HashSet<ViewPager.OnPageChangeListener> mOnPageChangeListeners = new HashSet<>();
-    ;
 
-    public LastfmTutorialFragmentView() {
-        super();
-        initViews();
+    public LastfmTutorialFragmentView(AppCompatActivity activity) {
+        mActivity = activity;
     }
 
-    void initViews() {
+    public void initViews() {
         mPagerAdapter = new LastfmTutorialPagerAdapter(mActivity.getSupportFragmentManager());
 
         mViewPager.setAdapter(mPagerAdapter);

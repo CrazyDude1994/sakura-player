@@ -26,7 +26,7 @@ public class LastfmTutorialPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        return new LastfmTutorialTextFragment();
+        return LastfmTutorialTextFragment.newInstance(TUTORIAL_TEXTS[i]);
     }
 
     @Override

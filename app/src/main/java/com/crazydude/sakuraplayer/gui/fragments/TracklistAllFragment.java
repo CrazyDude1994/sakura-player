@@ -12,6 +12,8 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -53,15 +55,12 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
 
     void initViews() {
         mTrackProvider.loadAllTracks(this);
-        mTracklistAllFragmentView.setOnRefreshListener(mOnRefreshListener);
     }
 
     @Override
     public void onTrackLoaded(ArrayList<TrackModel> tracks) {
         mTracklistAllFragmentView.setTrackList(tracks);
         mTracklistAllFragmentView.setOnRecyclerClickListener(this);
-        mTracklistAllFragmentView.hideProgressBar();
-        mTracklistAllFragmentView.setRefreshing(false);
     }
 
     @Override
@@ -88,6 +87,10 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
 
     @Subscribe
     public void onUpdateStarted(UpdateLibraryStartedEvent event) {
-        mTracklistAllFragmentView.setRefreshing(true);
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

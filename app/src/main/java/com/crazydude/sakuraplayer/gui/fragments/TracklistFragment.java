@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
 
@@ -33,5 +35,10 @@ public class TracklistFragment extends BaseFragment {
 
     void initViews() {
         mTracklistFragmentView.initViewPager(this);
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

@@ -9,7 +9,7 @@ import butterknife.Bind;
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-public class LastfmTutorialTextFragmentView extends BaseFragmentView {
+public class LastfmTutorialTextFragmentView {
 
     @Bind(R.id.fragment_lastfm_tutorial_text_text)
     TextView mTutorialText;

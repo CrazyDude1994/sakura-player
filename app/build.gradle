@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
-def AAVersion = '3.3.2'
 def supportLibraryVersion = '23.0.1'
 
 android {
@@ -26,6 +25,7 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
 

@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,7 @@ import butterknife.Bind;
 /**
  * Created by Crazy on 13.06.2015.
  */
-public class ArtistFragmentView extends BaseFragmentView {
+public class ArtistFragmentView {
 
     @Bind(R.id.fragmet_artist_add_to_playlist_floating_button)
     FloatingActionButton mAddToPlaylistButton;
@@ -34,10 +35,13 @@ public class ArtistFragmentView extends BaseFragmentView {
     @Inject
     TracklistAdapter mTracklistAdapter;
 
+    @Inject
+    Context mContext;
+
+
     private LinearLayoutManager mLinearLayoutManager;
 
     public ArtistFragmentView() {
-        super();
         initViews();
     }
 
@@ -45,7 +49,6 @@ public class ArtistFragmentView extends BaseFragmentView {
         mLinearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mTracklistAdapter);
-        hideToolbarShadow();
     }
 
     public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {

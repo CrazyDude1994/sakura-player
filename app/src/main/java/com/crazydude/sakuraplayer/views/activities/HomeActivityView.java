@@ -33,9 +33,6 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScree
  */
 public class HomeActivityView extends BaseActivityView implements Animator.AnimatorListener {
 
-    @Inject
-    AppCompatActivity mActivity;
-
     @Bind(R.id.activity_home_splash_screen)
     View mSplashScreenImage;
 
@@ -66,8 +63,8 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    public HomeActivityView() {
-        super();
+    public HomeActivityView(AppCompatActivity activity) {
+        super(activity);
 
         initViews();
     }
@@ -86,7 +83,7 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
         mPlayerWidgetSong.setText(trackModel.getTrackName());
         if (trackModel.getAlbum() != null && trackModel.getAlbum().getAlbumArtPath() != null) {
             File file = new File(trackModel.getAlbum().getAlbumArtPath());
-            Picasso.with(mContext)
+            Picasso.with(mAppCompatActivity)
                     .load(file)
                     .resizeDimen(R.dimen.list_rounded_image_width_height, R.dimen.list_rounded_image_width_height)
                     .error(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor))
@@ -125,11 +122,11 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     }
 
     private void initToolbar() {
-        mActivity.setSupportActionBar(mToolbar);
+        mAppCompatActivity.setSupportActionBar(mToolbar);
     }
 
     private void initNavigationDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, mToolbar,
+        mDrawerToggle = new ActionBarDrawerToggle(mAppCompatActivity, mDrawerLayout, mToolbar,
                 R.string.open_drawer, R.string.close_drawer);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();

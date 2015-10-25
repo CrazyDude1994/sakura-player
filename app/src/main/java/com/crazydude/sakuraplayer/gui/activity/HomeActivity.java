@@ -32,6 +32,7 @@ import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.NavigationManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
+import com.crazydude.sakuraplayer.managers.PreferencesManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -44,10 +45,12 @@ import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import static com.crazydude.sakuraplayer.common.Constants.FragmentsEnum.LastfmTutorialFragment;
 import static com.crazydude.sakuraplayer.common.Constants.FragmentsEnum.TracklistFragment;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
@@ -85,14 +88,19 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Inject
     MusicLibraryManager mMusicLibraryManager;
 
+    @Inject
+    PreferencesManager mPreferencesManager;
+
     private PlayerFragment mPlayerFragment;
     private PlayerBinder mBinder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        ButterKnife.bind(this);
+        getActivityComponent().inject(this);
         init();
         initViews();
     }
@@ -122,11 +130,11 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onAfterSplashScreen() {
-/*        if (!mPrefs.isTutorialCompleted().get()) {
+        if (!mPreferencesManager.isTutorialCompleted()) {
             mNavigationManager.switchFragment(LastfmTutorialFragment, true);
         } else {
             switchToPlayerMode();
-        }*/
+        }
     }
 
     private void switchToPlayerMode() {

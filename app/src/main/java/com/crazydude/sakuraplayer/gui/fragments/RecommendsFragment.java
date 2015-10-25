@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.models.net.ArtistResponse;
@@ -37,31 +39,26 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
     }
 
     void initViews() {
-        mRecommendsFragmentView.showProgressBar();
         mRecommendsFragmentView.setOnRecyclerClickListener(this);
         mLastfmApiManager.getRecommendedArtists(0, 100, this);
     }
 
     @Override
     public void onSuccess(RecommendationsResponse response) {
-        mRecommendsFragmentView.hideProgressBar();
         mRecommendsFragmentView.setData(response.getRecommendations().getArtists());
     }
 
     @Override
     public void onLastfmError(String message, Integer code) {
-        mRecommendsFragmentView.hideProgressBar();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mRecommendsFragmentView.hideProgressBar();
     }
 
     @Override
     public void onNetworkError(String message) {
-        mRecommendsFragmentView.hideProgressBar();
     }
 
     @Override
@@ -79,5 +76,10 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
     public void onClick(View view, int position) {
         ArtistResponse data = mRecommendsFragmentView.getData(position);
         mOnSelectedLastfmArtistListener.onSelecteLastfmArtist(data.getName(), data.getMbid());
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

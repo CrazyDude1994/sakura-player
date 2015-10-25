@@ -12,7 +12,7 @@ import butterknife.Bind;
 /**
  * Created by Crazy on 16.05.2015.
  */
-public class TracklistFragmentView extends BaseFragmentView {
+public class TracklistFragmentView {
 
     @Bind(R.id.fragment_tracklist_viewpager)
     ViewPager mViewPager;
@@ -21,15 +21,6 @@ public class TracklistFragmentView extends BaseFragmentView {
     TabLayout mTabLayout;
 
     private TracklistPagerAdapter mPagerAdapter;
-
-    public TracklistFragmentView() {
-        super();
-        initViews();
-    }
-
-    void initViews() {
-        showToolbarShadow();
-    }
 
     public void initViewPager(BaseFragment parentFragment) {
         if (mPagerAdapter == null) {

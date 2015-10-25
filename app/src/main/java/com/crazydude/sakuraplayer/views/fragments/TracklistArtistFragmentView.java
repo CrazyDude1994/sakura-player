@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +20,7 @@ import butterknife.Bind;
 /**
  * Created by Crazy on 27.05.2015.
  */
-public class TracklistArtistFragmentView extends BaseRefreshingView {
+public class TracklistArtistFragmentView {
 
     @Bind(R.id.fragment_tracklist_artist_recycler)
     RecyclerView mRecyclerView;
@@ -30,10 +31,8 @@ public class TracklistArtistFragmentView extends BaseRefreshingView {
     @Inject
     ArtistAdapter mArtistAdapter;
 
-    public TracklistArtistFragmentView() {
-        super();
-        initViews();
-    }
+    @Inject
+    Context mContext;
 
     void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -48,10 +47,5 @@ public class TracklistArtistFragmentView extends BaseRefreshingView {
 
     public void setArtistList(ArrayList<ArtistModel> models) {
         mArtistAdapter.setData(models);
-    }
-
-    @Override
-    public void injectSwipeRefreshLayout() {
-        super.mSwipeRefreshLayout = mSwipeRefreshLayout;
     }
 }

@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -22,13 +23,15 @@ import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.BindColor;
 
 /**
  * Created by kartavtsev.s on 08.06.2015.
  */
-public class LastfmArtistFragmentView extends BaseFragmentView implements Palette.PaletteAsyncListener,
+public class LastfmArtistFragmentView implements Palette.PaletteAsyncListener,
         Target {
 
     @Bind(R.id.fragment_lastfm_artist_image)
@@ -54,6 +57,10 @@ public class LastfmArtistFragmentView extends BaseFragmentView implements Palett
 
     @BindColor(R.color.white)
     int mWhiteColor;
+
+    @Inject
+    Context mContext;
+
 
     private ArrayList<TextView> mTagsViews = new ArrayList<>();
 

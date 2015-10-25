@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.models.net.AlbumResponse;
@@ -34,29 +36,28 @@ public class LastReleasesFragment extends BaseFragment implements Callbacks.OnRe
 
     void initLastReleases() {
         mLastfmApiManager.getNewReleases(null, this);
-        mLastReleasesFragmentView.showProgressBar();
-        mLastReleasesFragmentView.hideToolbarShadow();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mLastReleasesFragmentView.hideProgressBar();
     }
 
     @Override
     public void onSuccess(AlbumResponse response) {
-        mLastReleasesFragmentView.hideProgressBar();
         mLastReleasesFragmentView.setData(response);
     }
 
     @Override
     public void onLastfmError(String message, Integer code) {
-        mLastReleasesFragmentView.hideProgressBar();
     }
 
     @Override
     public void onNetworkError(String message) {
-        mLastReleasesFragmentView.hideProgressBar();
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

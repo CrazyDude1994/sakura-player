@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -77,5 +79,10 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
     @Override
     public void onTrackLoaded(TrackModel trackModel) {
 
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

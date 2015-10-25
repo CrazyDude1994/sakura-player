@@ -1,14 +1,10 @@
 package com.crazydude.sakuraplayer.views.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,11 +14,7 @@ import butterknife.ButterKnife;
  */
 public class BaseActivityView {
 
-    @Inject
-    Context mContext;
-
-    @Inject
-    AppCompatActivity mAppCompatActivity;
+    protected AppCompatActivity mAppCompatActivity;
 
     @Bind(R.id.activity_home_progressbar)
     View mProgressBar;
@@ -30,8 +22,9 @@ public class BaseActivityView {
     @Bind(R.id.activity_home_placeholder_progressbar)
     View mContentProgressBar;
 
-    public BaseActivityView() {
-        ButterKnife.bind(this, mAppCompatActivity);
+    public BaseActivityView(AppCompatActivity activity) {
+        mAppCompatActivity = activity;
+        ButterKnife.bind(this, activity);
     }
 
     public void showProgressBar() {
@@ -51,10 +44,10 @@ public class BaseActivityView {
     }
 
     public void showInfoDialog(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+        AlertDialog.Builder builder = new AlertDialog.Builder(mAppCompatActivity)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(mContext.getString(R.string.ok), null);
+                .setPositiveButton(mAppCompatActivity.getString(R.string.ok), null);
 
         AlertDialog dialog = builder.create();
         dialog.show();

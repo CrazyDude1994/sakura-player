@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
@@ -138,5 +140,10 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         if (!mIsInTouchMode) {
             mPlayerView.setProgress(event.getProgress(), event.getDuration());
         }
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

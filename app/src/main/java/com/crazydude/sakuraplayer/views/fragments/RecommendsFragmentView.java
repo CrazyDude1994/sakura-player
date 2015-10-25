@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
+import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -11,27 +12,31 @@ import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 
 /**
  * Created by kartavtsev.s on 05.06.2015.
  */
-public class RecommendsFragmentView extends BaseFragmentView {
+public class RecommendsFragmentView {
 
     @Bind(R.id.fragment_recommendations_recycler)
     RecyclerView mRecyclerView;
+
+    @Inject
+    Context mContext;
 
     private RecommendsAdapter mRecommendsAdapter;
     private GridLayoutManager mGridLayoutManager;
 
     public RecommendsFragmentView() {
-        super();
         initViews();
     }
 
     void initViews() {
         mRecommendsAdapter = new RecommendsAdapter();
-        mGridLayoutManager = new GridLayoutManager(mActivity, 2);
+        mGridLayoutManager = new GridLayoutManager(mContext, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mRecommendsAdapter);
     }
@@ -45,7 +50,7 @@ public class RecommendsFragmentView extends BaseFragmentView {
     }
 
     public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {
-        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mActivity, listener,
+        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
                 mRecyclerView));
     }
 

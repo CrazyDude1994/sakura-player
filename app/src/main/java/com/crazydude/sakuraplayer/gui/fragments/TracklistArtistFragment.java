@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -50,7 +52,6 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     void initViews() {
         mTrackProvider.loadAllArtists(this);
-        mTracklistArtistFragmentView.setOnRefreshListener(mOnRefreshListener);
     }
 
     @Override
@@ -58,8 +59,6 @@ public class TracklistArtistFragment extends BaseFragment implements
         mArtistModels = artists;
         mTracklistArtistFragmentView.setArtistList(artists);
         mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
-        mTracklistArtistFragmentView.hideProgressBar();
-        mTracklistArtistFragmentView.setRefreshing(false);
     }
 
     @Override
@@ -81,6 +80,10 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     @Subscribe
     public void onUpdateStarted(UpdateLibraryStartedEvent event) {
-        mTracklistArtistFragmentView.setRefreshing(true);
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

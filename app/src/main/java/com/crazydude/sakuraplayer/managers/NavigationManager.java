@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants.FragmentsEnum;
 import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
 import com.crazydude.sakuraplayer.interfaces.FeatureProvider;
 import com.crazydude.sakuraplayer.interfaces.SwitchableFragment;
 import com.squareup.otto.Bus;
@@ -49,8 +50,8 @@ public class NavigationManager {
                                        boolean addInsteadOfReplace, Object... arguments) {
         Fragment newFragment = null;
 
-/*        switch (fragment) {
-            case ArtistFragment:
+        switch (fragment) {
+/*            case ArtistFragment:
                 newFragment = ArtistFragment_.builder().artistName((String) arguments[0]).build();
                 break;
             case LastfmArtistFragment:
@@ -58,11 +59,11 @@ public class NavigationManager {
                         .artistName((String) arguments[0])
                         .mbid((String) arguments[1])
                         .build();
-                break;
+                break;*/
             case LastfmTutorialFragment:
-                newFragment = LastfmTutorialFragment_.builder().build();
+                newFragment = LastfmTutorialFragment.newInstance();
                 break;
-            case LastReleasesFragment:
+/*            case LastReleasesFragment:
                 newFragment = LastReleasesFragment_.builder().build();
                 break;
             case PlayerFragment:
@@ -73,8 +74,8 @@ public class NavigationManager {
                 break;
             case TracklistFragment:
                 newFragment = TracklistFragment_.builder().build();
-                break;
-        }*/
+                break;*/
+        }
 
         Features features = ((SwitchableFragment) newFragment).requestFeatures(new Features.FeaturesBuilder());
         ((FeatureProvider) mActivity.get()).provideFeatures(features);
