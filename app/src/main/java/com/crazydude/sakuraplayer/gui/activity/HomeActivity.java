@@ -149,6 +149,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
             new LastfmLoginFragment().show(getFragmentManager(), "");
         } else {
             switchToPlayerMode();
+            getActivityComponent().inject(this);
         }
     }
 

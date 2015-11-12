@@ -23,25 +23,23 @@ public class LastfmTutorialTextFragment extends BaseFragment {
     @Inject
     LastfmTutorialTextFragmentView mLastfmTutorialTextFragmentView;
 
+    private String tutorialText;
+
     public static LastfmTutorialTextFragment newInstance(String tutorialText) {
         LastfmTutorialTextFragment fragment = new LastfmTutorialTextFragment();
         fragment.tutorialText = tutorialText;
         return fragment;
     }
 
-    String tutorialText;
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lastfm_tutorial_text, container, false);
-        getActivityComponent().inject(this);
-        ButterKnife.bind(mLastfmTutorialTextFragmentView, view);
-        initViews();
-        return view;
+    protected int getLayoutRes() {
+        return R.layout.fragment_lastfm_tutorial_text;
     }
 
-    void initViews() {
+    @Override
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        ButterKnife.bind(mLastfmTutorialTextFragmentView, rootView);
         mLastfmTutorialTextFragmentView.setTutorialText(tutorialText);
     }
 

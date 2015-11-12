@@ -13,12 +13,8 @@ import javax.inject.Inject;
  */
 public class ArtistAdapter extends BaseAdapter<ArtistModel, ArtistView> {
 
-    @Inject
-    Context mContext;
-
     @Override
     public BaseViewHolder<ArtistView> onCreateViewHolder(ViewGroup parent, int viewType) {
-        ArtistView artistView = new ArtistView(mContext);
-        return new BaseViewHolder<>(artistView);
+        return new BaseViewHolder<>(new ArtistView(parent.getContext()));
     }
 }

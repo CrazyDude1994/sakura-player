@@ -14,6 +14,8 @@ import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Crazy on 25.05.2015.
  */
@@ -25,15 +27,19 @@ public class TracklistFragment extends BaseFragment {
     @Inject
     LastfmApiManager mLastfmApiManager;
 
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initViews();
-        return inflater.inflate(R.layout.fragment_tracklist, container, false);
+    public static TracklistFragment newInstance() {
+        return new TracklistFragment();
     }
 
-    void initViews() {
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_tracklist;
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        ButterKnife.bind(mTracklistFragmentView, rootView);
         mTracklistFragmentView.initViewPager(this);
     }
 

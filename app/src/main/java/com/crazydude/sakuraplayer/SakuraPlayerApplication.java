@@ -2,6 +2,8 @@ package com.crazydude.sakuraplayer;
 
 import com.crazydude.sakuraplayer.di.components.ApplicationComponent;
 import com.crazydude.sakuraplayer.di.components.DaggerApplicationComponent;
+import com.crazydude.sakuraplayer.di.modules.ApplicationModule;
+import com.crazydude.sakuraplayer.di.modules.UtilsModule;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -25,7 +27,10 @@ public class SakuraPlayerApplication extends com.activeandroid.app.Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build());
 
-        mApplicationComponent = DaggerApplicationComponent.builder().build();
+        mApplicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .utilsModule(new UtilsModule())
+                .build();
     }
 
     public boolean isIsSplashscreenShown() {
@@ -34,5 +39,9 @@ public class SakuraPlayerApplication extends com.activeandroid.app.Application {
 
     public void setIsSplashscreenShown(boolean mIsSplashscreenShown) {
         this.mIsSplashscreenShown = mIsSplashscreenShown;
+    }
+
+    public ApplicationComponent getApplicationComponent() {
+        return mApplicationComponent;
     }
 }

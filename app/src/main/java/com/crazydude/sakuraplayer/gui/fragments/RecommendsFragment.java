@@ -31,14 +31,13 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
 
     private Callbacks.OnSelectedLastfmArtistListener mOnSelectedLastfmArtistListener;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initViews();
-        return inflater.inflate(R.layout.fragment_recommendations, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_recommendations;
     }
 
-    void initViews() {
+    @Override
+    protected void initViews(View rootView) {
         mRecommendsFragmentView.setOnRecyclerClickListener(this);
         mLastfmApiManager.getRecommendedArtists(0, 100, this);
     }

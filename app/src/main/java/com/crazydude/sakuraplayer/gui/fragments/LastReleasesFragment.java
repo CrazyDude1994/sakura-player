@@ -27,14 +27,13 @@ public class LastReleasesFragment extends BaseFragment implements Callbacks.OnRe
     @Inject
     LastfmApiManager mLastfmApiManager;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initLastReleases();
-        return inflater.inflate(R.layout.fragment_last_releases, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_last_releases;
     }
 
-    void initLastReleases() {
+    @Override
+    protected void initViews(View rootView) {
         mLastfmApiManager.getNewReleases(null, this);
     }
 

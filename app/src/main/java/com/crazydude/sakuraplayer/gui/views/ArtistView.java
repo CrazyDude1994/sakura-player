@@ -34,6 +34,11 @@ public class ArtistView extends RelativeLayout implements DataView<ArtistModel> 
 
     public ArtistView(Context context) {
         super(context);
+        init();
+    }
+
+    private void init() {
+        inflate(getContext(), R.layout.view_artist, this);
         ButterKnife.bind(this);
     }
 

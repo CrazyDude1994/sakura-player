@@ -13,6 +13,7 @@ import com.crazydude.sakuraplayer.models.TrackModel;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 
@@ -33,9 +34,10 @@ public class TracklistAllFragmentView {
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Inject
+    @Named("Activity")
     Context mContext;
 
-    void initViews() {
+    public void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mTracklistAdapter);

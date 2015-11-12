@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.os.PowerManager;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.SakuraPlayerApplication;
+import com.crazydude.sakuraplayer.di.modules.ServiceModule;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
 import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
@@ -50,6 +52,13 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
 
     @Inject
     Bus mBus;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ((SakuraPlayerApplication) getApplication()).getApplicationComponent()
+                .provideServiceComponent(new ServiceModule()).inject(this);
+    }
 
     @Override
     public IBinder onBind(Intent intent) {

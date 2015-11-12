@@ -25,6 +25,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by CrazyDude on 13.04.2015.
  */
@@ -46,14 +48,17 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initViews();
-        return inflater.inflate(R.layout.fragment_tracklist_alltracks, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_tracklist_alltracks;
     }
 
-    void initViews() {
+    @Override
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        getActivityComponent().inject(mTracklistAllFragmentView);
+        ButterKnife.bind(mTracklistAllFragmentView, rootView);
+        mTracklistAllFragmentView.initViews();
         mTrackProvider.loadAllTracks(this);
     }
 

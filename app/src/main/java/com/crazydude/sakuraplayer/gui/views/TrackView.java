@@ -1,6 +1,8 @@
 package com.crazydude.sakuraplayer.gui.views;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -8,6 +10,9 @@ import android.widget.TextView;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.TrackModel;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +36,11 @@ public class TrackView extends RelativeLayout implements DataView<TrackModel> {
 
     public TrackView(Context context) {
         super(context);
+        init();
+    }
+
+    private void init() {
+        inflate(getContext(), R.layout.view_track, this);
         ButterKnife.bind(this);
     }
 

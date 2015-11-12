@@ -10,6 +10,7 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants.FragmentsEnum;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 import com.crazydude.sakuraplayer.interfaces.FeatureProvider;
 import com.crazydude.sakuraplayer.interfaces.SwitchableFragment;
 import com.squareup.otto.Bus;
@@ -71,10 +72,10 @@ public class NavigationManager {
                 break;
             case RecommendsFragment:
                 newFragment = RecommendsFragment_.builder().build();
-                break;
-            case TracklistFragment:
-                newFragment = TracklistFragment_.builder().build();
                 break;*/
+            case TracklistFragment:
+                newFragment = TracklistFragment.newInstance();
+                break;
         }
 
         Features features = ((SwitchableFragment) newFragment).requestFeatures(new Features.FeaturesBuilder());

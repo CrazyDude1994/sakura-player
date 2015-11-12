@@ -14,6 +14,7 @@ import com.crazydude.sakuraplayer.models.ArtistModel;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 
@@ -32,9 +33,10 @@ public class TracklistArtistFragmentView {
     ArtistAdapter mArtistAdapter;
 
     @Inject
+    @Named("Activity")
     Context mContext;
 
-    void initViews() {
+    public void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mArtistAdapter);

@@ -42,14 +42,14 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
     private boolean mIsShuffled = false;
     private boolean mIsRepeated = false;
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        init();
-        return inflater.inflate(R.layout.fragment_player, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_player;
     }
 
-    void init() {
+    @Override
+    protected void initViews(View rootView) {
         mDiscreteSeekBar.setOnProgressChangeListener(this);
         if (mCurrentTrack != null) {
             mPlayerView.setPlaying();

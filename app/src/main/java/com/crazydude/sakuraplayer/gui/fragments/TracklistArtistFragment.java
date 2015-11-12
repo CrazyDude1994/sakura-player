@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Crazy on 27.05.2015.
  */
@@ -43,14 +45,17 @@ public class TracklistArtistFragment extends BaseFragment implements
     private ArrayList<ArtistModel> mArtistModels;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initViews();
-        return inflater.inflate(R.layout.fragment_tracklist_artist, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_tracklist_artist;
     }
 
-    void initViews() {
+    @Override
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        getActivityComponent().inject(mTracklistArtistFragmentView);
+        ButterKnife.bind(mTracklistArtistFragmentView, rootView);
+        mTracklistArtistFragmentView.initViews();
         mTrackProvider.loadAllArtists(this);
     }
 

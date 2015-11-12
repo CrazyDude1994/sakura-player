@@ -12,7 +12,6 @@ public class TracklistAdapter extends BaseAdapter<TrackModel, TrackView> {
 
     @Override
     public BaseViewHolder<TrackView> onCreateViewHolder(ViewGroup parent, int viewType) {
-        TrackView trackView = new TrackView(mContext);
-        return new BaseViewHolder<>(trackView);
+        return new BaseViewHolder<>(new TrackView(parent.getContext()));
     }
 }

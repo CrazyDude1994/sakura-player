@@ -8,13 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 
 /**
  * Created by Crazy on 27.09.2015.
  */
-@Module(includes = {AdaptersModule.class, ManagersModule.class, UtilsModule.class, ViewModule.class})
+@Module(includes = {AdaptersModule.class, ManagersModule.class, ViewModule.class})
 public class ActivityModule {
 
     private final AppCompatActivity mActivity;
@@ -24,14 +26,9 @@ public class ActivityModule {
     }
 
     @Provides
+    @Named("Activity")
     public Context provideContext() {
         return mActivity;
-    }
-
-
-    @Provides
-    public Bus provideBus() {
-        return new Bus(ThreadEnforcer.MAIN);
     }
 
     @Provides

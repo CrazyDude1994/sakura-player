@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.di.components.ActivityComponent;
+import com.crazydude.sakuraplayer.di.components.ApplicationComponent;
 import com.crazydude.sakuraplayer.di.components.DaggerApplicationComponent;
 import com.crazydude.sakuraplayer.di.modules.ActivityModule;
 import com.squareup.otto.Bus;
@@ -56,8 +57,9 @@ abstract public class BaseActivity extends AppCompatActivity {
     }
 
     protected void injectDependencies() {
-        mActivityComponent = DaggerApplicationComponent.builder()
-                .build().provideActivityComponent(new ActivityModule(this));
+        mActivityComponent = getSakuraPlayerApplication()
+                .getApplicationComponent()
+                .provideActivityComponent(new ActivityModule(this));
         mActivityComponent.inject(this);
     }
 }

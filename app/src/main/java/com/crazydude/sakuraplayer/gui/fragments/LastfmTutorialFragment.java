@@ -35,14 +35,17 @@ public class LastfmTutorialFragment extends BaseFragment implements ViewPager.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lastfm_tutorial, container, false);
-        ButterKnife.bind(this, view);
+    protected int getLayoutRes() {
+        return R.layout.fragment_lastfm_tutorial;
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        ButterKnife.bind(this, rootView);
         getActivityComponent().inject(this);
-        ButterKnife.bind(mLastfmTutorialFragmentView, view);
+        ButterKnife.bind(mLastfmTutorialFragmentView, rootView);
         mLastfmTutorialFragmentView.initViews();
         mLastfmTutorialFragmentView.addOnPageChangeListener(this);
-        return view;
     }
 
     @Override

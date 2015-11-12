@@ -42,14 +42,13 @@ public class LastfmArtistFragment extends BaseFragment implements
 
     private Callbacks.OnSelectedLastfmArtistListener mOnSelectedLastfmArtistListener;
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_lastfm_artist, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_lastfm_artist;
     }
 
-    void initViews() {
+    @Override
+    protected void initViews(View rootView) {
         mRecommendsFragmentView.setOnRecyclerClickListener(this);
         loadArtistInfo(artistName, mbid);
     }
