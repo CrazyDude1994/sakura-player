@@ -3,12 +3,15 @@ package com.crazydude.sakuraplayer.di.components;
 import com.crazydude.sakuraplayer.di.modules.ActivityModule;
 import com.crazydude.sakuraplayer.gui.activity.BaseActivity;
 import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
+import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialTextFragment;
+import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
+import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
@@ -37,5 +40,11 @@ public interface ActivityComponent {
     void inject(TracklistArtistFragment tracklistArtistFragment);
 
     void inject(TracklistArtistFragmentView mTracklistArtistFragmentView);
+
+    void inject(PlayerFragment playerFragment);
+
+    void inject(ArtistFragment artistFragment);
+
+    void inject(ArtistFragmentView mArtistFragmentView);
 
 }

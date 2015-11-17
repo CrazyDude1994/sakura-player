@@ -22,6 +22,7 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnProgressChangeListener {
@@ -42,7 +43,6 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
     private boolean mIsShuffled = false;
     private boolean mIsRepeated = false;
 
-
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_player;
@@ -50,6 +50,9 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
 
     @Override
     protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        ButterKnife.bind(this, rootView);
+        ButterKnife.bind(mPlayerView, rootView);
         mDiscreteSeekBar.setOnProgressChangeListener(this);
         if (mCurrentTrack != null) {
             mPlayerView.setPlaying();
@@ -145,5 +148,10 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
     @Override
     public Features requestFeatures(Features.FeaturesBuilder builder) {
         return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
+    }
+
+    public static PlayerFragment newInstance() {
+        PlayerFragment playerFragment = new PlayerFragment();
+        return playerFragment;
     }
 }

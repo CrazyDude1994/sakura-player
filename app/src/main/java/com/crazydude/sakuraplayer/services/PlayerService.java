@@ -164,8 +164,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(track.getTrackPath());
             mMediaPlayer.prepareAsync();
-            PlayerEvent.PlayerPlaybackEvent playerPlaybackEvent = new PlayerEvent.
-                    PlayerPlaybackEvent();
+            PlayerEvent.PlayerPlaybackEvent playerPlaybackEvent = new PlayerEvent.PlayerPlaybackEvent();
             postPlaybackEvent(PlayerEvent.PlayerPlaybackEvent.PlaybackAction.PLAY, track);
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,6 +8,7 @@ import com.squareup.otto.ThreadEnforcer;
 
 import javax.inject.Named;
 import javax.inject.Qualifier;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -31,6 +32,7 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Singleton
     public Bus provideBus() {
         return new Bus(ThreadEnforcer.MAIN);
     }

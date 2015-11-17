@@ -13,6 +13,7 @@ import dagger.Component;
  * Created by Crazy on 27.09.2015.
  */
 @Component(modules = ApplicationModule.class)
+@Singleton
 public interface ApplicationComponent {
 
     ActivityComponent provideActivityComponent(ActivityModule activityModule);

@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/list_element_height"
-    android:paddingBottom="@dimen/list_padding_bottom"
-    android:paddingLeft="@dimen/list_padding_left"
-    android:paddingRight="@dimen/list_padding_right"
-    android:paddingTop="@dimen/list_padding_top">
+    android:layout_height="@dimen/list_element_height">
 
     <com.andexert.library.RippleView
         rv_centered="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="@dimen/list_padding_bottom"
+        android:paddingLeft="@dimen/list_padding_left"
+        android:paddingRight="@dimen/list_padding_right"
+        android:paddingTop="@dimen/list_padding_top"
         app:rv_color="@color/list_ripple_color">
 
         <LinearLayout

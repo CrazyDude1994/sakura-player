@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 
+import com.crazydude.navigationhandler.NavigationHandler;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.common.Constants;
@@ -24,13 +25,15 @@ import com.crazydude.sakuraplayer.features.FeatureIsNullException;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.NavigationDrawerFeature;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
+import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
+import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.FeatureProvider;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
-import com.crazydude.sakuraplayer.managers.NavigationManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.managers.PreferencesManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -50,8 +53,6 @@ import butterknife.OnClick;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import static com.crazydude.sakuraplayer.common.Constants.FragmentsEnum.LastfmTutorialFragment;
-import static com.crazydude.sakuraplayer.common.Constants.FragmentsEnum.TracklistFragment;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmTutorialCompletedListener;
@@ -74,7 +75,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     HomeActivityView mHomeActivityView;
 
     @Inject
-    NavigationManager mNavigationManager;
+    NavigationHandler mNavigationHandler;
 
     @Bind(R.id.activity_home_navigation_view)
     NavigationView mNavigationView;
@@ -131,7 +132,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onAfterSplashScreen() {
         if (!mPreferencesManager.isTutorialCompleted()) {
-            mNavigationManager.switchFragment(LastfmTutorialFragment, true);
+            mNavigationHandler.switchFragment(LastfmTutorialFragment.newInstance(), NavigationHandler.SwitchMethod.REPLACE, false);
         } else {
             switchToPlayerMode();
         }
@@ -139,7 +140,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     private void switchToPlayerMode() {
         mHomeActivityView.showToolbar();
-        mNavigationManager.switchFragment(TracklistFragment, false);
+        mNavigationHandler.switchFragment(TracklistFragment.newInstance(), NavigationHandler.SwitchMethod.REPLACE, false);
     }
 
     @Override
@@ -233,9 +234,10 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     private void switchToPlayerWithData(TrackModel data) {
         mHomeActivityView.hideToolbarShadow();
         if (mPlayerFragment == null) {
-            mPlayerFragment = new PlayerFragment();
+            mPlayerFragment = PlayerFragment.newInstance();
         }
-//        switchFragment(mPlayerFragment, true, R.id.activity_home_placeholder);
+        mNavigationHandler.switchFragment(mPlayerFragment,
+                NavigationHandler.SwitchMethod.REPLACE, true);
         if (data != null) {
             mPlayerFragment.setData(data);
         }
@@ -317,8 +319,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onSelectedArtist(ArtistModel artist) {
-/*        switchFragment(ArtistFragment_.builder().artistName(artist.getArtistName()).build(), true,
-                R.id.activity_home_placeholder);*/
+        mNavigationHandler.switchFragment(ArtistFragment.newInstance(artist.getArtistName()),
+                NavigationHandler.SwitchMethod.REPLACE, true);
     }
 
     @Override
@@ -409,18 +411,18 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onBackPressed() {
-        mNavigationManager.handleBackButtonPress();
+        mNavigationHandler.handleBackButtonPress();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mNavigationManager.storeCurrentFragment(outState);
+        mNavigationHandler.saveState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        mNavigationManager.restoreCurrentFragment(savedInstanceState);
+        mNavigationHandler.restoreState(savedInstanceState);
         super.onRestoreInstanceState(savedInstanceState);
     }
 }

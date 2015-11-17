@@ -2,10 +2,7 @@ package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.features.Features;
@@ -20,6 +17,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -28,17 +26,27 @@ import butterknife.OnClick;
 public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener,
         Callbacks.RecyclerViewClickListener {
 
+    private static final String KEY_ARTIST_NAME = "artist_name";
+
     @Inject
     ArtistFragmentView mArtistFragmentView;
 
     @Inject
     TrackProvider mTrackProvider;
 
-    String artistName;
+    private String mArtistName;
 
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
     private Callbacks.OnPlayerListener mOnPlayerListener;
     private ArrayList<TrackModel> mTrackModels;
+
+    public static ArtistFragment newInstance(String artistName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_ARTIST_NAME, artistName);
+        ArtistFragment artistFragment = new ArtistFragment();
+        artistFragment.setArguments(bundle);
+        return artistFragment;
+    }
 
     @Override
     protected int getLayoutRes() {
@@ -47,8 +55,13 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
 
     @Override
     protected void initViews(View rootView) {
-        mTrackProvider.loadAllTracksByArtist(artistName, this);
-        mArtistFragmentView.setArtistName(artistName);
+        getActivityComponent().inject(this);
+        getActivityComponent().inject(mArtistFragmentView);
+        ButterKnife.bind(mArtistFragmentView, rootView);
+        mArtistFragmentView.initViews();
+        mArtistName = getArguments().getString(KEY_ARTIST_NAME);
+        mTrackProvider.loadAllTracksByArtist(mArtistName, this);
+        mArtistFragmentView.setArtistName(mArtistName);
     }
 
     @Override
