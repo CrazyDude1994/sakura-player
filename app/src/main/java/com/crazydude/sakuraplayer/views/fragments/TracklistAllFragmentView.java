@@ -30,9 +30,6 @@ public class TracklistAllFragmentView {
     @Inject
     TracklistAdapter mTracklistAdapter;
 
-    @Bind(R.id.fragment_tracklist_alltracks_refresher)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
     @Inject
     @Named("Activity")
     Context mContext;

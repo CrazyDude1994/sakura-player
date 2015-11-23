@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.providers;
 
 import com.activeandroid.query.Select;
+import com.crazydude.sakuraplayer.events.TracklistUpdateCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -19,15 +20,16 @@ import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedList
  */
 public class TrackProvider {
 
-    @Inject
-    MusicLibraryManager mMusicLibraryManager;
+    private MusicLibraryManager mMusicLibraryManager;
+    private Bus mBus;
 
-    @Inject
-    Bus mBus;
+    public TrackProvider(MusicLibraryManager mMusicLibraryManager, Bus mBus) {
+        this.mMusicLibraryManager = mMusicLibraryManager;
+        this.mBus = mBus;
+    }
 
     public void updateMusicDatabase() {
         mMusicLibraryManager.generateDatabase();
-        mBus.post(new UpdateLibraryCompletedEvent());
     }
 
     public void loadAllTracks(OnTracksLoadedListener listener) {

@@ -42,14 +42,6 @@ public interface Callbacks {
         void onLastfmRegister();
     }
 
-    interface OnResponseListener<T extends ErrorResponse> {
-        void onSuccess(T response);
-
-        void onLastfmError(String message, Integer code);
-
-        void onNetworkError(String message);
-    }
-
     interface OnSelectedLastfmArtistListener {
         void onSelecteLastfmArtist(String name, String mbid);
     }

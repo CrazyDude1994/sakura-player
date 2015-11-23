@@ -43,7 +43,6 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
     private ArrayList<ArtistModel> mArtistModels;
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
     @Override
     protected int getLayoutRes() {
@@ -75,7 +74,6 @@ public class TracklistArtistFragment extends BaseFragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mOnSelectedArtistListener = (Callbacks.OnSelectedArtistListener) activity;
-        mOnRefreshListener = (SwipeRefreshLayout.OnRefreshListener) activity;
     }
 
     @Subscribe

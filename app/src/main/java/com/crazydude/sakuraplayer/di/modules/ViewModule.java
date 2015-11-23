@@ -8,6 +8,7 @@ import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialTextFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
+import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
@@ -59,5 +60,10 @@ public class ViewModule {
     @Provides
     public ArtistFragmentView provideArtistFragmentView() {
         return new ArtistFragmentView();
+    }
+
+    @Provides
+    public RecommendsFragmentView provideRecommendsFragmentView() {
+        return new RecommendsFragmentView();
     }
 }

@@ -3,95 +3,106 @@ package com.crazydude.sakuraplayer.managers;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
+import com.crazydude.sakuraplayer.events.TracklistUpdateCompletedEvent;
 import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.squareup.otto.Bus;
 
 import java.util.HashMap;
-
-import javax.inject.Inject;
 
 /**
  * Created by CrazyDude on 11.04.2015.
  */
 public class MusicLibraryManager {
 
-    @Inject
-    Context mContext;
+    private Context mContext;
+    private Bus mBus;
+
+    public MusicLibraryManager(Context mContext, Bus bus) {
+        this.mContext = mContext;
+        this.mBus = bus;
+    }
 
     public void generateDatabase() {
-        new Delete().from(TrackModel.class).execute();
-        new Delete().from(AlbumModel.class).execute();
-        new Delete().from(ArtistModel.class).execute();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new Delete().from(TrackModel.class).execute();
+                new Delete().from(AlbumModel.class).execute();
+                new Delete().from(ArtistModel.class).execute();
 
-        ContentResolver contentResolver = mContext.getContentResolver();
-        String[] projection = {
-                MediaStore.Audio.Media.ALBUM_ID,
-                MediaStore.Audio.Media.ARTIST_ID,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media._ID
-        };
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " = ?";
-        String[] selectionArgs = {"1"};
-        Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection, selection, selectionArgs, null);
-        HashMap<Long, ArtistModel> artistSet = new HashMap<>();
-        HashMap<Long, AlbumModel> albumSet = new HashMap<>();
-        ActiveAndroid.beginTransaction();
-        try {
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    TrackModel model = new TrackModel();
-                    long artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                    long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                ContentResolver contentResolver = mContext.getContentResolver();
+                String[] projection = {
+                        MediaStore.Audio.Media.ALBUM_ID,
+                        MediaStore.Audio.Media.ARTIST_ID,
+                        MediaStore.Audio.Media.TITLE,
+                        MediaStore.Audio.Media.DATA,
+                        MediaStore.Audio.Media._ID
+                };
+                String selection = MediaStore.Audio.Media.IS_MUSIC + " = ?";
+                String[] selectionArgs = {"1"};
+                Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        projection, selection, selectionArgs, null);
+                HashMap<Long, ArtistModel> artistSet = new HashMap<>();
+                HashMap<Long, AlbumModel> albumSet = new HashMap<>();
+//                ActiveAndroid.beginTransaction();
+                try {
+                    if (cursor != null) {
+                        while (cursor.moveToNext()) {
+                            TrackModel model = new TrackModel();
+                            long artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+                            long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
 
-                    AlbumModel albumModel;
-                    ArtistModel artistModel;
+                            AlbumModel albumModel;
+                            ArtistModel artistModel;
 
-                    if (artistSet.containsKey(artistId)) {
-                        artistModel = artistSet.get(artistId);
-                    } else {
-                        artistModel = getArtistById(artistId);
-                        artistSet.put(artistId, artistModel);
+                            if (artistSet.containsKey(artistId)) {
+                                artistModel = artistSet.get(artistId);
+                            } else {
+                                artistModel = getArtistById(artistId);
+                                artistSet.put(artistId, artistModel);
+                            }
+
+                            if (albumSet.containsKey(albumId)) {
+                                albumModel = albumSet.get(albumId);
+                            } else {
+                                albumModel = getAlbumById(albumId);
+                                albumSet.put(albumId, albumModel);
+                            }
+
+                            if (albumModel != null) {
+                                albumModel.setArtist(artistModel);
+                                albumModel.save();
+                            }
+
+                            model.setAlbum(albumModel);
+                            model.setArtist(artistModel);
+
+                            model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
+                            model.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                            model.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+//                            model.save();
+                        }
                     }
-
-                    if (albumSet.containsKey(albumId)) {
-                        albumModel = albumSet.get(albumId);
-                    } else {
-                        albumModel = getAlbumById(albumId);
-                        albumSet.put(albumId, albumModel);
+//                    ActiveAndroid.setTransactionSuccessful();
+                } catch (Exception e) {
+                    Log.e("Database", e.getMessage());
+                } finally {
+//                    ActiveAndroid.endTransaction();
+                    if (cursor != null) {
+                        cursor.close();
                     }
-
-                    if (albumModel != null) {
-                        albumModel.setArtist(artistModel);
-                        albumModel.save();
-                    }
-
-                    model.setAlbum(albumModel);
-                    model.setArtist(artistModel);
-
-                    model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
-                    model.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
-                    model.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                    model.save();
                 }
             }
-            ActiveAndroid.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e("Database", e.getMessage());
-        } finally {
-            ActiveAndroid.endTransaction();
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
+        }).start();
+        mBus.post(new TracklistUpdateCompletedEvent());
     }
 
     private AlbumModel getAlbumById(long id) {

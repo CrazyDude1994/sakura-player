@@ -7,12 +7,14 @@ import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialTextFragment;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment;
+import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
+import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
 
@@ -46,5 +48,9 @@ public interface ActivityComponent {
     void inject(ArtistFragment artistFragment);
 
     void inject(ArtistFragmentView mArtistFragmentView);
+
+    void inject(RecommendsFragment recommendsFragment);
+
+    void inject(RecommendsFragmentView mRecommendsFragmentView);
 
 }

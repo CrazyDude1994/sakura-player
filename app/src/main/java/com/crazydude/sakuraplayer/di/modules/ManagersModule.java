@@ -1,10 +1,12 @@
 package com.crazydude.sakuraplayer.di.modules;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crazydude.navigationhandler.NavigationHandler;
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.MusicPlayerManager;
@@ -12,6 +14,9 @@ import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.managers.PreferencesManager;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
+import com.squareup.otto.Bus;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -23,13 +28,14 @@ import dagger.Provides;
 public class ManagersModule {
 
     @Provides
-    public LastfmApiManager provideLastfmApiManager() {
-        return new LastfmApiManager();
+    public LastfmApiManager provideLastfmApiManager(@Named("Application") Context context, Utils utils, Bus bus,
+                                                    PreferencesManager preferencesManager) {
+        return new LastfmApiManager(context, utils, bus, preferencesManager);
     }
 
     @Provides
-    public MusicLibraryManager provideMusicLibraryManager() {
-        return new MusicLibraryManager();
+    public MusicLibraryManager provideMusicLibraryManager(@Named("Application") Context context, Bus bus) {
+        return new MusicLibraryManager(context, bus);
     }
 
     @Provides
@@ -43,8 +49,8 @@ public class ManagersModule {
     }
 
     @Provides
-    public TrackProvider provideTrackProvider() {
-        return new TrackProvider();
+    public TrackProvider provideTrackProvider(MusicLibraryManager musicLibraryManager, Bus bus) {
+        return new TrackProvider(musicLibraryManager, bus);
     }
 
     @Provides

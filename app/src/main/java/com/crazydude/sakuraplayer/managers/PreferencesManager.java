@@ -10,6 +10,7 @@ public class PreferencesManager {
     private SharedPreferences mPreferences;
 
     private static final String KEY_TUTORIAL_COMPLETED = "tutorial_completed";
+    private static final String KEY_LASTMFM_TOKEN = "lastfm_token";
 
     public PreferencesManager(SharedPreferences preferences) {
         mPreferences = preferences;
@@ -20,6 +21,14 @@ public class PreferencesManager {
     }
 
     public void completeTutorial() {
-        mPreferences.edit().putBoolean(KEY_TUTORIAL_COMPLETED, true);
+        mPreferences.edit().putBoolean(KEY_TUTORIAL_COMPLETED, true).commit();
+    }
+
+    public void saveToken(String token) {
+        mPreferences.edit().putString(KEY_LASTMFM_TOKEN, token).commit();
+    }
+
+    public String getToken() {
+        return mPreferences.getString(KEY_LASTMFM_TOKEN, "");
     }
 }

@@ -1,9 +1,12 @@
 package com.crazydude.sakuraplayer.di.modules;
 
+import android.content.Context;
+
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
+import com.squareup.otto.Bus;
 
-import javax.inject.Singleton;
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,7 +23,7 @@ public class UtilsModule {
     }
 
     @Provides
-    public Utils provideUtils() {
-        return new Utils();
+    public Utils provideUtils(@Named("Application") Context context, Bus bus) {
+        return new Utils(context, bus);
     }
 }

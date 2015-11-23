@@ -20,6 +20,8 @@ import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
+import com.crazydude.sakuraplayer.events.TrackListUpdateEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.features.Feature;
 import com.crazydude.sakuraplayer.features.FeatureIsNullException;
 import com.crazydude.sakuraplayer.features.Features;
@@ -29,6 +31,7 @@ import com.crazydude.sakuraplayer.gui.fragments.ArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmLoginFragment;
 import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialFragment;
 import com.crazydude.sakuraplayer.gui.fragments.PlayerFragment;
+import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.interfaces.FeatureProvider;
@@ -39,7 +42,6 @@ import com.crazydude.sakuraplayer.managers.PreferencesManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.models.net.SessionResponse;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
@@ -56,16 +58,13 @@ import lombok.experimental.Accessors;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmLoginListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmTutorialCompletedListener;
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
 
 @Accessors(prefix = "m")
 public class HomeActivity extends BaseActivity implements OnAfterSplashScreenListener,
-        OnLastfmTutorialCompletedListener, OnLastfmLoginListener,
-        OnResponseListener<SessionResponse>, NavigationView.OnNavigationItemSelectedListener,
+        OnLastfmTutorialCompletedListener, OnLastfmLoginListener, NavigationView.OnNavigationItemSelectedListener,
         Callbacks.OnSelectedLastfmArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
         Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener,
-        FragmentManager.OnBackStackChangedListener, SwipeRefreshLayout.OnRefreshListener,
-        MediaScannerConnection.OnScanCompletedListener, FeatureProvider {
+        FragmentManager.OnBackStackChangedListener, FeatureProvider {
 
     @Inject
     TrackProvider mTrackProvider;
@@ -110,9 +109,9 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         SakuraPlayerApplication application = (SakuraPlayerApplication) getApplication();
         mHomeActivityView.setOnAfterSplashScreenListener(this);
 
-        /*if (!mPrefs.isTutorialCompleted().get()) {
-            mUtils.triggerMediaScan(this);
-        }*/
+        if (!mPreferencesManager.isTutorialCompleted()) {
+            mUtils.triggerMediaScan();
+        }
 
         if (application.isIsSplashscreenShown() == false) {
             mHomeActivityView.hideSplashScreen(Constants.SPLASH_DURATION);
@@ -125,7 +124,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     }
 
     void init() {
-//        startService(PlayerService_.intent(this).get());
+        Intent intent = new Intent(this, PlayerService.class);
+        startService(intent);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
@@ -145,7 +145,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onTutorialCompleted(boolean isLoginToLastfm) {
-//        mPrefs.isTutorialCompleted().put(true);
+        mPreferencesManager.completeTutorial();
         if (isLoginToLastfm) {
             new LastfmLoginFragment().show(getFragmentManager(), "");
         } else {
@@ -157,15 +157,11 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onLastfmLogin(String login, String password) {
         mHomeActivityView.showProgressBar();
-        mLastfmApiManager.login(login, password, this);
-    }
-
-    @Override
-    public void onSuccess(SessionResponse response) {
-        mHomeActivityView.hideProgressBar();
-/*        mPrefs.lastfmToken().put(response.getSession().getKey());
-        mPrefs.lastfmUsername().put(response.getSession().getName());*/
-        switchToPlayerMode();
+        mLastfmApiManager.login(login, password)
+                .subscribe(sessionResponse -> {
+                    mHomeActivityView.hideProgressBar();
+                    switchToPlayerMode();
+                }, throwable -> mHomeActivityView.hideProgressBar(), mHomeActivityView::hideProgressBar);
     }
 
     @Override
@@ -175,7 +171,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         startActivityForResult(intent, 0);
     }
 
-    @Override
+/*    @Override
     public void onNetworkError(String message) {
         mHomeActivityView.hideProgressBar();
         mHomeActivityView.showInfoDialog(getString(R.string.network_error), message);
@@ -193,14 +189,13 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
                 mHomeActivityView.showInfoDialog(getString(R.string.error), message);
                 break;
         }
-    }
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.navigation_menu_recommends:
-/*                switchFragment(RecommendsFragment_.builder().build(), false,
-                        R.id.activity_home_placeholder);*/
+                mNavigationHandler.switchFragment(new RecommendsFragment(), NavigationHandler.SwitchMethod.REPLACE, false);
                 mHomeActivityView.hidePlayerWidget();
                 break;
             case R.id.navigation_menu_new_releases:
@@ -353,13 +348,13 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         }
     }
 
-    @Override
-    public void onRefresh() {
-        mUtils.triggerMediaScan(this);
+    @Subscribe
+    public void onTracklistUpdate(TrackListUpdateEvent event) {
+        mUtils.triggerMediaScan();
     }
 
-    @Override
-    public void onScanCompleted(String path, Uri uri) {
+    @Subscribe
+    public void onScanCompleted(UpdateLibraryCompletedEvent event) {
         mTrackProvider.updateMusicDatabase();
     }
 

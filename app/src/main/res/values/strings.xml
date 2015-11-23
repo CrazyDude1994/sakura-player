@@ -31,4 +31,7 @@
     <string name="new_releases">Новые релизы</string>
     <string name="album">Альбом</string>
     <string name="artist">Исполнитель</string>
+    <string name="error_check_your_net_and_retry">Проверьте свое интернет соеденение и попробуйте снова</string>
+    <string name="network_timeout">Таймаут соеденения</string>
+    <string name="server_error">Ошибка сервера</string>
 </resources>

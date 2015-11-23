@@ -13,6 +13,7 @@ import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 
@@ -25,6 +26,7 @@ public class RecommendsFragmentView {
     RecyclerView mRecyclerView;
 
     @Inject
+    @Named("Activity")
     Context mContext;
 
     private RecommendsAdapter mRecommendsAdapter;
@@ -34,7 +36,7 @@ public class RecommendsFragmentView {
         initViews();
     }
 
-    void initViews() {
+    public void initViews() {
         mRecommendsAdapter = new RecommendsAdapter();
         mGridLayoutManager = new GridLayoutManager(mContext, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);

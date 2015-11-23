@@ -18,10 +18,14 @@ import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import rx.functions.Action0;
+import rx.functions.Action1;
+
 /**
  * Created by CrazyDude on 17.03.2015.
  */
-public class RecommendsFragment extends BaseFragment implements Callbacks.OnResponseListener<RecommendationsResponse>, Callbacks.RecyclerViewClickListener {
+public class RecommendsFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener {
 
     @Inject
     RecommendsFragmentView mRecommendsFragmentView;
@@ -38,26 +42,36 @@ public class RecommendsFragment extends BaseFragment implements Callbacks.OnResp
 
     @Override
     protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        getActivityComponent().inject(mRecommendsFragmentView);
+        ButterKnife.bind(mRecommendsFragmentView, rootView);
+        mRecommendsFragmentView.initViews();
         mRecommendsFragmentView.setOnRecyclerClickListener(this);
-        mLastfmApiManager.getRecommendedArtists(0, 100, this);
+        mLastfmApiManager.getRecommendedArtists(0, 100).subscribe(new Action1<RecommendationsResponse>() {
+            @Override
+            public void call(RecommendationsResponse recommendationsResponse) {
+                mRecommendsFragmentView.setData(recommendationsResponse.getRecommendations().getArtists());
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+            }
+        });
     }
 
-    @Override
+/*    @Override
     public void onSuccess(RecommendationsResponse response) {
         mRecommendsFragmentView.setData(response.getRecommendations().getArtists());
-    }
-
-    @Override
-    public void onLastfmError(String message, Integer code) {
-    }
+    }*/
 
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public void onNetworkError(String message) {
     }
 
     @Override

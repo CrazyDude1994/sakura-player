@@ -8,6 +8,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -26,11 +27,13 @@ import javax.inject.Inject;
  */
 public class Utils {
 
-    @Inject
     Context mContext;
-
-    @Inject
     Bus mBus;
+
+    public Utils(Context context, Bus bus) {
+        this.mContext = context;
+        this.mBus = bus;
+    }
 
     private static String convertToHex(byte[] data) {
         StringBuffer buf = new StringBuffer();
@@ -64,10 +67,10 @@ public class Utils {
         return new PlaylistModel(tracks, "Current");
     }
 
-    public void triggerMediaScan(MediaScannerConnection.OnScanCompletedListener listener) {
+    public void triggerMediaScan() {
         mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
                 Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-        MediaScanCompletedReceiver receiver = new MediaScanCompletedReceiver(listener);
+        MediaScanCompletedReceiver receiver = new MediaScanCompletedReceiver((s, uri) -> mBus.post(new UpdateLibraryCompletedEvent()));
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
         intentFilter.addDataScheme("file");

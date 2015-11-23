@@ -63,7 +63,7 @@
                 android:text="@string/similiar_artists" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_recommendations_recycler"
+                android:id="@+id/fragment_recommendations_recycler_rec"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/artist_image_height" />
 

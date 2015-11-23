@@ -26,9 +26,6 @@ public class TracklistArtistFragmentView {
     @Bind(R.id.fragment_tracklist_artist_recycler)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.fragment_tracklist_artist_refresher)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
     @Inject
     ArtistAdapter mArtistAdapter;
 

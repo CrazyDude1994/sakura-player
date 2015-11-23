@@ -19,7 +19,7 @@ import javax.inject.Inject;
 /**
  * Created by kartavtsev.s on 15.06.2015.
  */
-public class LastReleasesFragment extends BaseFragment implements Callbacks.OnResponseListener<AlbumResponse> {
+public class LastReleasesFragment extends BaseFragment {
 
     @Inject
     LastReleasesFragmentView mLastReleasesFragmentView;
@@ -34,7 +34,7 @@ public class LastReleasesFragment extends BaseFragment implements Callbacks.OnRe
 
     @Override
     protected void initViews(View rootView) {
-        mLastfmApiManager.getNewReleases(null, this);
+        mLastfmApiManager.getNewReleases(null);
     }
 
     @Override
@@ -42,18 +42,10 @@ public class LastReleasesFragment extends BaseFragment implements Callbacks.OnRe
         super.onPause();
     }
 
-    @Override
+/*    @Override
     public void onSuccess(AlbumResponse response) {
         mLastReleasesFragmentView.setData(response);
-    }
-
-    @Override
-    public void onLastfmError(String message, Integer code) {
-    }
-
-    @Override
-    public void onNetworkError(String message) {
-    }
+    }*/
 
     @Override
     public Features requestFeatures(Features.FeaturesBuilder builder) {

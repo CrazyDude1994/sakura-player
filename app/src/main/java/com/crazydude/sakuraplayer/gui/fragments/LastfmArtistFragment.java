@@ -24,8 +24,7 @@ import javax.inject.Inject;
 /**
  * Created by kartavtsev.s on 08.06.2015.
  */
-public class LastfmArtistFragment extends BaseFragment implements
-        Callbacks.OnResponseListener<ArtistInfoResponse>, Callbacks.RecyclerViewClickListener {
+public class LastfmArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener {
 
     @Inject
     LastfmArtistFragmentView mLastfmArtistFragmentView;
@@ -54,7 +53,7 @@ public class LastfmArtistFragment extends BaseFragment implements
     }
 
     private void loadArtistInfo(String artistName, String mbid) {
-        mLastfmApiManager.getArtistInfo(artistName, mbid, "ru", this);
+        mLastfmApiManager.getArtistInfo(artistName, mbid, "ru");
     }
 
     void loadArtistImage(String url) {
@@ -63,7 +62,7 @@ public class LastfmArtistFragment extends BaseFragment implements
                 .into(mLastfmArtistFragmentView);
     }
 
-    @Override
+/*    @Override
     public void onSuccess(ArtistInfoResponse response) {
         mLastfmArtistFragmentView.showContent();
         mLastfmArtistFragmentView.setData(response);
@@ -71,15 +70,7 @@ public class LastfmArtistFragment extends BaseFragment implements
         mRecommendsFragmentView.setColumnCount(1);
         mRecommendsFragmentView.setData(response.getArtist().getSimilar().getArtist());
         loadArtistImage(response.getArtist().getImages().get(3).getUrl()); // achtung!
-    }
-
-    @Override
-    public void onLastfmError(String message, Integer code) {
-    }
-
-    @Override
-    public void onNetworkError(String message) {
-    }
+    }*/
 
     @Override
     public void onClick(View view, int position) {

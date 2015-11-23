@@ -46,7 +46,6 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     TrackProvider mTrackProvider;
 
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
     @Override
     protected int getLayoutRes() {
@@ -82,7 +81,6 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.OnTr
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mOnSelectedTrackListener = (Callbacks.OnSelectedTrackListener) activity;
-        mOnRefreshListener = (SwipeRefreshLayout.OnRefreshListener) activity;
     }
 
     @Subscribe
