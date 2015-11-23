@@ -3,12 +3,9 @@ package com.crazydude.sakuraplayer.managers;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.activeandroid.ActiveAndroid;
-import com.activeandroid.query.Delete;
 import com.crazydude.sakuraplayer.events.TracklistUpdateCompletedEvent;
 import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -34,9 +31,6 @@ public class MusicLibraryManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new Delete().from(TrackModel.class).execute();
-                new Delete().from(AlbumModel.class).execute();
-                new Delete().from(ArtistModel.class).execute();
 
                 ContentResolver contentResolver = mContext.getContentResolver();
                 String[] projection = {
@@ -52,7 +46,6 @@ public class MusicLibraryManager {
                         projection, selection, selectionArgs, null);
                 HashMap<Long, ArtistModel> artistSet = new HashMap<>();
                 HashMap<Long, AlbumModel> albumSet = new HashMap<>();
-//                ActiveAndroid.beginTransaction();
                 try {
                     if (cursor != null) {
                         while (cursor.moveToNext()) {
@@ -79,7 +72,6 @@ public class MusicLibraryManager {
 
                             if (albumModel != null) {
                                 albumModel.setArtist(artistModel);
-                                albumModel.save();
                             }
 
                             model.setAlbum(albumModel);
@@ -88,14 +80,11 @@ public class MusicLibraryManager {
                             model.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
                             model.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
                             model.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-//                            model.save();
                         }
                     }
-//                    ActiveAndroid.setTransactionSuccessful();
                 } catch (Exception e) {
                     Log.e("Database", e.getMessage());
                 } finally {
-//                    ActiveAndroid.endTransaction();
                     if (cursor != null) {
                         cursor.close();
                     }
@@ -123,7 +112,6 @@ public class MusicLibraryManager {
             albumModel = new AlbumModel();
             albumModel.setAlbumArtPath(path);
             albumModel.setName(name);
-            albumModel.save();
         }
         cursor.close();
         return albumModel;
@@ -144,7 +132,6 @@ public class MusicLibraryManager {
             String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
             artistModel = new ArtistModel();
             artistModel.setArtistName(name);
-            artistModel.save();
         }
         cursor.close();
         return artistModel;

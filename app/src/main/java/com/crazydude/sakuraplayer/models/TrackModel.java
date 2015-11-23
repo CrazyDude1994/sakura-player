@@ -1,24 +1,14 @@
 package com.crazydude.sakuraplayer.models;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-
 /**
  * Created by Crazy on 26.04.2015.
  */
-@Table(name = "Tracks")
-public class TrackModel extends Model {
+public class TrackModel {
 
-    @Column(name = "Artist")
     private ArtistModel artist;
-    @Column(name = "SongName")
     private String trackName;
-    @Column(name = "Path")
     private String trackPath;
-    @Column(name = "Album")
     private AlbumModel album;
-    @Column(name = "Track_ID")
     private long trackId;
 
     private AlbumModel cachedAlbumModel;

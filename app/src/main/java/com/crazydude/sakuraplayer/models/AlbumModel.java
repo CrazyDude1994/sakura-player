@@ -1,25 +1,14 @@
 package com.crazydude.sakuraplayer.models;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-
 import java.util.List;
 
 /**
  * Created by kartavtsev.s on 16.06.2015.
  */
-@Table(name = "Albums")
-public class AlbumModel extends Model {
+public class AlbumModel {
 
-    @Column(name = "Artist")
     private ArtistModel artist;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "AlbumArt")
     private String albumArt;
 
     private ArtistModel cachedArtist;
@@ -43,7 +32,6 @@ public class AlbumModel extends Model {
 
     public List<TrackModel> tracks() {
         if (cachedTracks == null) {
-            cachedTracks = getMany(TrackModel.class, "Album");
         }
         return cachedTracks;
     }
