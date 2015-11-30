@@ -13,6 +13,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.crazydude.navigationhandler.NavigationHandler;
 import com.crazydude.sakuraplayer.R;

@@ -49,8 +49,9 @@ public class ManagersModule {
     }
 
     @Provides
-    public TrackProvider provideTrackProvider(MusicLibraryManager musicLibraryManager, Bus bus) {
-        return new TrackProvider(musicLibraryManager, bus);
+    public TrackProvider provideTrackProvider(MusicLibraryManager musicLibraryManager, Bus bus,
+                                              @Named("Application") Context context) {
+        return new TrackProvider(musicLibraryManager, bus, context);
     }
 
     @Provides

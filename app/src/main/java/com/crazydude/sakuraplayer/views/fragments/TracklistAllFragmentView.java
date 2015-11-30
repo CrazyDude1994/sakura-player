@@ -27,6 +27,9 @@ public class TracklistAllFragmentView {
     @Bind(R.id.fragment_tracklist_alltracks_recycler)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.fragment_tracklist_alltracks_refresher)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Inject
     TracklistAdapter mTracklistAdapter;
 

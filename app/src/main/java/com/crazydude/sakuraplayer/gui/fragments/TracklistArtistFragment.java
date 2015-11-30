@@ -61,7 +61,6 @@ public class TracklistArtistFragment extends BaseFragment implements
     @Override
     public void onArtistsLoaded(ArrayList<ArtistModel> artists) {
         mArtistModels = artists;
-        mTracklistArtistFragmentView.setArtistList(artists);
         mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
     }
 

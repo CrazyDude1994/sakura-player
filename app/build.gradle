@@ -8,7 +8,7 @@ def daggerVersion = '2.0.1'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         applicationId "com.crazydude.sakuraplayer"
@@ -70,6 +70,9 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.10'
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
+
+    //Realm
+    compile 'io.realm:realm-android:0.85.0'
 
     //Misc
     compile 'org.projectlombok:lombok:1.16.2'

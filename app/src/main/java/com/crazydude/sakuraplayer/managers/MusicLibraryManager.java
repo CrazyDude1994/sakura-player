@@ -110,7 +110,7 @@ public class MusicLibraryManager {
             String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM));
             String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM_ART));
             albumModel = new AlbumModel();
-            albumModel.setAlbumArtPath(path);
+//            albumModel.setAlbumArtPath(path);
             albumModel.setName(name);
         }
         cursor.close();

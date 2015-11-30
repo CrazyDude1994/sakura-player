@@ -81,7 +81,7 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     public void setPlayerWidgetData(TrackModel trackModel) {
         mPlayerWidgetArtist.setText(trackModel.getArtist().getArtistName());
         mPlayerWidgetSong.setText(trackModel.getTrackName());
-        if (trackModel.getAlbum() != null && trackModel.getAlbum().getAlbumArtPath() != null) {
+/*        if (trackModel.getAlbum() != null && trackModel.getAlbum().getAlbumArtPath() != null) {
             File file = new File(trackModel.getAlbum().getAlbumArtPath());
             Picasso.with(mAppCompatActivity)
                     .load(file)
@@ -90,7 +90,7 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
                     .into(mWidgetAlbumArt);
         } else {
             mWidgetAlbumArt.setImageDrawable(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor));
-        }
+        }*/
     }
 
     public void showPlayerWidget() {

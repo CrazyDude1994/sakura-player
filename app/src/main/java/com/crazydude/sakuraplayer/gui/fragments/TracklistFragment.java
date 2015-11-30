@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Crazy on 25.05.2015.
  */
-public class TracklistFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TracklistFragment extends BaseFragment {
 
     @Inject
     TracklistFragmentView mTracklistFragmentView;
@@ -46,20 +46,5 @@ public class TracklistFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public Features requestFeatures(Features.FeaturesBuilder builder) {
         return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
-    }
-
-    @Override
-    public void onRefresh() {
-        mBus.post(new TrackListUpdateEvent());
-    }
-
-    @Subscribe
-    public void onTracklistUpdate(TrackListUpdateEvent event) {
-        mTracklistFragmentView.setRefreshing(true);
-    }
-
-    @Subscribe
-    public void onTracklistCompletedUpdate(TracklistUpdateCompletedEvent event) {
-        mTracklistFragmentView.setRefreshing(false);
     }
 }

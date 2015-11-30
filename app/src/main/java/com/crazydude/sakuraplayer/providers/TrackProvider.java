@@ -1,15 +1,13 @@
 package com.crazydude.sakuraplayer.providers;
 
-import com.crazydude.sakuraplayer.events.TracklistUpdateCompletedEvent;
-import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore;
+
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
-import com.crazydude.sakuraplayer.models.ArtistModel;
-import com.crazydude.sakuraplayer.models.TrackModel;
 import com.squareup.otto.Bus;
 
-import java.util.ArrayList;
-
-import javax.inject.Inject;
+import javax.inject.Named;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnArtistsLoadedListener;
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnTracksLoadedListener;
@@ -21,10 +19,17 @@ public class TrackProvider {
 
     private MusicLibraryManager mMusicLibraryManager;
     private Bus mBus;
+    private Context mContext;
 
-    public TrackProvider(MusicLibraryManager mMusicLibraryManager, Bus mBus) {
+    public TrackProvider(MusicLibraryManager mMusicLibraryManager, Bus mBus, @Named("Application") Context context) {
         this.mMusicLibraryManager = mMusicLibraryManager;
         this.mBus = mBus;
+        this.mContext = context;
+    }
+
+    public Cursor getArtistCursor() {
+        return mContext.getContentResolver()
+                .query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null, null, null, null);
     }
 
     public void updateMusicDatabase() {

@@ -43,8 +43,4 @@ public class TracklistArtistFragmentView {
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
                 mRecyclerView));
     }
-
-    public void setArtistList(ArrayList<ArtistModel> models) {
-        mArtistAdapter.setData(models);
-    }
 }

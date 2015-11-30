@@ -46,7 +46,7 @@ public class ArtistView extends RelativeLayout implements DataView<ArtistModel> 
         if (data != null) {
             mArtistNameText.setText(data.getArtistName());
             boolean loaded = false;
-            if (data.getAlbums().size() > 0) {
+/*            if (data.getAlbums().size() > 0) {
                 for (AlbumModel albumModel : data.getAlbums()) {
                     if (albumModel.getAlbumArtPath() != null && !albumModel.getAlbumArtPath().isEmpty()) {
                         File file = new File(albumModel.getAlbumArtPath());
@@ -55,7 +55,7 @@ public class ArtistView extends RelativeLayout implements DataView<ArtistModel> 
                         break;
                     }
                 }
-            }
+            }*/
             if (!loaded) {
                 TextDrawable textDrawable = TextDrawable.builder().buildRound(data.getArtistName().substring(0, 1), mCircleColor);
                 mImageView.setImageDrawable(textDrawable);
