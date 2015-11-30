@@ -60,7 +60,7 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
         ButterKnife.bind(mArtistFragmentView, rootView);
         mArtistFragmentView.initViews();
         mArtistName = getArguments().getString(KEY_ARTIST_NAME);
-        mTrackProvider.loadAllTracksByArtist(mArtistName, this);
+//        mTrackProvider.loadAllTracksByArtist(mArtistName, this);
         mArtistFragmentView.setArtistName(mArtistName);
     }
 

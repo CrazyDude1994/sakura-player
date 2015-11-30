@@ -58,6 +58,6 @@ public class ArtistFragmentView {
     }
 
     public void setData(ArrayList<TrackModel> models) {
-        mTracklistAdapter.setData(models);
+//        mTracklistAdapter.setData(models);
     }
 }

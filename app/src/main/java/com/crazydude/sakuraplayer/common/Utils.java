@@ -20,8 +20,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import javax.inject.Inject;
-
 /**
  * Created by CrazyDude on 14.03.2015.
  */

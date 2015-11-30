@@ -6,6 +6,11 @@ import com.crazydude.sakuraplayer.di.components.ApplicationComponent;
 import com.crazydude.sakuraplayer.di.components.DaggerApplicationComponent;
 import com.crazydude.sakuraplayer.di.modules.ApplicationModule;
 import com.crazydude.sakuraplayer.di.modules.UtilsModule;
+import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -20,6 +25,7 @@ public class SakuraPlayerApplication extends Application {
 
     private boolean mIsSplashscreenShown = false;
     private ApplicationComponent mApplicationComponent;
+    private boolean mLibraryUpdating;
 
     @Override
     public void onCreate() {
@@ -35,12 +41,40 @@ public class SakuraPlayerApplication extends Application {
                 .build();
     }
 
+
+    @Produce
+    public UpdateLibraryStartedEvent produceTracklistUpdate() {
+        if (isLibraryUpdating()) {
+            return new UpdateLibraryStartedEvent();
+        } else {
+            return null;
+        }
+    }
+
+    @Subscribe
+    public void onLibraryUpdate(RequestUpdateLibraryEvent event) {
+        mLibraryUpdating = true;
+    }
+
+    @Subscribe
+    public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
+        mLibraryUpdating = false;
+    }
+
     public boolean isIsSplashscreenShown() {
         return mIsSplashscreenShown;
     }
 
     public void setIsSplashscreenShown(boolean mIsSplashscreenShown) {
         this.mIsSplashscreenShown = mIsSplashscreenShown;
+    }
+
+    public void setIsLibraryUpdating(boolean updating) {
+        mLibraryUpdating = updating;
+    }
+
+    public boolean isLibraryUpdating() {
+        return mLibraryUpdating;
     }
 
     public ApplicationComponent getApplicationComponent() {

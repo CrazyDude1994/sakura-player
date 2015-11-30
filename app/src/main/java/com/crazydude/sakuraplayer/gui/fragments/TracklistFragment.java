@@ -1,16 +1,12 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.events.TrackListUpdateEvent;
-import com.crazydude.sakuraplayer.events.TracklistUpdateCompletedEvent;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.managers.LastfmApiManager;
 import com.crazydude.sakuraplayer.views.fragments.TracklistFragmentView;
-import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 

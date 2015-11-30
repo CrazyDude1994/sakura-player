@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.crazydude.sakuraplayer.events.TracklistUpdateCompletedEvent;
 import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
@@ -91,7 +90,6 @@ public class MusicLibraryManager {
                 }
             }
         }).start();
-        mBus.post(new TracklistUpdateCompletedEvent());
     }
 
     private AlbumModel getAlbumById(long id) {

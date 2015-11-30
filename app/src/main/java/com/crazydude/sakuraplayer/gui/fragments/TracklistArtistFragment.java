@@ -1,15 +1,12 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
@@ -30,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by Crazy on 27.05.2015.
  */
 public class TracklistArtistFragment extends BaseFragment implements
-        Callbacks.OnArtistsLoadedListener, Callbacks.RecyclerViewClickListener {
+        Callbacks.OnArtistsLoadedListener, Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TracklistArtistFragmentView mTracklistArtistFragmentView;
@@ -55,7 +52,8 @@ public class TracklistArtistFragment extends BaseFragment implements
         getActivityComponent().inject(mTracklistArtistFragmentView);
         ButterKnife.bind(mTracklistArtistFragmentView, rootView);
         mTracklistArtistFragmentView.initViews();
-        mTrackProvider.loadAllArtists(this);
+        mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
+        mTracklistArtistFragmentView.setOnRefreshListener(this);
     }
 
     @Override
@@ -75,17 +73,24 @@ public class TracklistArtistFragment extends BaseFragment implements
         mOnSelectedArtistListener = (Callbacks.OnSelectedArtistListener) activity;
     }
 
-    @Subscribe
-    public void onUpdate(UpdateLibraryCompletedEvent event) {
-        mTrackProvider.loadAllArtists(this);
-    }
-
-    @Subscribe
-    public void onUpdateStarted(UpdateLibraryStartedEvent event) {
-    }
-
     @Override
     public Features requestFeatures(Features.FeaturesBuilder builder) {
         return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
+    }
+
+    @Override
+    public void onRefresh() {
+        mBus.post(new RequestUpdateLibraryEvent());
+    }
+
+    @Subscribe
+    public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
+        mTracklistArtistFragmentView.setRefreshing(false);
+        mTracklistArtistFragmentView.setData(mTrackProvider.getArtistCursor());
+    }
+
+    @Subscribe
+    public void onLibraryUpdating(UpdateLibraryStartedEvent event) {
+        mTracklistArtistFragmentView.setRefreshing(true);
     }
 }

@@ -1,15 +1,10 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.interfaces.DataView;
-
-import java.util.List;
-
-import javax.inject.Inject;
 
 import static android.support.v7.widget.RecyclerView.Adapter;
 
@@ -25,8 +20,21 @@ abstract class BaseCursorAdapter<ModelType, ViewType extends View & DataView<Mod
         mCursor = cursor;
     }
 
+    public void setCursor(Cursor cursor) {
+        if (this.mCursor != null) {
+            mCursor.close();
+        }
+        this.mCursor = cursor;
+        notifyDataSetChanged();
+    }
+
     abstract public BaseViewHolder<ViewType> onCreateViewHolder(ViewGroup parent, int viewType);
-    abstract public void onBindViewHolder(BaseViewHolder<ViewType> holder, int position);
+    abstract public ModelType getData(int position);
+
+    @Override
+    public void onBindViewHolder(BaseViewHolder<ViewType> holder, int position) {
+        holder.getView().setContent(getData(position));
+    }
 
     @Override
     public int getItemCount() {

@@ -2,10 +2,8 @@ package com.crazydude.sakuraplayer.di.modules;
 
 import com.crazydude.sakuraplayer.adapters.ArtistAdapter;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
-import com.crazydude.sakuraplayer.gui.views.TrackView;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 
-import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 
@@ -16,8 +14,8 @@ import dagger.Provides;
 public class AdaptersModule {
 
     @Provides
-    public TracklistAdapter provideTracklistAdapter() {
-        return new TracklistAdapter();
+    public TracklistAdapter provideTracklistAdapter(TrackProvider trackProvider) {
+        return new TracklistAdapter(trackProvider.getTracklistCursor());
     }
 
     @Provides

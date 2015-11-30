@@ -4,16 +4,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.crazydude.navigationhandler.NavigationHandler;
 import com.crazydude.sakuraplayer.R;
@@ -21,8 +18,7 @@ import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
-import com.crazydude.sakuraplayer.events.TrackListUpdateEvent;
-import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
 import com.crazydude.sakuraplayer.features.Feature;
 import com.crazydude.sakuraplayer.features.FeatureIsNullException;
 import com.crazydude.sakuraplayer.features.Features;
@@ -350,13 +346,8 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     }
 
     @Subscribe
-    public void onTracklistUpdate(TrackListUpdateEvent event) {
+    public void onTracklistUpdate(RequestUpdateLibraryEvent event) {
         mUtils.triggerMediaScan();
-    }
-
-    @Subscribe
-    public void onScanCompleted(UpdateLibraryCompletedEvent event) {
-        mTrackProvider.updateMusicDatabase();
     }
 
     @Subscribe
