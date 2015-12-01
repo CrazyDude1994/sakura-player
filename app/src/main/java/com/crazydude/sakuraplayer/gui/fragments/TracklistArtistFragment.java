@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -58,7 +59,7 @@ public class TracklistArtistFragment extends BaseFragment implements
         mTracklistArtistFragmentView.initViews();
         mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
         mTracklistArtistFragmentView.setOnRefreshListener(this);
-        getLoaderManager().initLoader(0, null, this);
+        getParentFragment().getLoaderManager().initLoader(1, null, this);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class TracklistArtistFragment extends BaseFragment implements
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistArtistFragmentView.setRefreshing(false);
-        getLoaderManager().restartLoader(0, null, this);
+        getParentFragment().getLoaderManager().restartLoader(1, null, this);
     }
 
     @Subscribe

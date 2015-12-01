@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
-import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import javax.inject.Inject;
@@ -43,8 +42,7 @@ public class TracklistAllFragmentView {
     }
 
     public void setOnRecyclerClickListener(RecyclerViewClickListener listener) {
-        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
-                mRecyclerView));
+        mTracklistAdapter.setOnRecyclerViewClickListener(listener);
     }
 
     public TrackModel getData(int position) {

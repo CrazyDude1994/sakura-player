@@ -42,8 +42,7 @@ public class TracklistArtistFragmentView {
     }
 
     public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {
-        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
-                mRecyclerView));
+        mArtistAdapter.setOnRecyclerViewClickListener(listener);
     }
 
     public ArtistModel getData(int position) {

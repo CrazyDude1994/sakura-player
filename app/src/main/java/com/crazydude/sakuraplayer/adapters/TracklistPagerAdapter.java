@@ -1,10 +1,10 @@
 package com.crazydude.sakuraplayer.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
 

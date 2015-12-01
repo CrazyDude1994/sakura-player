@@ -6,12 +6,14 @@
     android:layout_height="@dimen/list_element_height">
 
     <com.andexert.library.RippleView
+        android:id="@+id/view_track_ripple_view"
         android:paddingLeft="@dimen/list_padding_left"
         android:paddingRight="@dimen/list_padding_right"
         android:paddingTop="@dimen/list_padding_top"
         android:paddingBottom="@dimen/list_padding_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:rv_rippleDuration="250"
         app:rv_color="@color/list_ripple_color"
         rv_centered="true">
 

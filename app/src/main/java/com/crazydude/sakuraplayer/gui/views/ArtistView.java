@@ -5,6 +5,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.andexert.library.RippleView;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.DataView;
 import com.crazydude.sakuraplayer.models.ArtistModel;
@@ -28,6 +29,9 @@ public class ArtistView extends RelativeLayout implements DataView<ArtistModel> 
     @Bind(R.id.view_artist_image)
     CircularImageView mImageView;
 
+    @Bind(R.id.view_artist_ripple_view)
+    RippleView mRippleView;
+
     @BindColor(R.color.accent)
     int mCircleColor;
 
@@ -39,6 +43,10 @@ public class ArtistView extends RelativeLayout implements DataView<ArtistModel> 
     private void init() {
         inflate(getContext(), R.layout.view_artist, this);
         ButterKnife.bind(this);
+    }
+
+    public void setRippleCallback(RippleView.OnRippleCompleteListener listener) {
+        mRippleView.setOnRippleCompleteListener(listener);
     }
 
     public void setContent(ArtistModel data) {

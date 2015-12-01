@@ -39,9 +39,6 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
     @Inject
     Utils utils;
 
-    @Inject
-    TrackProvider mTrackProvider;
-
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
 
     @Override
@@ -57,7 +54,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
         mTracklistAllFragmentView.initViews();
         mTracklistAllFragmentView.setOnRecyclerClickListener(this);
         mTracklistAllFragmentView.setOnRefreshListener(this);
-        getLoaderManager().initLoader(0, null, this);
+        getParentFragment().getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -89,7 +86,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistAllFragmentView.setRefreshing(false);
-        getLoaderManager().restartLoader(0, null, this);
+        getParentFragment().getLoaderManager().restartLoader(0, null, this);
     }
 
     @Override

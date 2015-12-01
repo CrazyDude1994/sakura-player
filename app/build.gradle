@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
-def supportLibraryVersion = '23.0.1'
+def supportLibraryVersion = '23.1.1'
 def retrofitVersion = '2.0.0-beta2'
 def daggerVersion = '2.0.1'
 

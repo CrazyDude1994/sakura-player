@@ -7,12 +7,14 @@
 
     <com.andexert.library.RippleView
         rv_centered="true"
+        android:id="@+id/view_artist_ripple_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/list_padding_bottom"
         android:paddingLeft="@dimen/list_padding_left"
         android:paddingRight="@dimen/list_padding_right"
         android:paddingTop="@dimen/list_padding_top"
+        app:rv_rippleDuration="250"
         app:rv_color="@color/list_ripple_color">
 
         <LinearLayout
