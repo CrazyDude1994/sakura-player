@@ -14,6 +14,6 @@ public class AlbumModel {
 
     private ArtistModel mArtist;
     private String mName;
-    private String mAlbumArt;
+    private String mAlbumArtPath;
     private List<TrackModel> mTracks;
 }

@@ -107,7 +107,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         mHomeActivityView.setOnAfterSplashScreenListener(this);
 
         if (!mPreferencesManager.isTutorialCompleted()) {
-            mUtils.triggerMediaScan();
+//            mUtils.triggerMediaScan();
         }
 
         if (application.isIsSplashscreenShown() == false) {

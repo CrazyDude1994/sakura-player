@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.DataView;
-import com.crazydude.sakuraplayer.models.net.AlbumResponse;
+import com.crazydude.sakuraplayer.models.AlbumModel;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -15,33 +15,26 @@ import butterknife.ButterKnife;
 /**
  * Created by kartavtsev.s on 15.06.2015.
  */
-public class AlbumView extends RelativeLayout implements DataView<AlbumResponse.Album> {
+public class AlbumView extends RelativeLayout implements DataView<AlbumModel> {
 
     @Bind(R.id.view_album_image)
-    ImageView mImageView;
+    ImageView mAlbumImage;
 
-    @Bind(R.id.view_album_artist_name)
-    TextView mArtistName;
-
-    @Bind(R.id.view_album_name)
-    TextView mAlbumName;
-
-    @Bind(R.id.view_album_date)
-    TextView mAlbumDate;
+    @Bind(R.id.view_album_name_text)
+    TextView mAlbumTextView;
 
     public AlbumView(Context context) {
         super(context);
+        init();
+    }
+
+    void init() {
+        inflate(getContext(), R.layout.view_album, this);
         ButterKnife.bind(this);
     }
 
-    public ImageView getImageView() {
-        return mImageView;
-    }
-
     @Override
-    public void setContent(AlbumResponse.Album data) {
-        mArtistName.setText(data.getArtist().getName());
-        mAlbumName.setText(data.getName());
-//        mAlbumDate.setText(data.get);
+    public void setContent(AlbumModel data) {
+        
     }
 }

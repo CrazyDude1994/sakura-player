@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.interfaces.DataView;
-import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -45,18 +44,10 @@ public class ArtistView extends RelativeLayout implements DataView<ArtistModel> 
     public void setContent(ArtistModel data) {
         if (data != null) {
             mArtistNameText.setText(data.getArtistName());
-            boolean loaded = false;
-/*            if (data.getAlbums().size() > 0) {
-                for (AlbumModel albumModel : data.getAlbums()) {
-                    if (albumModel.getAlbumArtPath() != null && !albumModel.getAlbumArtPath().isEmpty()) {
-                        File file = new File(albumModel.getAlbumArtPath());
-                        Picasso.with(getContext()).load(file).resizeDimen(R.dimen.list_rounded_image_width_height, R.dimen.list_rounded_image_width_height).into(mImageView);
-                        loaded = true;
-                        break;
-                    }
-                }
-            }*/
-            if (!loaded) {
+            if (!data.getArtistArt().isEmpty()) {
+                File file = new File(data.getArtistArt());
+                Picasso.with(getContext()).load(file).resizeDimen(R.dimen.list_rounded_image_width_height, R.dimen.list_rounded_image_width_height).into(mImageView);
+            } else {
                 TextDrawable textDrawable = TextDrawable.builder().buildRound(data.getArtistName().substring(0, 1), mCircleColor);
                 mImageView.setImageDrawable(textDrawable);
             }

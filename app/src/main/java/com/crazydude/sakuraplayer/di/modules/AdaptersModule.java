@@ -24,8 +24,8 @@ public class AdaptersModule {
     }
 
     @Provides
-    public ArtistAdapter provideArtistAdapter() {
-        return new ArtistAdapter();
+    public ArtistAdapter provideArtistAdapter(@Named("Activity") Context context) {
+        return new ArtistAdapter(context);
     }
 
     @Provides

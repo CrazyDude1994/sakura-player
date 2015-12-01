@@ -10,6 +10,7 @@ import javax.inject.Named;
 /**
  * Created by Crazy on 16.05.2015.
  */
+@Deprecated
 public class TrackProvider {
 
     private MusicLibraryManager mMusicLibraryManager;

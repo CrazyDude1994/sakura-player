@@ -13,5 +13,6 @@ import lombok.experimental.Accessors;
 public class ArtistModel {
 
     private String mArtistName;
+    private String mArtistArt;
     private List<AlbumModel> mAlbums;
 }
