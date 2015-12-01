@@ -16,10 +16,6 @@ abstract class BaseCursorAdapter<ModelType, ViewType extends View & DataView<Mod
 
     protected Cursor mCursor;
 
-    public BaseCursorAdapter(Cursor cursor) {
-        mCursor = cursor;
-    }
-
     public void setCursor(Cursor cursor) {
         if (this.mCursor != null) {
             mCursor.close();
@@ -38,6 +34,6 @@ abstract class BaseCursorAdapter<ModelType, ViewType extends View & DataView<Mod
 
     @Override
     public int getItemCount() {
-        return mCursor.getCount();
+        return (mCursor == null) ? 0 : mCursor.getCount();
     }
 }

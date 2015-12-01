@@ -5,15 +5,13 @@ import com.crazydude.sakuraplayer.di.modules.ApplicationModule;
 import com.crazydude.sakuraplayer.di.modules.ServiceModule;
 import com.crazydude.sakuraplayer.di.scopes.ApplicationScope;
 
-import javax.inject.Singleton;
-
 import dagger.Component;
 
 /**
  * Created by Crazy on 27.09.2015.
  */
 @Component(modules = ApplicationModule.class)
-@Singleton
+@ApplicationScope
 public interface ApplicationComponent {
 
     ActivityComponent provideActivityComponent(ActivityModule activityModule);

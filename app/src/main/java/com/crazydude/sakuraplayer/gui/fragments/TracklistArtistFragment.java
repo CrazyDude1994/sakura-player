@@ -1,6 +1,11 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
@@ -20,6 +25,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.ButterKnife;
 
@@ -27,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by Crazy on 27.05.2015.
  */
 public class TracklistArtistFragment extends BaseFragment implements
-        Callbacks.OnArtistsLoadedListener, Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
+        Callbacks.OnArtistsLoadedListener, Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     @Inject
     TracklistArtistFragmentView mTracklistArtistFragmentView;
@@ -37,6 +43,10 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     @Inject
     TrackProvider mTrackProvider;
+
+    @Inject
+    @Named("Artist")
+    CursorLoader mArtistCursorLoader;
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
     private ArrayList<ArtistModel> mArtistModels;
@@ -54,6 +64,7 @@ public class TracklistArtistFragment extends BaseFragment implements
         mTracklistArtistFragmentView.initViews();
         mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
         mTracklistArtistFragmentView.setOnRefreshListener(this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -86,11 +97,26 @@ public class TracklistArtistFragment extends BaseFragment implements
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistArtistFragmentView.setRefreshing(false);
-        mTracklistArtistFragmentView.setData(mTrackProvider.getArtistCursor());
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Subscribe
     public void onLibraryUpdating(UpdateLibraryStartedEvent event) {
         mTracklistArtistFragmentView.setRefreshing(true);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return mArtistCursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mTracklistArtistFragmentView.setData(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mTracklistArtistFragmentView.setData(null);
     }
 }

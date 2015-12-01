@@ -1,6 +1,5 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.database.Cursor;
 import android.provider.MediaStore;
 import android.view.ViewGroup;
 
@@ -11,10 +10,6 @@ import com.crazydude.sakuraplayer.models.TrackModel;
  * Created by Crazy on 26.04.2015.
  */
 public class TracklistAdapter extends BaseCursorAdapter<TrackModel, TrackView> {
-
-    public TracklistAdapter(Cursor cursor) {
-        super(cursor);
-    }
 
     @Override
     public TrackModel getData(int position) {

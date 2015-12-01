@@ -1,6 +1,5 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.database.Cursor;
 import android.provider.MediaStore;
 import android.view.ViewGroup;
 
@@ -11,10 +10,6 @@ import com.crazydude.sakuraplayer.models.ArtistModel;
  * Created by Crazy on 27.05.2015.
  */
 public class ArtistAdapter extends BaseCursorAdapter<ArtistModel, ArtistView> {
-
-    public ArtistAdapter(Cursor cursor) {
-        super(cursor);
-    }
 
     @Override
     public BaseViewHolder<ArtistView> onCreateViewHolder(ViewGroup parent, int viewType) {

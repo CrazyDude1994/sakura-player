@@ -1,6 +1,11 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
@@ -18,13 +23,14 @@ import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.ButterKnife;
 
 /**
  * Created by CrazyDude on 13.04.2015.
  */
-public class TracklistAllFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class TracklistAllFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     @Inject
     TracklistAllFragmentView mTracklistAllFragmentView;
@@ -37,6 +43,10 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
 
     @Inject
     TrackProvider mTrackProvider;
+
+    @Inject
+    @Named("Track")
+    CursorLoader mTrackCursorLoader;
 
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
 
@@ -53,6 +63,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
         mTracklistAllFragmentView.initViews();
         mTracklistAllFragmentView.setOnRecyclerClickListener(this);
         mTracklistAllFragmentView.setOnRefreshListener(this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -84,6 +95,21 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistAllFragmentView.setRefreshing(false);
-        mTracklistAllFragmentView.setData(mTrackProvider.getTracklistCursor());
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return mTrackCursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mTracklistAllFragmentView.setData(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mTracklistAllFragmentView.setData(null);
     }
 }
