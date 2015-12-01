@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.di.components;
 
+import com.crazydude.sakuraplayer.SakuraPlayerApplication;
 import com.crazydude.sakuraplayer.di.modules.ActivityModule;
 import com.crazydude.sakuraplayer.di.modules.ApplicationModule;
 import com.crazydude.sakuraplayer.di.modules.ServiceModule;
@@ -16,5 +17,7 @@ public interface ApplicationComponent {
 
     ActivityComponent provideActivityComponent(ActivityModule activityModule);
     ServiceComponent provideServiceComponent(ServiceModule serviceModule);
+
+    void inject(SakuraPlayerApplication sakuraPlayerApplication);
 
 }

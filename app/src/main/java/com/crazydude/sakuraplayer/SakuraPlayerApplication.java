@@ -9,8 +9,11 @@ import com.crazydude.sakuraplayer.di.modules.UtilsModule;
 import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -22,6 +25,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 @Getter
 @Accessors(prefix = "m")
 public class SakuraPlayerApplication extends Application {
+
+    @Inject
+    Bus mBus;
 
     private boolean mIsSplashscreenShown = false;
     private ApplicationComponent mApplicationComponent;
@@ -39,8 +45,10 @@ public class SakuraPlayerApplication extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .utilsModule(new UtilsModule())
                 .build();
-    }
+        mApplicationComponent.inject(this);
 
+        mBus.register(this);
+    }
 
     @Produce
     public UpdateLibraryStartedEvent produceTracklistUpdate() {

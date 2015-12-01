@@ -1,5 +1,7 @@
 package com.crazydude.sakuraplayer.di.components;
 
+import android.support.v4.content.CursorLoader;
+
 import com.crazydude.sakuraplayer.di.modules.ActivityModule;
 import com.crazydude.sakuraplayer.gui.activity.BaseActivity;
 import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
@@ -11,12 +13,12 @@ import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
-import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
-import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
+
+import javax.inject.Named;
 
 import dagger.Subcomponent;
 
@@ -53,4 +55,8 @@ public interface ActivityComponent {
 
     void inject(RecommendsFragmentView mRecommendsFragmentView);
 
+    @Named("Track")
+    CursorLoader getTrackCursorLoader();
+    @Named("Artist")
+    CursorLoader getArtistCursorLoader();
 }

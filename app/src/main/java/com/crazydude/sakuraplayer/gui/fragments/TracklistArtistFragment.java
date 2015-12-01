@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
@@ -25,7 +24,6 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.ButterKnife;
 
@@ -43,10 +41,6 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     @Inject
     TrackProvider mTrackProvider;
-
-    @Inject
-    @Named("Artist")
-    CursorLoader mArtistCursorLoader;
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
     private ArrayList<ArtistModel> mArtistModels;
@@ -97,7 +91,7 @@ public class TracklistArtistFragment extends BaseFragment implements
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistArtistFragmentView.setRefreshing(false);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().restartLoader(0, null, this);
     }
 
     @Subscribe
@@ -107,7 +101,7 @@ public class TracklistArtistFragment extends BaseFragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return mArtistCursorLoader;
+        return getActivityComponent().getArtistCursorLoader();
     }
 
     @Override

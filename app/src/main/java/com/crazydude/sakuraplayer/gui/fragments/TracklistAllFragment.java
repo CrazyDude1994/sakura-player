@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.ButterKnife;
 
@@ -43,10 +41,6 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
 
     @Inject
     TrackProvider mTrackProvider;
-
-    @Inject
-    @Named("Track")
-    CursorLoader mTrackCursorLoader;
 
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
 
@@ -100,7 +94,7 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return mTrackCursorLoader;
+        return getActivityComponent().getTrackCursorLoader();
     }
 
     @Override
