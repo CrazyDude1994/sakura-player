@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,6 @@ import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
 import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.TrackModel;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -57,7 +56,11 @@ public class ArtistFragmentView {
         mArtistName.setText(artistName);
     }
 
-    public void setData(ArrayList<TrackModel> models) {
-//        mTracklistAdapter.setData(models);
+    public void setData(Cursor cursor) {
+        mTracklistAdapter.setCursor(cursor);
+    }
+
+    public TrackModel getData(int position) {
+        return mTracklistAdapter.getData(position);
     }
 }

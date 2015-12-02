@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -17,12 +16,9 @@ import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
-import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -31,8 +27,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Crazy on 27.05.2015.
  */
-public class TracklistArtistFragment extends BaseFragment implements
-        Callbacks.OnArtistsLoadedListener, Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class TracklistArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     @Inject
     TracklistArtistFragmentView mTracklistArtistFragmentView;
@@ -44,7 +39,6 @@ public class TracklistArtistFragment extends BaseFragment implements
     TrackProvider mTrackProvider;
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
-    private ArrayList<ArtistModel> mArtistModels;
 
     @Override
     protected int getLayoutRes() {
@@ -63,14 +57,8 @@ public class TracklistArtistFragment extends BaseFragment implements
     }
 
     @Override
-    public void onArtistsLoaded(ArrayList<ArtistModel> artists) {
-        mArtistModels = artists;
-        mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
-    }
-
-    @Override
     public void onClick(View view, int position) {
-        mOnSelectedArtistListener.onSelectedArtist(mArtistModels.get(position));
+        mOnSelectedArtistListener.onSelectedArtist(mTracklistArtistFragmentView.getData(position));
     }
 
     @Override

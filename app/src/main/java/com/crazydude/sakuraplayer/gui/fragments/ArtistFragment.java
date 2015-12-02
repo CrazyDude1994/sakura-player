@@ -2,6 +2,8 @@ package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
@@ -23,22 +25,17 @@ import butterknife.OnClick;
 /**
  * Created by Crazy on 13.06.2015.
  */
-public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLoadedListener,
-        Callbacks.RecyclerViewClickListener {
+public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, LoaderManager.LoaderCallbacks<Object> {
 
     private static final String KEY_ARTIST_NAME = "artist_name";
 
     @Inject
     ArtistFragmentView mArtistFragmentView;
 
-    @Inject
-    TrackProvider mTrackProvider;
-
     private String mArtistName;
 
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
     private Callbacks.OnPlayerListener mOnPlayerListener;
-    private ArrayList<TrackModel> mTrackModels;
 
     public static ArtistFragment newInstance(String artistName) {
         Bundle bundle = new Bundle();
@@ -60,15 +57,8 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
         ButterKnife.bind(mArtistFragmentView, rootView);
         mArtistFragmentView.initViews();
         mArtistName = getArguments().getString(KEY_ARTIST_NAME);
-//        mTrackProvider.loadAllTracksByArtist(mArtistName, this);
         mArtistFragmentView.setArtistName(mArtistName);
-    }
-
-    @Override
-    public void onTrackLoaded(ArrayList<TrackModel> tracks) {
-        mArtistFragmentView.setData(tracks);
-        mTrackModels = tracks;
-        mArtistFragmentView.setOnRecyclerClickListener(this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -80,7 +70,7 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
 
     @Override
     public void onClick(View view, int position) {
-        mOnSelectedTrackListener.onSelectedTrack(mTrackModels.get(position));
+        mOnSelectedTrackListener.onSelectedTrack(mArtistFragmentView.getData(position));
     }
 
     @OnClick(R.id.fragmet_artist_add_to_playlist_floating_button)
@@ -90,12 +80,22 @@ public class ArtistFragment extends BaseFragment implements Callbacks.OnTracksLo
     }
 
     @Override
-    public void onTrackLoaded(TrackModel trackModel) {
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
+    }
+
+    @Override
+    public Loader<Object> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Object> loader, Object data) {
 
     }
 
     @Override
-    public Features requestFeatures(Features.FeaturesBuilder builder) {
-        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
+    public void onLoaderReset(Loader<Object> loader) {
+
     }
 }

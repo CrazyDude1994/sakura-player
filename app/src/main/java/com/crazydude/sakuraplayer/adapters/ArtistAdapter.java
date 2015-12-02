@@ -6,14 +6,13 @@ import android.provider.MediaStore;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.gui.views.ArtistView;
-import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.*;
+import static com.crazydude.sakuraplayer.interfaces.Callbacks.RecyclerViewClickListener;
 
 /**
  * Created by Crazy on 27.05.2015.
@@ -57,7 +56,6 @@ public class ArtistAdapter extends BaseCursorAdapter<ArtistModel, ArtistView> {
 
             albumCursor.close();
         }
-
         artistModel.setArtistArt(albumArt);
         return artistModel;
     }
