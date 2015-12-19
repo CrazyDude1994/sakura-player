@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(prefix = "m")
 public class ArtistModel {
 
+    private long mId;
     private String mArtistName;
     private String mArtistArt;
     private List<AlbumModel> mAlbums;

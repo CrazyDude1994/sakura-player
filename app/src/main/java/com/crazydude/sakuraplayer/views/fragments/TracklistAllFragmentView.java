@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
+import com.crazydude.sakuraplayer.gui.decorators.DividerItemDecoration;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
 import javax.inject.Inject;
@@ -39,6 +40,7 @@ public class TracklistAllFragmentView {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mTracklistAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST));
     }
 
     public void setOnRecyclerClickListener(RecyclerViewClickListener listener) {

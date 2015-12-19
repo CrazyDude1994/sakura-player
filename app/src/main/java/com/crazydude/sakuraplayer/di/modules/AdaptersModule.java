@@ -6,6 +6,7 @@ import android.support.v4.content.CursorLoader;
 
 import com.crazydude.sakuraplayer.adapters.ArtistAdapter;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 
 import javax.inject.Named;
 
@@ -19,8 +20,8 @@ import dagger.Provides;
 public class AdaptersModule {
 
     @Provides
-    public TracklistAdapter provideTracklistAdapter() {
-        return new TracklistAdapter();
+    public TracklistAdapter provideTracklistAdapter(MusicLibraryManager musicLibraryManager) {
+        return new TracklistAdapter(musicLibraryManager);
     }
 
     @Provides

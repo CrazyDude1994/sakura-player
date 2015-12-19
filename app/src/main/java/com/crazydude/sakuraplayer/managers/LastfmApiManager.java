@@ -66,12 +66,7 @@ public class LastfmApiManager {
         String apiSig = mUtils.getSignature(treeMap);
         return mLastfmInterface.login(username, password, Constants.LASTFM_API_KEY, apiSig)
                 .compose(applyTransformers())
-                .doOnNext(new Action1<SessionResponse>() {
-                    @Override
-                    public void call(SessionResponse sessionResponse) {
-
-                    }
-                });
+                .doOnNext(sessionResponse -> mPreferencesManager.saveToken(sessionResponse.getSession().getKey()));
     }
 
     public Observable<RecommendationsResponse> getRecommendedArtists(int page, int limit) {

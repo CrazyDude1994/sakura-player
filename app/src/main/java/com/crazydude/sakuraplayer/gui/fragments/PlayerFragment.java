@@ -1,11 +1,7 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.events.PlayerEvent;
@@ -13,7 +9,6 @@ import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
 import com.squareup.otto.Subscribe;
 
@@ -29,9 +24,6 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
 
     @Inject
     PlayerView mPlayerView;
-
-    @Inject
-    TrackProvider mTrackProvider;
 
     @Bind(R.id.fragment_player_seekbar)
     DiscreteSeekBar mDiscreteSeekBar;

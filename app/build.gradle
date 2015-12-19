@@ -88,5 +88,11 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.crazydude:navigation-handler:0.1'
+    compile ('com.github.ozodrukh:CircularReveal:1.1.1@aar') {
+        transitive = true;
+    }
+    compile('com.mikepenz:materialdrawer:4.5.6@aar') {
+        transitive = true
+    }
     compile project(':viewpagerindicator')
 }

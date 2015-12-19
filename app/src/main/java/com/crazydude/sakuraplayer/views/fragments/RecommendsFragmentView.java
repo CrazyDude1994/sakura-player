@@ -32,10 +32,6 @@ public class RecommendsFragmentView {
     private RecommendsAdapter mRecommendsAdapter;
     private GridLayoutManager mGridLayoutManager;
 
-    public RecommendsFragmentView() {
-        initViews();
-    }
-
     public void initViews() {
         mRecommendsAdapter = new RecommendsAdapter();
         mGridLayoutManager = new GridLayoutManager(mContext, 2);

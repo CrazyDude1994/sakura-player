@@ -12,7 +12,6 @@ import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.managers.MusicPlayerManager;
 import com.crazydude.sakuraplayer.managers.PlayerBinder;
 import com.crazydude.sakuraplayer.managers.PreferencesManager;
-import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.squareup.otto.Bus;
 
@@ -34,8 +33,8 @@ public class ManagersModule {
     }
 
     @Provides
-    public MusicLibraryManager provideMusicLibraryManager(@Named("Application") Context context, Bus bus) {
-        return new MusicLibraryManager(context, bus);
+    public MusicLibraryManager provideMusicLibraryManager(@Named("Application") Context context) {
+        return new MusicLibraryManager(context);
     }
 
     @Provides
@@ -46,12 +45,6 @@ public class ManagersModule {
     @Provides
     public PlayerBinder providePlayerBinder(PlayerService playerService) {
         return new PlayerBinder(playerService);
-    }
-
-    @Provides
-    public TrackProvider provideTrackProvider(MusicLibraryManager musicLibraryManager, Bus bus,
-                                              @Named("Application") Context context) {
-        return new TrackProvider(musicLibraryManager, bus, context);
     }
 
     @Provides

@@ -3,6 +3,7 @@ package com.crazydude.sakuraplayer.gui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 
@@ -10,9 +11,9 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
 
 import java.util.ArrayList;
@@ -25,21 +26,28 @@ import butterknife.OnClick;
 /**
  * Created by Crazy on 13.06.2015.
  */
-public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, LoaderManager.LoaderCallbacks<Object> {
+public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, LoaderManager.LoaderCallbacks<ArrayList<TrackModel>> {
 
     private static final String KEY_ARTIST_NAME = "artist_name";
+    private static final String KEY_ARTIST_ID = "artist_id";
 
     @Inject
     ArtistFragmentView mArtistFragmentView;
 
-    private String mArtistName;
+    @Inject
+    MusicLibraryManager mMusicLibraryManager;
 
+    private String mArtistName;
+    private long mArtistId;
+
+    private ArrayList<TrackModel> mTrackModels;
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
     private Callbacks.OnPlayerListener mOnPlayerListener;
 
-    public static ArtistFragment newInstance(String artistName) {
+    public static ArtistFragment newInstance(String artistName, long artistId) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_ARTIST_NAME, artistName);
+        bundle.putLong(KEY_ARTIST_ID, artistId);
         ArtistFragment artistFragment = new ArtistFragment();
         artistFragment.setArguments(bundle);
         return artistFragment;
@@ -55,8 +63,10 @@ public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerVi
         getActivityComponent().inject(this);
         getActivityComponent().inject(mArtistFragmentView);
         ButterKnife.bind(mArtistFragmentView, rootView);
+        ButterKnife.bind(this, rootView);
         mArtistFragmentView.initViews();
         mArtistName = getArguments().getString(KEY_ARTIST_NAME);
+        mArtistId = getArguments().getLong(KEY_ARTIST_ID);
         mArtistFragmentView.setArtistName(mArtistName);
         getLoaderManager().initLoader(0, null, this);
     }
@@ -74,8 +84,8 @@ public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerVi
     }
 
     @OnClick(R.id.fragmet_artist_add_to_playlist_floating_button)
-    void onAddToPlaylistClick() {
-        PlaylistModel playlistModel = new PlaylistModel(mTrackModels, "Current");
+    public void onAddToPlaylistClick() {
+        PlaylistModel playlistModel = new PlaylistModel(mMusicLibraryManager.getTracksByArtistId(mArtistId), "Current");
         mOnPlayerListener.onSetPlaylist(playlistModel);
     }
 
@@ -85,17 +95,22 @@ public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerVi
     }
 
     @Override
-    public Loader<Object> onCreateLoader(int id, Bundle args) {
-        return null;
+    public Loader<ArrayList<TrackModel>> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<ArrayList<TrackModel>>(getContext()) {
+            @Override
+            public ArrayList<TrackModel> loadInBackground() {
+                return mMusicLibraryManager.getTracksByArtistId(mArtistId);
+            }
+        };
     }
 
     @Override
-    public void onLoadFinished(Loader<Object> loader, Object data) {
-
+    public void onLoadFinished(Loader<ArrayList<TrackModel>> loader, ArrayList<TrackModel> data) {
+        mArtistFragmentView.setData(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Object> loader) {
+    public void onLoaderReset(Loader<ArrayList<TrackModel>> loader) {
 
     }
 }

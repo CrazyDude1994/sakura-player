@@ -39,7 +39,6 @@ import com.crazydude.sakuraplayer.managers.PreferencesManager;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.squareup.otto.Subscribe;
@@ -62,9 +61,6 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         Callbacks.OnSelectedLastfmArtistListener, Callbacks.OnSelectedTrackListener, ServiceConnection,
         Callbacks.OnPlayerListener, Callbacks.OnSelectedArtistListener,
         FragmentManager.OnBackStackChangedListener, FeatureProvider {
-
-    @Inject
-    TrackProvider mTrackProvider;
 
     @Getter
     @Inject
@@ -311,7 +307,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onSelectedArtist(ArtistModel artist) {
-        mNavigationHandler.switchFragment(ArtistFragment.newInstance(artist.getArtistName()),
+        mNavigationHandler.switchFragment(ArtistFragment.newInstance(artist.getArtistName(), artist.getId()),
                 NavigationHandler.SwitchMethod.REPLACE, true);
     }
 

@@ -39,6 +39,7 @@ public class ArtistAdapter extends BaseCursorAdapter<ArtistModel, ArtistView> {
         mCursor.moveToPosition(position);
         ArtistModel artistModel = new ArtistModel();
         artistModel.setArtistName(mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST)));
+        artistModel.setId(mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Artists._ID)));
         Cursor albumCursor =
                 mContext
                         .getContentResolver()

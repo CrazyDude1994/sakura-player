@@ -7,65 +7,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/activity_home_toolbar_container"
-            layout="@layout/toolbar" />
-
-        <ImageView
-            android:id="@+id/activity_home_splash_screen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/splash_screen"
-            tools:visibility="gone" />
-
-        <include
-            android:id="@+id/activity_home_view_player_widget"
-            layout="@layout/view_player_widget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-
-        <FrameLayout
-            android:id="@+id/activity_home_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/activity_home_view_player_widget"
-            android:layout_below="@id/activity_home_toolbar_container">
-
-            <com.pnikosis.materialishprogress.ProgressWheel
-                android:id="@+id/activity_home_placeholder_progressbar"
-                android:layout_width="@dimen/progress_size"
-                android:layout_height="@dimen/progress_size"
-                android:layout_gravity="center_horizontal"
-                android:visibility="gone"
-                tools:visibility="visible"
-                wheel:matProg_barColor="#5588FF"
-                wheel:matProg_progressIndeterminate="true" />
-        </FrameLayout>
-
         <RelativeLayout
-            android:id="@+id/activity_home_progressbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.9"
-            android:background="@color/background_material_dark"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
-            <com.pnikosis.materialishprogress.ProgressWheel
-                android:layout_width="@dimen/progress_size"
-                android:layout_height="@dimen/progress_size"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                wheel:matProg_barColor="#5588FF"
-                wheel:matProg_progressIndeterminate="true" />
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:id="@+id/activity_home_toolbar_container"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    android:id="@+id/activity_home_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </android.support.design.widget.AppBarLayout>
+
+
+            <ImageView
+                android:id="@+id/activity_home_splash_screen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/splash_screen"
+                tools:visibility="gone" />
+
+            <include
+                android:id="@+id/activity_home_view_player_widget"
+                layout="@layout/view_player_widget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" />
+
+            <FrameLayout
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:id="@+id/activity_home_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/activity_home_view_player_widget"
+                android:layout_below="@id/activity_home_toolbar_container">
+
+                <com.pnikosis.materialishprogress.ProgressWheel
+                    android:id="@+id/activity_home_placeholder_progressbar"
+                    android:layout_width="@dimen/progress_size"
+                    android:layout_height="@dimen/progress_size"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    wheel:matProg_barColor="#5588FF"
+                    wheel:matProg_progressIndeterminate="true" />
+            </FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_home_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.9"
+                android:background="@color/background_material_dark"
+                android:visibility="gone">
+
+                <com.pnikosis.materialishprogress.ProgressWheel
+                    android:layout_width="@dimen/progress_size"
+                    android:layout_height="@dimen/progress_size"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    wheel:matProg_barColor="#5588FF"
+                    wheel:matProg_progressIndeterminate="true" />
+            </RelativeLayout>
+
         </RelativeLayout>
 
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/activity_home_navigation_view"

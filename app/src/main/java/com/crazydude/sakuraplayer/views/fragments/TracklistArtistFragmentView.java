@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.ArtistAdapter;
 import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
+import com.crazydude.sakuraplayer.gui.decorators.DividerItemDecoration;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 
@@ -39,6 +40,7 @@ public class TracklistArtistFragmentView {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mArtistAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST));
     }
 
     public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {

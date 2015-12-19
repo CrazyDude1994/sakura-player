@@ -16,7 +16,6 @@ import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
-import com.crazydude.sakuraplayer.providers.TrackProvider;
 import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
 import com.squareup.otto.Subscribe;
 
@@ -34,9 +33,6 @@ public class TracklistArtistFragment extends BaseFragment implements Callbacks.R
 
     @Inject
     MusicLibraryManager mMusicLibraryManager;
-
-    @Inject
-    TrackProvider mTrackProvider;
 
     private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
 
