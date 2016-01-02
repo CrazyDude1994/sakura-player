@@ -35,33 +35,6 @@ public class ArtistAdapter extends BaseCursorAdapter<ArtistModel, ArtistView> {
     }
 
     @Override
-    public ArtistModel getData(int position) {
-        mCursor.moveToPosition(position);
-        ArtistModel artistModel = new ArtistModel();
-        artistModel.setArtistName(mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST)));
-        artistModel.setId(mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Artists._ID)));
-        Cursor albumCursor =
-                mContext
-                        .getContentResolver()
-                        .query(MediaStore.Audio.Artists.Albums.getContentUri("external", mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Artists._ID))), null, null, null, null);
-        String albumArt = "";
-        if (albumCursor != null) {
-            while (albumCursor.moveToNext()) {
-                if (albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Artists.Albums.ALBUM_ART)) != null) {
-                    albumArt = albumCursor.getString(albumCursor.getColumnIndex(MediaStore.Audio.Artists.Albums.ALBUM_ART));
-                }
-                if (albumArt != null && !albumArt.isEmpty()) {
-                    break;
-                }
-            }
-
-            albumCursor.close();
-        }
-        artistModel.setArtistArt(albumArt);
-        return artistModel;
-    }
-
-    @Override
     public void onBindViewHolder(BaseViewHolder<ArtistView> holder, int position) {
         super.onBindViewHolder(holder, position);
         holder.getView().setRippleCallback(rippleView -> {

@@ -79,7 +79,7 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     }
 
     public void setPlayerWidgetData(TrackModel trackModel) {
-        mPlayerWidgetArtist.setText(trackModel.getArtist().getArtistName());
+        mPlayerWidgetArtist.setText(trackModel.getArtistName());
         mPlayerWidgetSong.setText(trackModel.getTrackName());
 /*        if (trackModel.getAlbum() != null && trackModel.getAlbum().getAlbumArtPath() != null) {
             File file = new File(trackModel.getAlbum().getAlbumArtPath());

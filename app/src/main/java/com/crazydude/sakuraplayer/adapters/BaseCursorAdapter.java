@@ -1,10 +1,10 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.interfaces.DataView;
+import com.venmo.cursor.IterableCursor;
 
 import static android.support.v7.widget.RecyclerView.Adapter;
 
@@ -14,18 +14,22 @@ import static android.support.v7.widget.RecyclerView.Adapter;
 abstract class BaseCursorAdapter<ModelType, ViewType extends View & DataView<ModelType>> extends
         Adapter<BaseViewHolder<ViewType>> {
 
-    protected Cursor mCursor;
+    protected IterableCursor<ModelType> mIterableCursor;
 
-    public void setCursor(Cursor cursor) {
-        if (this.mCursor != null) {
-            mCursor.close();
+    public void setCursor(IterableCursor<ModelType> cursor) {
+        if (this.mIterableCursor != null) {
+            mIterableCursor.close();
         }
-        this.mCursor = cursor;
+        this.mIterableCursor = cursor;
         notifyDataSetChanged();
     }
 
     abstract public BaseViewHolder<ViewType> onCreateViewHolder(ViewGroup parent, int viewType);
-    abstract public ModelType getData(int position);
+
+    public ModelType getData(int position) {
+        mIterableCursor.moveToPosition(position);
+        return mIterableCursor.peek();
+    }
 
     @Override
     public void onBindViewHolder(BaseViewHolder<ViewType> holder, int position) {
@@ -34,6 +38,6 @@ abstract class BaseCursorAdapter<ModelType, ViewType extends View & DataView<Mod
 
     @Override
     public int getItemCount() {
-        return (mCursor == null) ? 0 : mCursor.getCount();
+        return (mIterableCursor == null) ? 0 : mIterableCursor.getCount();
     }
 }

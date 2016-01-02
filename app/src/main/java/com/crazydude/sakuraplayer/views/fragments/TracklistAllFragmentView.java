@@ -10,6 +10,7 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
 import com.crazydude.sakuraplayer.gui.decorators.DividerItemDecoration;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.venmo.cursor.IterableCursor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -51,7 +52,7 @@ public class TracklistAllFragmentView {
         return mTracklistAdapter.getData(position);
     }
 
-    public void setData(Cursor cursor) {
+    public void setData(IterableCursor<TrackModel> cursor) {
         mTracklistAdapter.setCursor(cursor);
     }
 

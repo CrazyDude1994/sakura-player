@@ -97,7 +97,7 @@ public class PlayerService extends Service implements MediaPlayer.OnErrorListene
         Notification notification = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.ic_equalizer_animated)
                 .setContentTitle(model.getTrackName())
-                .setContentText(model.getArtist().getArtistName())
+                .setContentText(model.getArtistName())
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(NOTIFICATION_ID, notification);

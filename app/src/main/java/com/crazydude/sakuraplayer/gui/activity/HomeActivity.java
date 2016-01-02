@@ -1,5 +1,6 @@
 package com.crazydude.sakuraplayer.gui.activity;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
@@ -42,6 +44,10 @@ import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.squareup.otto.Subscribe;
+
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Permissions;
 
 import javax.inject.Inject;
 
@@ -127,8 +133,17 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
         if (!mPreferencesManager.isTutorialCompleted()) {
             mNavigationHandler.switchFragment(LastfmTutorialFragment.newInstance(), NavigationHandler.SwitchMethod.REPLACE, false);
         } else {
-            switchToPlayerMode();
+            askForPermission();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switchToPlayerMode();
+    }
+
+    private void askForPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
     }
 
     private void switchToPlayerMode() {

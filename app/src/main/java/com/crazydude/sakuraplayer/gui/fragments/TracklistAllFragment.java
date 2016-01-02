@@ -17,6 +17,7 @@ import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.squareup.otto.Subscribe;
 
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * Created by CrazyDude on 13.04.2015.
  */
-public class TracklistAllFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class TracklistAllFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TracklistAllFragmentView mTracklistAllFragmentView;
@@ -53,7 +54,11 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
         mTracklistAllFragmentView.initViews();
         mTracklistAllFragmentView.setOnRecyclerClickListener(this);
         mTracklistAllFragmentView.setOnRefreshListener(this);
-        getParentFragment().getLoaderManager().initLoader(0, null, this);
+        loadData();
+    }
+
+    private void loadData() {
+        mTracklistAllFragmentView.setData(mMusicLibraryManager.queryAllTracks());
     }
 
     @Override
@@ -85,21 +90,6 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistAllFragmentView.setRefreshing(false);
-        getParentFragment().getLoaderManager().restartLoader(0, null, this);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return getActivityComponent().getTrackCursorLoader();
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mTracklistAllFragmentView.setData(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mTracklistAllFragmentView.setData(null);
+        loadData();
     }
 }

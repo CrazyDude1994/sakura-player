@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Crazy on 27.05.2015.
  */
-public class TracklistArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class TracklistArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TracklistArtistFragmentView mTracklistArtistFragmentView;
@@ -49,7 +49,11 @@ public class TracklistArtistFragment extends BaseFragment implements Callbacks.R
         mTracklistArtistFragmentView.initViews();
         mTracklistArtistFragmentView.setOnRecyclerClickListener(this);
         mTracklistArtistFragmentView.setOnRefreshListener(this);
-        getParentFragment().getLoaderManager().initLoader(1, null, this);
+        loadData();
+    }
+
+    private void loadData() {
+        mTracklistArtistFragmentView.setData(mMusicLibraryManager.queryAllArtists());
     }
 
     @Override
@@ -76,26 +80,11 @@ public class TracklistArtistFragment extends BaseFragment implements Callbacks.R
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
         mTracklistArtistFragmentView.setRefreshing(false);
-        getParentFragment().getLoaderManager().restartLoader(1, null, this);
+        loadData();
     }
 
     @Subscribe
     public void onLibraryUpdating(UpdateLibraryStartedEvent event) {
         mTracklistArtistFragmentView.setRefreshing(true);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return getActivityComponent().getArtistCursorLoader();
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mTracklistArtistFragmentView.setData(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mTracklistArtistFragmentView.setData(null);
     }
 }

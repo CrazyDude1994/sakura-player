@@ -29,12 +29,6 @@ public class TracklistAdapter extends BaseCursorAdapter<TrackModel, TrackView> {
     }
 
     @Override
-    public TrackModel getData(int position) {
-        mCursor.moveToPosition(position);
-        return mMusicLibraryManager.loadTrackModel(mCursor);
-    }
-
-    @Override
     public BaseViewHolder<TrackView> onCreateViewHolder(ViewGroup parent, int viewType) {
         return new BaseViewHolder<>(new TrackView(parent.getContext()));
     }

@@ -77,7 +77,7 @@ public class PlayerView {
     }
 
     public void setData(TrackModel data) {
-        mArtistName.setText(data.getArtist().getArtistName());
+        mArtistName.setText(data.getArtistName());
         mSongName.setText(data.getTrackName());
 
 /*        if (data.getAlbum() != null && data.getAlbum().getAlbumArtPath() != null) {

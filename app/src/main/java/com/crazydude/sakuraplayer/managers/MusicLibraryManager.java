@@ -4,10 +4,15 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 
 import com.crazydude.sakuraplayer.models.AlbumModel;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.venmo.cursor.CursorList;
+import com.venmo.cursor.IterableCursor;
+import com.venmo.cursor.IterableCursorAdapter;
+import com.venmo.cursor.IterableCursorWrapper;
 
 import java.util.ArrayList;
 
@@ -22,77 +27,54 @@ public class MusicLibraryManager {
         this.mContext = context;
     }
 
-    public TrackModel loadTrackModel(Cursor cursor) {
-        TrackModel trackModel = new TrackModel();
-        ArtistModel artistModel = new ArtistModel();
-        trackModel.setTrackName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-        trackModel.setTrackId(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
-        trackModel.setTrackPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
-        artistModel.setArtistName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-        trackModel.setArtist(artistModel);
-        return trackModel;
+    public IterableCursor<TrackModel> queryAllTracks() {
+        Cursor cursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        return new TrackModel.TrackModelCursor(cursor);
     }
 
-    public ArrayList<TrackModel> getTracksByArtistId(long artistId) {
-        ArrayList<TrackModel> trackModels = new ArrayList<>();
-
-        String selection = MediaStore.Audio.Media.ARTIST_ID + "=?";
-
-        String[] selectionArgs = {String.valueOf(artistId)};
-
-        Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, selection, selectionArgs, null);
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                trackModels.add(loadTrackModel(cursor));
-            }
-
-            cursor.close();
-        }
-
-        return trackModels;
+    public IterableCursor<AlbumModel> queryAllAlbums() {
+        Cursor cursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, null, null, null);
+        Cursor trackCursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        return new AlbumModel.AlbumModelCursor(cursor, trackCursor);
     }
 
-    public AlbumModel getAlbumById(long id) {
-        AlbumModel albumModel = null;
+    public IterableCursor<ArtistModel> queryAllArtists() {
+        Cursor cursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null, null, null, null);
+        Cursor albumCursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, null, null, null);
+        Cursor trackCursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        return new ArtistModel.ArtistModelCursor(cursor, albumCursor, trackCursor);
+    }
 
-        ContentResolver contentResolver = mContext.getContentResolver();
-        String[] projection = {
-                MediaStore.Audio.AlbumColumns.ALBUM,
-                MediaStore.Audio.AlbumColumns.ALBUM_ART,
+    public IterableCursor<TrackModel> queryTracksByArtistId(long artistId) {
+        String selection = MediaStore.Audio.Media.ARTIST_ID + " = ?";
+
+        String[] selectionArgs = {
+                String.valueOf(artistId)
         };
-        String selection = MediaStore.Audio.Albums._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
-        Cursor cursor = contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection,
-                selection, selectionArgs, null);
-        if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
-            String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM));
-            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AlbumColumns.ALBUM_ART));
-            albumModel = new AlbumModel();
-            albumModel.setAlbumArtPath(path);
-            albumModel.setName(name);
-        }
-        cursor.close();
-        return albumModel;
+
+        Cursor cursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, selection, selectionArgs, null);
+        return new TrackModel.TrackModelCursor(cursor);
     }
 
-    public ArtistModel getArtistById(long id) {
-        ArtistModel artistModel = null;
-
-        ContentResolver contentResolver = mContext.getContentResolver();
-        String[] projection = {
-                MediaStore.Audio.ArtistColumns.ARTIST
-        };
-        String selection = MediaStore.Audio.Artists._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
-        Cursor cursor = contentResolver.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, projection,
-                selection, selectionArgs, null);
-        if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
-            String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
-            artistModel = new ArtistModel();
-            artistModel.setArtistName(name);
+    public ArtistModel queryArtistById(long id) {
+        Cursor cursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null, null, null, null);
+        Cursor albumCursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, null, null, null);
+        Cursor trackCursor = mContext.getContentResolver()
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        ArtistModel.ArtistModelCursor artistModels = new ArtistModel.ArtistModelCursor(cursor, albumCursor, trackCursor);
+        if (artistModels.getCount() > 0) {
+            return artistModels.peek();
+        } else {
+            return null;
         }
-        cursor.close();
-        return artistModel;
     }
 }

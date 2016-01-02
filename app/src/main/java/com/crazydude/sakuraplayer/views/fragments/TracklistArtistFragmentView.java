@@ -12,6 +12,7 @@ import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.gui.decorators.DividerItemDecoration;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.venmo.cursor.IterableCursor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -51,8 +52,8 @@ public class TracklistArtistFragmentView {
         return mArtistAdapter.getData(position);
     }
 
-    public void setData(Cursor cursor) {
-        mArtistAdapter.setCursor(cursor);
+    public void setData(IterableCursor<ArtistModel> data) {
+        mArtistAdapter.setCursor(data);
     }
 
     public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {

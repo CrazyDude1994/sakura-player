@@ -1,6 +1,7 @@
 package com.crazydude.sakuraplayer.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public class PlaylistModel {
 
-    private ArrayList<TrackModel> mTracks;
+    private List<TrackModel> mTracks;
     private String mName;
 }

@@ -13,7 +13,9 @@ import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
 import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
+import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
+import com.venmo.cursor.IterableCursor;
 
 import java.util.ArrayList;
 
@@ -66,8 +68,8 @@ public class ArtistFragmentView {
         mArtistName.setText(artistName);
     }
 
-    public void setData(ArrayList<TrackModel> cursor) {
-//        mTracklistAdapter.setCursor(cursor);
+    public void setData(IterableCursor<TrackModel> cursor) {
+        mTracklistAdapter.setCursor(cursor);
     }
 
     public TrackModel getData(int position) {
