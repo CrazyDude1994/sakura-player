@@ -1,75 +1,75 @@
 package com.crazydude.sakuraplayer.managers;
 
+import android.content.Context;
+
+import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.common.Constants;
 import com.crazydude.sakuraplayer.common.Utils;
-import com.crazydude.sakuraplayer.interfaces.Callbacks.OnResponseListener;
+import com.crazydude.sakuraplayer.events.NetworkErrorEvent;
+import com.crazydude.sakuraplayer.exceptions.LastfmException;
 import com.crazydude.sakuraplayer.interfaces.LastfmInterface;
-import com.crazydude.sakuraplayer.interfaces.Preferences_;
+import com.crazydude.sakuraplayer.models.net.AlbumResponse;
 import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 import com.crazydude.sakuraplayer.models.net.RecommendationsResponse;
 import com.crazydude.sakuraplayer.models.net.SessionResponse;
+import com.squareup.otto.Bus;
 
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.sharedpreferences.Pref;
-
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.TreeMap;
 
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
+import javax.inject.Named;
+
+import retrofit.GsonConverterFactory;
+import retrofit.HttpException;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by CrazyDude on 15.03.2015.
  */
-@EBean(scope = EBean.Scope.Singleton)
 public class LastfmApiManager {
 
-    @Bean
-    Utils mUtils;
+    private Utils mUtils;
 
-    @Pref
-    Preferences_ mPreferences;
+    private LastfmInterface mLastfmInterface;
+    private Bus mBus;
+    private Context mContext;
+    private PreferencesManager mPreferencesManager;
 
-    LastfmInterface mLastfmInterface;
+    public LastfmApiManager(Context context, Utils utils, Bus bus, PreferencesManager preferencesManager) {
+        mUtils = utils;
+        mBus = bus;
+        mContext = context;
+        mPreferencesManager = preferencesManager;
 
-    public LastfmApiManager() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.LASTFM_API_ROOT_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.LASTFM_API_ROOT_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
-        mLastfmInterface = restAdapter.create(LastfmInterface.class);
+        mLastfmInterface = retrofit.create(LastfmInterface.class);
     }
 
-    @Background
-    public void login(String username, String password, OnResponseListener<SessionResponse> callback) {
+    public Observable<SessionResponse> login(String username, String password) {
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.put("username", username);
         treeMap.put("password", password);
         treeMap.put("method", "auth.getMobileSession");
         String apiSig = mUtils.getSignature(treeMap);
-        try {
-            SessionResponse response = mLastfmInterface.login(username, password, Constants.LASTFM_API_KEY, apiSig);
-            checkForErrors(response);
-            if (callback != null) {
-                callback.onSuccess(response);
-            }
-        } catch (LastfmError lastfmError) {
-            if (callback != null) {
-                callback.onLastfmError(lastfmError.getMessage(),
-                        lastfmError.getCode());
-            }
-        } catch (RetrofitError error) {
-            if (callback != null) {
-                callback.onNetworkError(error.getMessage());
-            }
-        }
+        return mLastfmInterface.login(username, password, Constants.LASTFM_API_KEY, apiSig)
+                .compose(applyTransformers())
+                .doOnNext(sessionResponse -> mPreferencesManager.saveToken(sessionResponse.getSession().getKey()));
     }
 
-    @Background
-    public void getRecommendedArtists(int page, int limit, OnResponseListener<RecommendationsResponse> callback) {
+    public Observable<RecommendationsResponse> getRecommendedArtists(int page, int limit) {
         String session = getUserSession();
         if (!session.isEmpty()) {
             TreeMap<String, String> treeMap = new TreeMap<>();
@@ -78,75 +78,77 @@ public class LastfmApiManager {
             treeMap.put("method", "user.getRecommendedArtists");
             treeMap.put("sk", session);
             String apiSig = mUtils.getSignature(treeMap);
-            try {
-                RecommendationsResponse response = mLastfmInterface.getRecommendedArtists(page, limit,
-                        Constants.LASTFM_API_KEY, apiSig, session);
-                checkForErrors(response);
-                if (callback != null) {
-                    callback.onSuccess(response);
-                }
-            } catch (LastfmError lastfmError) {
-                if (callback != null) {
-                    callback.onLastfmError(lastfmError.getMessage(),
-                            lastfmError.getCode());
-                }
-            } catch (RetrofitError error) {
-                if (callback != null) {
-                    callback.onNetworkError(error.getMessage());
-                }
-            }
+
+            return mLastfmInterface.getRecommendedArtists(page, limit,
+                    Constants.LASTFM_API_KEY, apiSig, session).compose(applyTransformers());
         }
+
+        return Observable.empty();
     }
 
-    @Background
-    public void getArtistInfo(String name, String mbid, String lang,
-                       OnResponseListener<ArtistInfoResponse> callback) {
+    public Observable<ArtistInfoResponse> getArtistInfo(String name, String mbid, String lang) {
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.put("name", name);
         treeMap.put("mbid", mbid);
         treeMap.put("lang", lang);
         treeMap.put("method", "artist.getInfo");
         String apiSig = mUtils.getSignature(treeMap);
-        try {
-            ArtistInfoResponse response = mLastfmInterface.getArtistInfo(name, mbid, lang,
-                    Constants.LASTFM_API_KEY, apiSig);
-            checkForErrors(response);
-            if (callback != null) {
-                callback.onSuccess(response);
-            }
-        } catch (LastfmError lastfmError) {
-            if (callback != null) {
-                callback.onLastfmError(lastfmError.getMessage(),
-                        lastfmError.getCode());
-            }
-        } catch (RetrofitError error) {
-            if (callback != null) {
-                callback.onNetworkError(error.getMessage());
-            }
+        return mLastfmInterface.getArtistInfo(name, mbid, lang,
+                Constants.LASTFM_API_KEY, apiSig).compose(applyTransformers()).compose(applyTransformers());
+    }
+
+    public Observable<AlbumResponse> getNewReleases(String username) {
+        if (username == null) {
+//            username = mPreferences.lastfmUsername();
         }
+        return mLastfmInterface.getNewReleases(username, Constants.LASTFM_API_KEY).compose(applyTransformers());
     }
 
     private String getUserSession() {
-        return mPreferences.lastfmToken().getOr("");
+        return mPreferencesManager.getToken();
     }
 
-    private void checkForErrors(ErrorResponse response) throws LastfmError {
-        if (response.getError() != null) {
-            throw new LastfmError(response.getMessage(), response.getError());
-        }
+    private <T> Observable.Transformer<T, T> applySchedulers() {
+        return observable -> observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public class LastfmError extends Exception {
+    private <T extends ErrorResponse> Observable.Transformer<T, T> applyErrorChecker() {
+        return observable -> observable.first(t -> {
+            if (t.getError() != null) {
+                throw new LastfmException(t.getMessage(), t.getError());
+            }
+            return true;
+        });
+    }
 
-        private Integer code;
-
-        public LastfmError(String message, Integer code) {
-            super(message);
-            this.code = code;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
+    private <T extends ErrorResponse> Observable.Transformer<T, T> applyTransformers() {
+        return observable -> observable
+                .compose(applySchedulers())
+                .compose(applyErrorChecker())
+                .onErrorResumeNext(throwable -> {
+                    if (throwable instanceof SocketException) {
+                        mBus.post(new NetworkErrorEvent(mContext.getString(R.string.network_error),
+                                mContext.getString(R.string.error_check_your_net_and_retry)));
+                        return Observable.empty();
+                    } else if (throwable instanceof SocketTimeoutException) {
+                        mBus.post(new NetworkErrorEvent(mContext.getString(R.string.network_timeout),
+                                mContext.getString(R.string.error_check_your_net_and_retry)));
+                        return Observable.empty();
+                    } else if (throwable instanceof LastfmException) {
+                        return Observable.error(throwable);
+                    } else if (throwable instanceof IOException) {
+                        mBus.post(new NetworkErrorEvent(mContext.getString(R.string.network_error),
+                                mContext.getString(R.string.error_check_your_net_and_retry)));
+                        return Observable.empty();
+                    } else if (throwable instanceof HttpException) {
+                        mBus.post(new NetworkErrorEvent(mContext.getString(R.string.network_error),
+                                mContext.getString(R.string.server_error)));
+                        return Observable.empty();
+                    } else {
+                        return Observable.error(throwable);
+                    }
+                });
     }
 }

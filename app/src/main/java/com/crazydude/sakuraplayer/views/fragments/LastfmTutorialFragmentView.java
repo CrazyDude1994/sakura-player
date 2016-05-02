@@ -2,9 +2,11 @@ package com.crazydude.sakuraplayer.views.fragments;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.graphics.Point;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -12,45 +14,47 @@ import android.widget.Button;
 import com.andraskindler.parallaxviewpager.ParallaxViewPager;
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.LastfmTutorialPagerAdapter;
+import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.ViewById;
-
 import java.util.HashSet;
+
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-@EBean
-public class LastfmTutorialFragmentView extends BaseFragmentView implements ViewPager.OnPageChangeListener {
+public class LastfmTutorialFragmentView implements ViewPager.OnPageChangeListener {
 
-    @ViewById(R.id.fragment_lastfm_tutorial_viewpager)
+    @Bind(R.id.fragment_lastfm_tutorial_viewpager)
     ParallaxViewPager mViewPager;
 
-    @ViewById(R.id.fragment_lastfm_tutorial_indicator)
+    @Bind(R.id.fragment_lastfm_tutorial_indicator)
     CirclePageIndicator mPageIndicator;
 
-    @ViewById(R.id.fragment_lastfm_tutorial_login_button)
+    @Bind(R.id.fragment_lastfm_tutorial_login_button)
     Button mLoginButton;
 
-    @ViewById(R.id.fragment_lastfm_tutorial_cancel_button)
+    @Bind(R.id.fragment_lastfm_tutorial_cancel_button)
     Button mCancelButton;
 
-    @ViewById(R.id.fragment_lastfm_tutorial_button_container)
+    @Bind(R.id.fragment_lastfm_tutorial_button_container)
     View mButtonContainer;
 
-    @RootContext
-    FragmentActivity mContext;
+    AppCompatActivity mActivity;
 
     private LastfmTutorialPagerAdapter mPagerAdapter;
-    private HashSet<ViewPager.OnPageChangeListener> mOnPageChangeListeners = new HashSet<>();;
+    private HashSet<ViewPager.OnPageChangeListener> mOnPageChangeListeners = new HashSet<>();
 
-    @AfterViews
-    void initViews() {
-        mPagerAdapter = new LastfmTutorialPagerAdapter(mContext.getSupportFragmentManager());
+    public LastfmTutorialFragmentView(AppCompatActivity activity) {
+        mActivity = activity;
+    }
+
+    public void initViews() {
+        mPagerAdapter = new LastfmTutorialPagerAdapter(mActivity.getSupportFragmentManager());
 
         mViewPager.setAdapter(mPagerAdapter);
         mPageIndicator.setViewPager(mViewPager);
@@ -60,7 +64,7 @@ public class LastfmTutorialFragmentView extends BaseFragmentView implements View
 
     public void showLoginButton() {
         if (mButtonContainer.getVisibility() == View.GONE) {
-            Display mDisplay = mContext.getWindowManager().getDefaultDisplay();
+            Display mDisplay = mActivity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
             mDisplay.getSize(size);
             mButtonContainer.setTranslationY(0);
@@ -94,7 +98,7 @@ public class LastfmTutorialFragmentView extends BaseFragmentView implements View
 
     public void hideLoginButton() {
         if (mButtonContainer.getVisibility() == View.VISIBLE) {
-            Display mDisplay = mContext.getWindowManager().getDefaultDisplay();
+            Display mDisplay = mActivity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
             mDisplay.getSize(size);
             Animator animator = ObjectAnimator.ofFloat(mButtonContainer, "translationY", 0,

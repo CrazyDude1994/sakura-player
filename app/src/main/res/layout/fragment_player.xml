@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:id="@+id/fragment_player_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -36,7 +37,8 @@
         android:id="@+id/fragment_player_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/fragment_player_seekbar" />
+        android:layout_above="@+id/fragment_player_seekbar"
+        android:layout_below="@id/fragment_player_header" />
 
     <LinearLayout
         android:id="@+id/fragment_player_controls"
@@ -46,6 +48,14 @@
         android:layout_centerHorizontal="true"
         android:background="@color/primary"
         android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/fragment_player_button_shuffle"
+            android:layout_width="@dimen/touchable_ui"
+            android:layout_height="@dimen/touchable_ui"
+            android:layout_margin="@dimen/ui_elements_margin"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_shuffle" />
 
         <ImageButton
             android:id="@+id/fragment_player_button_prev"
@@ -70,6 +80,14 @@
             android:layout_margin="@dimen/ui_elements_margin"
             android:background="@color/transparent"
             android:src="@drawable/ic_skip_next" />
+
+        <ImageButton
+            android:id="@+id/fragment_player_button_repeat"
+            android:layout_width="@dimen/touchable_ui"
+            android:layout_height="@dimen/touchable_ui"
+            android:layout_margin="@dimen/ui_elements_margin"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_repeat" />
     </LinearLayout>
 
     <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar

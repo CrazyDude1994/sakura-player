@@ -2,48 +2,71 @@ package com.crazydude.sakuraplayer.views.activities;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.models.TrackModel;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
+import java.io.File;
+
+import butterknife.Bind;
+import butterknife.BindColor;
 
 import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnAfterSplashScreenListener;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
 public class HomeActivityView extends BaseActivityView implements Animator.AnimatorListener {
 
-    @RootContext
-    AppCompatActivity mActivity;
-
-    @ViewById(R.id.activity_home_splash_screen)
+    @Bind(R.id.activity_home_splash_screen)
     View mSplashScreenImage;
 
-    @ViewById(R.id.activity_home_toolbar)
+    @Bind(R.id.activity_home_toolbar)
     Toolbar mToolbar;
 
-    @ViewById(R.id.activity_home_toolbar_shadow)
-    View mToolbarShadow;
-
-    @ViewById(R.id.navigation_drawer)
+    @Bind(R.id.navigation_drawer)
     DrawerLayout mDrawerLayout;
+
+    @Bind(R.id.activity_home_view_player_widget)
+    RelativeLayout mPlayerWidget;
+
+    @Bind(R.id.view_player_widget_artist)
+    TextView mPlayerWidgetArtist;
+
+    @Bind(R.id.view_player_widget_song)
+    TextView mPlayerWidgetSong;
+
+    @Bind(R.id.view_player_widget_equalizer_image)
+    ImageView mEqualizerImage;
+
+    @Bind(R.id.view_player_widget_album_art)
+    CircularImageView mWidgetAlbumArt;
+
+    @BindColor(R.color.accent)
+    int mAccentColor;
 
     private OnAfterSplashScreenListener mOnAfterSplashScreen;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    @AfterViews
+    public HomeActivityView(AppCompatActivity activity) {
+        super(activity);
+
+        initViews();
+    }
+
     void initViews() {
         initToolbar();
         initNavigationDrawer();
@@ -53,38 +76,64 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
         mOnAfterSplashScreen = listener;
     }
 
-    @UiThread
+    public void setPlayerWidgetData(TrackModel trackModel) {
+        mPlayerWidgetArtist.setText(trackModel.getArtistName());
+        mPlayerWidgetSong.setText(trackModel.getTrackName());
+        if (!trackModel.getAlbumArtPath().isEmpty()) {
+            File file = new File(trackModel.getAlbumArtPath());
+            Picasso.with(mAppCompatActivity)
+                    .load(file)
+                    .resizeDimen(R.dimen.list_rounded_image_width_height, R.dimen.list_rounded_image_width_height)
+                    .error(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor))
+                    .into(mWidgetAlbumArt);
+        } else {
+            mWidgetAlbumArt.setImageDrawable(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor));
+        }
+    }
+
+    public void showPlayerWidget() {
+        mPlayerWidget.setVisibility(View.VISIBLE);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mEqualizerImage.getBackground();
+        animationDrawable.start();
+    }
+
+    public void hidePlayerWidget() {
+        mPlayerWidget.setVisibility(View.GONE);
+    }
+
     public void showToolbar() {
         mToolbar.setVisibility(View.VISIBLE);
     }
 
-    @UiThread
     public void hideToolbar() {
         mToolbar.setVisibility(View.INVISIBLE);
     }
 
-    @UiThread
+    @Deprecated
     public void showToolbarShadow() {
-        mToolbarShadow.setVisibility(View.VISIBLE);
+
     }
 
-    @UiThread
+    @Deprecated
     public void hideToolbarShadow() {
-        mToolbarShadow.setVisibility(View.GONE);
+
     }
 
     private void initToolbar() {
-        mActivity.setSupportActionBar(mToolbar);
+        mAppCompatActivity.setSupportActionBar(mToolbar);
     }
 
     private void initNavigationDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, mToolbar,
+        mDrawerToggle = new ActionBarDrawerToggle(mAppCompatActivity, mDrawerLayout, mToolbar,
                 R.string.open_drawer, R.string.close_drawer);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
     }
 
-    @UiThread
+    public void hideSplashScreen() {
+        mSplashScreenImage.setVisibility(View.GONE);
+    }
+
     public void hideSplashScreen(final int duration) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

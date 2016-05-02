@@ -1,74 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_artist_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:visibility="gone">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/fragment_artist_header"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/fragment_artist_image_height">
 
-        <ImageView
-            android:id="@+id/fragment_artist_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            tools:background="@color/black" />
-
-        <TextView
-            android:id="@+id/fragment_artist_name"
-            style="@style/Text.ArtistTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/bg_artist_name_gradient"
-            android:padding="@dimen/ui_elements_padding"
-            android:textColor="@color/white"
-            tools:text="Sum 41" />
-
-        <org.apmem.tools.layouts.FlowLayout
-            android:id="@+id/fragment_artist_tag_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="wrap_content"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/fragment_artist_coordinator"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/fragment_artist_summary"
+                android:id="@+id/fragment_artist_name"
+                style="@style/Text.ArtistTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/ui_elements_padding" />
-
-            <TextView
-                android:id="@+id/fragment_artist_similar_text"
-                style="@style/Text.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/ui_elements_padding"
-                android:paddingLeft="@dimen/ui_elements_padding"
-                android:text="@string/similiar_artists" />
+                android:layout_alignParentTop="true"
+                android:background="@color/primary"
+                android:padding="@dimen/ui_elements_padding"
+                android:textColor="@color/white"
+                tools:text="Sum 41" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_recommendations_recycler"
+                android:id="@+id/fragment_artist_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/artist_image_height" />
-
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/fragment_artist_recycler_top_margin" />
         </LinearLayout>
 
-    </ScrollView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fragmet_artist_add_to_playlist_floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_playlist_add_white_48dp"
+            app:layout_anchor="@id/fragment_artist_name"
+            app:layout_anchorGravity="bottom|right|end" />
+    </android.support.design.widget.CoordinatorLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

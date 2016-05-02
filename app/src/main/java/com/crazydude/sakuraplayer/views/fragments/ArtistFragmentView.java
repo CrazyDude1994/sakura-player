@@ -1,140 +1,78 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v7.graphics.Palette;
-import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.database.Cursor;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.ColorRes;
-import org.apmem.tools.layouts.FlowLayout;
+import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
+import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
+import com.crazydude.sakuraplayer.interfaces.Callbacks;
+import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.crazydude.sakuraplayer.models.TrackModel;
+import com.venmo.cursor.IterableCursor;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import butterknife.Bind;
+import io.codetail.animation.RevealAnimator;
+import io.codetail.animation.SupportAnimator;
+import io.codetail.widget.RevealFrameLayout;
+
 /**
- * Created by kartavtsev.s on 08.06.2015.
+ * Created by Crazy on 13.06.2015.
  */
-@EBean
-public class ArtistFragmentView extends BaseFragmentView implements Palette.PaletteAsyncListener,
-        Target {
+public class ArtistFragmentView {
 
-    @RootContext
-    Context mContext;
+    @Bind(R.id.fragmet_artist_add_to_playlist_floating_button)
+    FloatingActionButton mAddToPlaylistButton;
 
-    @ViewById(R.id.fragment_artist_image)
-    ImageView mArtistImage;
+    @Bind(R.id.fragment_artist_recycler)
+    RecyclerView mRecyclerView;
 
-    @ViewById(R.id.fragment_artist_name)
+    @Bind(R.id.fragment_artist_name)
     TextView mArtistName;
 
-    @ViewById(R.id.fragment_artist_tag_layout)
-    FlowLayout mTagLayout;
+    @Bind(R.id.fragment_artist_coordinator)
+    CoordinatorLayout mCoordinatorLayout;
 
-    @ViewById(R.id.fragment_artist_header)
-    RelativeLayout mHeaderLayout;
+    @Inject
+    TracklistAdapter mTracklistAdapter;
 
-    @ViewById(R.id.fragment_artist_summary)
-    TextView mSummaryText;
+    @Inject
+    @Named("Activity")
+    Context mContext;
 
-    @ViewById(R.id.fragment_artist_layout)
-    LinearLayout mLinearLayout;
+    private LinearLayoutManager mLinearLayoutManager;
 
-    @ViewById(R.id.fragment_artist_similar_text)
-    TextView mSimilarText;
-
-    @ColorRes(R.color.white)
-    int mWhiteColor;
-
-    private ArrayList<TextView> mTagsViews = new ArrayList<>();
-
-    @AfterViews
-    void initViews() {
+    public void initViews() {
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mTracklistAdapter);
     }
 
-    private TextView generateTagTextView(String text) {
-        TextView textView = (TextView) LayoutInflater.from(mContext).inflate(R.layout.view_tag, null);
-        FlowLayout.LayoutParams layoutParams = new
-                FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        int tagMargin = mContext.getResources().getDimensionPixelSize(R.dimen.ui_elements_margin) / 4;
-        layoutParams.setMargins(tagMargin, tagMargin, tagMargin, tagMargin);
-        textView.setText(text);
-        textView.setTextColor(mWhiteColor);
-        textView.setLayoutParams(layoutParams);
-        return textView;
+    public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {
+        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
+                mRecyclerView));
     }
 
-    @UiThread
-    public void setData(ArtistInfoResponse data) {
-        mArtistName.setText(data.getArtist().getName());
-        mSummaryText.setText(Html.fromHtml(data.getArtist().getBio().getSummary()));
-        for (ArtistInfoResponse.Artist.Tags.Tag tag : data.getArtist().getTags().getTag()) {
-            TextView textView = generateTagTextView(tag.getName());
-            mTagLayout.addView(textView);
-            mTagsViews.add(textView);
-        }
+    public void setArtistName(String artistName) {
+        mArtistName.setText(artistName);
     }
 
-    @UiThread
-    public void showContent() {
-        mLinearLayout.setVisibility(View.VISIBLE);
+    public void setData(IterableCursor<TrackModel> cursor) {
+        mTracklistAdapter.setCursor(cursor);
     }
 
-    @UiThread
-    public void hideContent() {
-        mLinearLayout.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onGenerated(Palette palette) {
-        int swatchNumber = 0;
-        for (TextView tag : mTagsViews) {
-            GradientDrawable drawable = (GradientDrawable) tag.getBackground();
-            Palette.Swatch currentSwatch = palette.getSwatches().get(swatchNumber);
-            drawable.setColor(currentSwatch.getRgb());
-            tag.setTextColor(currentSwatch.getTitleTextColor());
-            swatchNumber++;
-            if (swatchNumber >= palette.getSwatches().size()) {
-                swatchNumber = 0;
-            }
-        }
-        Palette.Swatch backgroundSwatch = palette.getSwatches().get(0);
-        mLinearLayout.setBackgroundColor(backgroundSwatch.getRgb());
-        mSummaryText.setTextColor(backgroundSwatch.getBodyTextColor());
-        mSimilarText.setTextColor(backgroundSwatch.getTitleTextColor());
-    }
-
-    @Override
-    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-        mArtistImage.setImageBitmap(bitmap);
-        Palette.generateAsync(bitmap, this);
-    }
-
-    @Override
-    public void onBitmapFailed(Drawable errorDrawable) {
-
-    }
-
-    @Override
-    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
+    public TrackModel getData(int position) {
+        return mTracklistAdapter.getData(position);
     }
 }

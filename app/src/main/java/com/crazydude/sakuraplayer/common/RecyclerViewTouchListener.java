@@ -49,4 +49,9 @@ public class RecyclerViewTouchListener extends GestureDetector.SimpleOnGestureLi
         View child = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
         return child;
     }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
 }

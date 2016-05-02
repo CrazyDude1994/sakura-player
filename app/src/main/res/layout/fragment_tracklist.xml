@@ -1,19 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.viewpagerindicator.TabPageIndicator
-        android:id="@+id/fragment_tracklist_viewpager_titles"
-        android:theme="@style/ViewpagerIndicatorTabs"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    <android.support.design.widget.TabLayout
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:id="@+id/fragment_tracklist_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/fragment_tracklist_viewpager"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
-
+        android:layout_weight="1"/>
 
 </LinearLayout>

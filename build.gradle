@@ -6,16 +6,26 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
     }
 }
+
 
 allprojects {
     repositories {
         jcenter()
         mavenCentral()
         mavenLocal()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            url 'http://dl.bintray.com/amulyakhare/maven'
+        }
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }

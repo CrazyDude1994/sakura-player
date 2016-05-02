@@ -3,6 +3,7 @@ package com.crazydude.sakuraplayer.interfaces;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.models.net.ErrorResponse;
 
@@ -14,52 +15,52 @@ import java.util.List;
  */
 public interface Callbacks {
 
-    public interface OnAfterSplashScreenListener {
-        public void onAfterSplashScreen();
+    interface OnAfterSplashScreenListener {
+        void onAfterSplashScreen();
     }
 
-    public interface OnTracksLoadedListener {
-        public void onTrackLoaded(List<TrackModel> tracks);
+    interface OnTracksLoadedListener {
+        void onTrackLoaded(TrackModel trackModel);
+        void onTrackLoaded(ArrayList<TrackModel> tracks);
     }
 
-    public interface RecyclerViewClickListener {
+    interface RecyclerViewClickListener {
         void onClick(View view, int position);
     }
 
-    public interface OnArtistsLoadedListener {
-        public void onArtistsLoaded(ArrayList<ArtistModel> artists);
+    interface OnArtistsLoadedListener {
+        void onArtistsLoaded(ArrayList<ArtistModel> artists);
     }
 
-    public interface OnLastfmTutorialCompletedListener {
-        public void onTutorialCompleted(boolean isLoginToLastfm);
+    interface OnLastfmTutorialCompletedListener {
+        void onTutorialCompleted(boolean isLoginToLastfm);
     }
 
-    public interface OnLastfmLoginListener {
-        public void onLastfmLogin(String login, String password);
+    interface OnLastfmLoginListener {
+        void onLastfmLogin(String login, String password);
 
-        public void onLastfmRegister();
+        void onLastfmRegister();
     }
 
-    public interface OnResponseListener<T extends ErrorResponse> {
-        public void onSuccess(T response);
-
-        public void onLastfmError(String message, Integer code);
-
-        public void onNetworkError(String message);
+    interface OnSelectedLastfmArtistListener {
+        void onSelecteLastfmArtist(String name, String mbid);
     }
 
-    public interface OnSelectedArtistListener {
-        public void onSelectedArtist(String name, String mbid);
+    interface OnSelectedTrackListener {
+        void onSelectedTrack(TrackModel track);
     }
 
-    public interface OnSelectedTrackListener {
-        public void onSelectedTrack(TrackModel track);
+    interface OnSelectedArtistListener {
+        void onSelectedArtist(ArtistModel artist);
     }
 
-    public interface OnPlayerListener {
-        public void onPauseOrResume();
-        public void onNext();
-        public void onPrevious();
-        public void onSeek(int progress);
+    interface OnPlayerListener {
+        void onPauseOrResume();
+        void onNext();
+        void onPrevious();
+        void onSeek(int progress);
+        void onSetPlaylist(PlaylistModel playlist);
+        void onSwitchShuffle(boolean isShuffle);
+        void onSwitchRepeat(boolean isRepeat);
     }
 }

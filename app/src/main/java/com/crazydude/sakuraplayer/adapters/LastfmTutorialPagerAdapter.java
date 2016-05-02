@@ -4,7 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialTextFragment_;
+import com.crazydude.sakuraplayer.gui.fragments.LastfmTutorialTextFragment;
+
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
@@ -25,9 +26,7 @@ public class LastfmTutorialPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        return LastfmTutorialTextFragment_.builder()
-                .tutorialText(TUTORIAL_TEXTS[i])
-                .build();
+        return LastfmTutorialTextFragment.newInstance(TUTORIAL_TEXTS[i]);
     }
 
     @Override

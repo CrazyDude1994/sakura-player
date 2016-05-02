@@ -1,53 +1,48 @@
 package com.crazydude.sakuraplayer.models;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import android.database.Cursor;
+import android.provider.MediaStore;
+
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.venmo.cursor.IterableCursorWrapper;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Created by Crazy on 26.04.2015.
  */
-@Table(name = "Tracks")
-public class TrackModel extends Model {
+@Data
+@Accessors(prefix = "m")
+public class TrackModel {
 
-    @Column(name = "Artist")
-    private ArtistModel mArtist;
-    @Column(name = "SongName")
+    private String mArtistName;
     private String mTrackName;
-    @Column(name = "AlbumName")
-    private String mAlbumName;
-    @Column(name = "Path")
     private String mTrackPath;
+    private String mAlbumName;
+    private long mTrackId;
+    private String mAlbumArtPath;
 
-    public ArtistModel getArtist() {
-        return mArtist;
-    }
+    public static class TrackModelCursor extends IterableCursorWrapper<TrackModel> {
 
-    public void setArtist(ArtistModel mArtist) {
-        this.mArtist = mArtist;
-    }
+        private MusicLibraryManager mMusicLibraryManager;
 
-    public String getTrackName() {
-        return mTrackName;
-    }
+        public TrackModelCursor(Cursor cursor, MusicLibraryManager musicLibraryManager) {
+            super(cursor);
+            mMusicLibraryManager = musicLibraryManager;
+        }
 
-    public void setTrackName(String mTrackName) {
-        this.mTrackName = mTrackName;
-    }
-
-    public String getAlbumName() {
-        return mAlbumName;
-    }
-
-    public void setAlbumName(String mAlbumName) {
-        this.mAlbumName = mAlbumName;
-    }
-
-    public void setTrackPath(String trackPath) {
-        this.mTrackPath = trackPath;
-    }
-
-    public String getTrackPath() {
-        return mTrackPath;
+        @Override
+        public TrackModel peek() {
+            TrackModel trackModel = new TrackModel();
+            trackModel.setTrackName(getString(getColumnIndex(MediaStore.Audio.Media.TITLE)));
+            trackModel.setTrackId(getLong(getColumnIndex(MediaStore.Audio.Media._ID)));
+            trackModel.setTrackPath(getString(getColumnIndex(MediaStore.Audio.Media.DATA)));
+            trackModel.setArtistName(getString(MediaStore.Audio.Media.ARTIST, ""));
+            trackModel.setAlbumName(getString(MediaStore.Audio.Media.ALBUM, ""));
+            AlbumModel albumModel = mMusicLibraryManager.queryAlbumById(getLong(getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+            trackModel.setAlbumArtPath(albumModel == null ? "" : albumModel.getAlbumArtPath());
+            return trackModel;
+        }
     }
 }

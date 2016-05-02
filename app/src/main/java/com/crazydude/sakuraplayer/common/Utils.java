@@ -1,20 +1,37 @@
 package com.crazydude.sakuraplayer.common;
 
-import org.androidannotations.annotations.EBean;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Environment;
+
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
+import com.crazydude.sakuraplayer.models.TrackModel;
+import com.squareup.otto.Bus;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
  * Created by CrazyDude on 14.03.2015.
  */
-@EBean(scope = EBean.Scope.Singleton)
 public class Utils {
+
+    Context mContext;
+    Bus mBus;
+
+    public Utils(Context context, Bus bus) {
+        this.mContext = context;
+        this.mBus = bus;
+    }
 
     private static String convertToHex(byte[] data) {
         StringBuffer buf = new StringBuffer();
@@ -27,19 +44,56 @@ public class Utils {
                 else
                     buf.append((char) ('a' + (halfbyte - 10)));
                 halfbyte = data[i] & 0x0F;
-            } while(two_halfs++ < 1);
+            } while (two_halfs++ < 1);
         }
         return buf.toString();
     }
 
     public static String MD5(String text)
-            throws NoSuchAlgorithmException, UnsupportedEncodingException  {
+            throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md;
         md = MessageDigest.getInstance("MD5");
         byte[] md5hash;
         md.update(text.getBytes("UTF-8"), 0, text.length());
         md5hash = md.digest();
         return convertToHex(md5hash);
+    }
+
+    public PlaylistModel generateSingleTrackPlaylist(TrackModel model) {
+        ArrayList<TrackModel> tracks = new ArrayList<>();
+        tracks.add(model);
+        return new PlaylistModel(tracks, "Current");
+    }
+
+    public void triggerMediaScan() {
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        MediaScanCompletedReceiver receiver = new MediaScanCompletedReceiver((s, uri) -> mBus.post(new UpdateLibraryCompletedEvent()));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+        intentFilter.addDataScheme("file");
+        mContext.registerReceiver(receiver, intentFilter);
+        mBus.post(new UpdateLibraryStartedEvent());
+    }
+
+    private class MediaScanCompletedReceiver extends BroadcastReceiver {
+
+        private MediaScannerConnection.OnScanCompletedListener listener;
+
+        public MediaScanCompletedReceiver(MediaScannerConnection.OnScanCompletedListener listener) {
+            super();
+            this.listener = listener;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (listener != null) {
+                listener.onScanCompleted(null, null);
+            }
+            if (context != null) {
+                context.unregisterReceiver(this);
+            }
+        }
     }
 
     public String getSignature(TreeMap<String, String> params) {

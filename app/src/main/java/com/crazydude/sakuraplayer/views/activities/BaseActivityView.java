@@ -1,57 +1,53 @@
 package com.crazydude.sakuraplayer.views.activities;
 
-import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
 
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
 public class BaseActivityView {
 
-    @RootContext
-    Context mContext;
+    protected AppCompatActivity mAppCompatActivity;
 
-    @ViewById(R.id.activity_home_progressbar)
+    @Bind(R.id.activity_home_progressbar)
     View mProgressBar;
 
-    @ViewById(R.id.activity_home_placeholder_progressbar)
+    @Bind(R.id.activity_home_placeholder_progressbar)
     View mContentProgressBar;
 
-    @UiThread
+    public BaseActivityView(AppCompatActivity activity) {
+        mAppCompatActivity = activity;
+        ButterKnife.bind(this, activity);
+    }
+
     public void showProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
-    @UiThread
     public void hideProgressBar() {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @UiThread
     public void showContentProgressBar() {
         mContentProgressBar.setVisibility(View.VISIBLE);
     }
 
-    @UiThread
     public void hideContentProgressBar() {
         mContentProgressBar.setVisibility(View.GONE);
     }
 
-    @UiThread
     public void showInfoDialog(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+        AlertDialog.Builder builder = new AlertDialog.Builder(mAppCompatActivity)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(mContext.getString(R.string.ok), null);
+                .setPositiveButton(mAppCompatActivity.getString(R.string.ok), null);
 
         AlertDialog dialog = builder.create();
         dialog.show();

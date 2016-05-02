@@ -1,32 +1,91 @@
 package com.crazydude.sakuraplayer;
 
 import android.app.Application;
-import android.content.Context;
 
-import com.activeandroid.query.Select;
-import com.crazydude.sakuraplayer.models.PlaylistModel;
-import com.crazydude.sakuraplayer.models.TrackModel;
+import com.crazydude.sakuraplayer.di.components.ApplicationComponent;
+import com.crazydude.sakuraplayer.di.components.DaggerApplicationComponent;
+import com.crazydude.sakuraplayer.di.modules.ApplicationModule;
+import com.crazydude.sakuraplayer.di.modules.UtilsModule;
+import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
+import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
 
-import org.androidannotations.annotations.EApplication;
+import javax.inject.Inject;
 
-import java.util.ArrayList;
-
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-@EApplication
-public class SakuraPlayerApplication extends com.activeandroid.app.Application {
+@Getter
+@Accessors(prefix = "m")
+public class SakuraPlayerApplication extends Application {
+
+    @Inject
+    Bus mBus;
+
+    private boolean mIsSplashscreenShown = false;
+    private ApplicationComponent mApplicationComponent;
+    private boolean mLibraryUpdating;
 
     @Override
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/Roboto-Regular.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-        );
+                .setDefaultFontPath("fonts/Roboto-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build());
+
+        mApplicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .utilsModule(new UtilsModule())
+                .build();
+        mApplicationComponent.inject(this);
+
+        mBus.register(this);
+    }
+
+    @Produce
+    public UpdateLibraryStartedEvent produceTracklistUpdate() {
+        if (isLibraryUpdating()) {
+            return new UpdateLibraryStartedEvent();
+        } else {
+            return null;
+        }
+    }
+
+    @Subscribe
+    public void onLibraryUpdate(RequestUpdateLibraryEvent event) {
+        mLibraryUpdating = true;
+    }
+
+    @Subscribe
+    public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
+        mLibraryUpdating = false;
+    }
+
+    public boolean isIsSplashscreenShown() {
+        return mIsSplashscreenShown;
+    }
+
+    public void setIsSplashscreenShown(boolean mIsSplashscreenShown) {
+        this.mIsSplashscreenShown = mIsSplashscreenShown;
+    }
+
+    public void setIsLibraryUpdating(boolean updating) {
+        mLibraryUpdating = updating;
+    }
+
+    public boolean isLibraryUpdating() {
+        return mLibraryUpdating;
+    }
+
+    public ApplicationComponent getApplicationComponent() {
+        return mApplicationComponent;
     }
 }

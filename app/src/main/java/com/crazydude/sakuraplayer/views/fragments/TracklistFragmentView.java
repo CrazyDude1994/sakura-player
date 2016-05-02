@@ -1,40 +1,35 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
+import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.TracklistPagerAdapter;
-import com.viewpagerindicator.TabPageIndicator;
+import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.ViewById;
+import butterknife.Bind;
 
 /**
  * Created by Crazy on 16.05.2015.
  */
-@EBean
-public class TracklistFragmentView extends BaseFragmentView {
+public class TracklistFragmentView {
 
-    @ViewById(R.id.fragment_tracklist_viewpager)
+    @Bind(R.id.fragment_tracklist_viewpager)
     ViewPager mViewPager;
 
-    @ViewById(R.id.fragment_tracklist_viewpager_titles)
-    TabPageIndicator mTablistIndicator;
+    @Bind(R.id.fragment_tracklist_tabs)
+    TabLayout mTabLayout;
 
-    @RootContext
-    FragmentActivity mContext;
+    private TracklistPagerAdapter mPagerAdapter;
 
-    private PagerAdapter mPagerAdapter;
-
-    @AfterViews
-    void initViews() {
-        mPagerAdapter = new TracklistPagerAdapter(mContext.getSupportFragmentManager());
+    public void initViewPager(TracklistFragment parentFragment) {
+        if (mPagerAdapter == null) {
+            mPagerAdapter = new TracklistPagerAdapter(parentFragment.getChildFragmentManager());
+        }
         mViewPager.setAdapter(mPagerAdapter);
-
-        mTablistIndicator.setViewPager(mViewPager);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

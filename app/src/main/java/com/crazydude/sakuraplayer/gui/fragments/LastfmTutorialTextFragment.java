@@ -1,27 +1,50 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialTextFragmentView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.FragmentArg;
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-@EFragment(R.layout.fragment_lastfm_tutorial_text)
 public class LastfmTutorialTextFragment extends BaseFragment {
 
-    @Bean
+    @Inject
     LastfmTutorialTextFragmentView mLastfmTutorialTextFragmentView;
 
-    @FragmentArg
-    String tutorialText;
+    private String tutorialText;
 
-    @AfterViews
-    void initViews() {
+    public static LastfmTutorialTextFragment newInstance(String tutorialText) {
+        LastfmTutorialTextFragment fragment = new LastfmTutorialTextFragment();
+        fragment.tutorialText = tutorialText;
+        return fragment;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_lastfm_tutorial_text;
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        ButterKnife.bind(mLastfmTutorialTextFragmentView, rootView);
         mLastfmTutorialTextFragmentView.setTutorialText(tutorialText);
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

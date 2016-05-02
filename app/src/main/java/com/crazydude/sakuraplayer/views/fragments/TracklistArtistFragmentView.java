@@ -1,46 +1,66 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.adapters.ArtistAdapter;
+import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
+import com.crazydude.sakuraplayer.gui.decorators.DividerItemDecoration;
+import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.ArtistModel;
+import com.venmo.cursor.IterableCursor;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import java.util.ArrayList;
+import butterknife.Bind;
 
 /**
  * Created by Crazy on 27.05.2015.
  */
-@EBean
-public class TracklistArtistFragmentView extends BaseFragmentView {
+public class TracklistArtistFragmentView {
 
-    @RootContext
-    Context mContext;
-
-    @ViewById(R.id.fragment_tracklist_artist_recycler)
+    @Bind(R.id.fragment_tracklist_artist_recycler)
     RecyclerView mRecyclerView;
 
-    @Bean
+    @Inject
     ArtistAdapter mArtistAdapter;
 
-    @AfterViews
-    void initViews() {
+    @Bind(R.id.fragment_tracklist_artist_refresher)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @Inject
+    @Named("Activity")
+    Context mContext;
+
+    public void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mArtistAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST));
     }
 
-    @UiThread
-    public void setArtistList(ArrayList<ArtistModel> models) {
-        mArtistAdapter.setData(models);
+    public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {
+        mArtistAdapter.setOnRecyclerViewClickListener(listener);
+    }
+
+    public ArtistModel getData(int position) {
+        return mArtistAdapter.getData(position);
+    }
+
+    public void setData(IterableCursor<ArtistModel> data) {
+        mArtistAdapter.setCursor(data);
+    }
+
+    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
+        mSwipeRefreshLayout.setOnRefreshListener(listener);
+    }
+
+    public void setRefreshing(boolean isRefreshing) {
+        mSwipeRefreshLayout.setRefreshing(isRefreshing);
     }
 }

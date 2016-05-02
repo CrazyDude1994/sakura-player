@@ -1,48 +1,46 @@
 package com.crazydude.sakuraplayer.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.gui.views.ArtistView;
-import com.crazydude.sakuraplayer.gui.views.ArtistView_;
 import com.crazydude.sakuraplayer.models.ArtistModel;
 
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import static com.crazydude.sakuraplayer.interfaces.Callbacks.RecyclerViewClickListener;
 
 /**
  * Created by Crazy on 27.05.2015.
  */
-@EBean
-public class ArtistAdapter extends BaseAdapter<ArtistModel> {
+@EqualsAndHashCode(callSuper = false)
+@Data
+@Accessors(prefix = "m")
+public class ArtistAdapter extends BaseCursorAdapter<ArtistModel, ArtistView> {
 
-    @RootContext
-    Context mContext;
+    private Context mContext;
+    private RecyclerViewClickListener mOnRecyclerViewClickListener;
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ArtistView artistView = ArtistView_.build(mContext);
-        return new ViewHolder(artistView);
+    public ArtistAdapter(Context context) {
+        mContext = context;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ArtistView artistView = ((ViewHolder) holder).getView();
-        artistView.setContent(getData(position));
+    public BaseViewHolder<ArtistView> onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new BaseViewHolder<>(new ArtistView(parent.getContext()));
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private ArtistView mAristView;
-
-        public ViewHolder(ArtistView artistView) {
-            super(artistView);
-            this.mAristView = artistView;
-        }
-
-        public ArtistView getView() {
-            return mAristView;
-        }
+    @Override
+    public void onBindViewHolder(BaseViewHolder<ArtistView> holder, int position) {
+        super.onBindViewHolder(holder, position);
+        holder.getView().setRippleCallback(rippleView -> {
+            if (mOnRecyclerViewClickListener != null) {
+                mOnRecyclerViewClickListener.onClick(rippleView, position);
+            }
+        });
     }
 }

@@ -1,101 +1,107 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
-import com.crazydude.sakuraplayer.managers.LastfmApiManager;
-import com.crazydude.sakuraplayer.models.net.ArtistInfoResponse;
-import com.crazydude.sakuraplayer.models.net.ArtistResponse;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.models.PlaylistModel;
+import com.crazydude.sakuraplayer.models.TrackModel;
 import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
-import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
-import com.squareup.picasso.Picasso;
+import com.venmo.cursor.CursorList;
+import com.venmo.cursor.IterableCursor;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.FragmentArg;
-import org.androidannotations.annotations.UiThread;
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
- * Created by kartavtsev.s on 08.06.2015.
+ * Created by Crazy on 13.06.2015.
  */
-@EFragment(R.layout.fragment_artist)
-public class ArtistFragment extends BaseFragment implements
-        Callbacks.OnResponseListener<ArtistInfoResponse>, Callbacks.RecyclerViewClickListener {
+public class ArtistFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener {
 
-    @Bean
+    private static final String KEY_ARTIST_NAME = "artist_name";
+    private static final String KEY_ARTIST_ID = "artist_id";
+
+    @Inject
     ArtistFragmentView mArtistFragmentView;
 
-    @Bean
-    RecommendsFragmentView mRecommendsFragmentView;
+    @Inject
+    MusicLibraryManager mMusicLibraryManager;
 
-    @FragmentArg
-    String artistName;
+    private String mArtistName;
+    private long mArtistId;
 
-    @FragmentArg
-    String mbid;
+    private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
+    private Callbacks.OnPlayerListener mOnPlayerListener;
+    private IterableCursor<TrackModel> mTrackModels;
 
-    @Bean
-    LastfmApiManager mLastfmApiManager;
-
-    private Callbacks.OnSelectedArtistListener mOnSelectedArtistListener;
-
-    @AfterViews
-    void initViews() {
-        mArtistFragmentView.showProgressBar();
-        mRecommendsFragmentView.setOnRecyclerClickListener(this);
-        loadArtistInfo(artistName, mbid);
-    }
-
-    private void loadArtistInfo(String artistName, String mbid) {
-        mLastfmApiManager.getArtistInfo(artistName, mbid, "ru", this);
-    }
-
-    @UiThread
-    void loadArtistImage(String url) {
-        Picasso.with(getActivity())
-                .load(url)
-                .into(mArtistFragmentView);
+    public static ArtistFragment newInstance(String artistName, long artistId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_ARTIST_NAME, artistName);
+        bundle.putLong(KEY_ARTIST_ID, artistId);
+        ArtistFragment artistFragment = new ArtistFragment();
+        artistFragment.setArguments(bundle);
+        return artistFragment;
     }
 
     @Override
-    public void onSuccess(ArtistInfoResponse response) {
-        mArtistFragmentView.hideProgressBar();
-        mArtistFragmentView.showContent();
-        mArtistFragmentView.setData(response);
-        mRecommendsFragmentView.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecommendsFragmentView.setColumnCount(1);
-        mRecommendsFragmentView.setData(response.getArtist().getSimilar().getArtist());
-        loadArtistImage(response.getArtist().getImages().get(3).getUrl()); // achtung!
+    protected int getLayoutRes() {
+        return R.layout.fragment_artist;
     }
 
     @Override
-    public void onLastfmError(String message, Integer code) {
-        mArtistFragmentView.hideProgressBar();
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        getActivityComponent().inject(mArtistFragmentView);
+        ButterKnife.bind(mArtistFragmentView, rootView);
+        ButterKnife.bind(this, rootView);
+        mArtistFragmentView.initViews();
+        mArtistName = getArguments().getString(KEY_ARTIST_NAME);
+        mArtistId = getArguments().getLong(KEY_ARTIST_ID);
+        mArtistFragmentView.setArtistName(mArtistName);
+        loadData();
     }
 
-    @Override
-    public void onNetworkError(String message) {
-        mArtistFragmentView.hideProgressBar();
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-        ArtistResponse data = mRecommendsFragmentView.getData(position);
-        mOnSelectedArtistListener.onSelectedArtist(data.getName(), data.getMbid());
+    private void loadData() {
+        mTrackModels = mMusicLibraryManager.queryTracksByArtistId(mArtistId);
+        mArtistFragmentView.setData(mTrackModels);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mOnSelectedArtistListener = (Callbacks.OnSelectedArtistListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement " + Callbacks.OnSelectedArtistListener.class.getSimpleName());
-        }
+        mOnSelectedTrackListener = (Callbacks.OnSelectedTrackListener) activity;
+        mOnPlayerListener = (Callbacks.OnPlayerListener) activity;
     }
+
+    @Override
+    public void onClick(View view, int position) {
+        mOnSelectedTrackListener.onSelectedTrack(mArtistFragmentView.getData(position));
+    }
+
+    @OnClick(R.id.fragmet_artist_add_to_playlist_floating_button)
+    public void onAddToPlaylistClick() {
+        CursorList<TrackModel> trackModels = new CursorList<>(mTrackModels);
+        PlaylistModel playlistModel = new PlaylistModel(trackModels, "Current");
+        mOnPlayerListener.onSetPlaylist(playlistModel);
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
+    }
+
 }

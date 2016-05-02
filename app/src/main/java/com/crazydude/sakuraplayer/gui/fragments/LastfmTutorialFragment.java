@@ -1,36 +1,50 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.crazydude.sakuraplayer.R;
-import com.crazydude.sakuraplayer.gui.activity.HomeActivity;
-import com.crazydude.sakuraplayer.interfaces.Callbacks;
-import com.crazydude.sakuraplayer.interfaces.Preferences_;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.views.fragments.LastfmTutorialFragmentView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.sharedpreferences.Pref;
+import javax.inject.Inject;
 
-import static com.crazydude.sakuraplayer.interfaces.Callbacks.*;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.crazydude.sakuraplayer.interfaces.Callbacks.OnLastfmTutorialCompletedListener;
 
 /**
  * Created by kartavtsev.s on 28.05.2015.
  */
-@EFragment(R.layout.fragment_lastfm_tutorial)
 public class LastfmTutorialFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
-    @Bean
+    @Inject
     LastfmTutorialFragmentView mLastfmTutorialFragmentView;
 
     private OnLastfmTutorialCompletedListener mLastfmTutorialCompletedListener;
 
-    @AfterViews
-    void initViews() {
+    public static LastfmTutorialFragment newInstance() {
+        return new LastfmTutorialFragment();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_lastfm_tutorial;
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        ButterKnife.bind(this, rootView);
+        getActivityComponent().inject(this);
+        ButterKnife.bind(mLastfmTutorialFragmentView, rootView);
+        mLastfmTutorialFragmentView.initViews();
         mLastfmTutorialFragmentView.addOnPageChangeListener(this);
     }
 
@@ -64,7 +78,7 @@ public class LastfmTutorialFragment extends BaseFragment implements ViewPager.On
         }
     }
 
-    @Click({R.id.fragment_lastfm_tutorial_login_button, R.id.fragment_lastfm_tutorial_cancel_button})
+    @OnClick({R.id.fragment_lastfm_tutorial_login_button, R.id.fragment_lastfm_tutorial_cancel_button})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.fragment_lastfm_tutorial_login_button:
@@ -74,5 +88,10 @@ public class LastfmTutorialFragment extends BaseFragment implements ViewPager.On
                 mLastfmTutorialCompletedListener.onTutorialCompleted(false);
                 break;
         }
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
     }
 }

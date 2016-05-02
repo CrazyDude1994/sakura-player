@@ -1,6 +1,6 @@
 package com.crazydude.sakuraplayer.views.fragments;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -10,53 +10,48 @@ import com.crazydude.sakuraplayer.common.RecyclerViewTouchListener;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.net.ArtistResponse;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import butterknife.Bind;
 
 /**
  * Created by kartavtsev.s on 05.06.2015.
  */
-@EBean
-public class RecommendsFragmentView extends BaseFragmentView {
+public class RecommendsFragmentView {
 
-    @RootContext
-    AppCompatActivity mActivity;
-
-    @ViewById(R.id.fragment_recommendations_recycler)
+    @Bind(R.id.fragment_recommendations_recycler)
     RecyclerView mRecyclerView;
+
+    @Inject
+    @Named("Activity")
+    Context mContext;
 
     private RecommendsAdapter mRecommendsAdapter;
     private GridLayoutManager mGridLayoutManager;
 
-    @AfterViews
-    void initViews() {
+    public void initViews() {
         mRecommendsAdapter = new RecommendsAdapter();
-        mGridLayoutManager = new GridLayoutManager(mActivity, 2);
+        mGridLayoutManager = new GridLayoutManager(mContext, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mRecommendsAdapter);
     }
 
-    @UiThread
     public void setOrientation(int orientation) {
         mGridLayoutManager.setOrientation(orientation);
     }
 
-    @UiThread
     public void setColumnCount(int columnCount) {
         mGridLayoutManager.setSpanCount(columnCount);
     }
 
     public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {
-        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mActivity, listener,
+        mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(mContext, listener,
                 mRecyclerView));
     }
 
-    @UiThread
     public void setData(List<ArtistResponse> data) {
         mRecommendsAdapter.setData(data);
     }

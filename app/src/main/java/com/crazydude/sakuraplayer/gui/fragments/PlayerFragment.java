@@ -1,65 +1,81 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.events.PlayerEvent;
+import com.crazydude.sakuraplayer.features.Features;
+import com.crazydude.sakuraplayer.features.ToolbarFeature;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.fragments.PlayerView;
+import com.squareup.otto.Subscribe;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
 
-@EFragment(R.layout.fragment_player)
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnProgressChangeListener {
 
-    @Bean
+    @Inject
     PlayerView mPlayerView;
 
-    @ViewById(R.id.fragment_player_seekbar)
+    @Bind(R.id.fragment_player_seekbar)
     DiscreteSeekBar mDiscreteSeekBar;
 
     private TrackModel mCurrentTrack;
     private Callbacks.OnPlayerListener mOnPlayerListener;
-    private PlayerBroadcastReceiver mPlayerBroadcastReceiver;
     private boolean mIsInTouchMode = false;
     private int mSeekProgress = 0;
+    private boolean mIsShuffled = false;
+    private boolean mIsRepeated = false;
 
-    @AfterViews
-    void init() {
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_player;
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        getActivityComponent().inject(this);
+        ButterKnife.bind(this, rootView);
+        ButterKnife.bind(mPlayerView, rootView);
         mDiscreteSeekBar.setOnProgressChangeListener(this);
         if (mCurrentTrack != null) {
             mPlayerView.setPlaying();
             mPlayerView.setData(mCurrentTrack);
         }
-        if (mPlayerBroadcastReceiver == null) {
-            mPlayerBroadcastReceiver = new PlayerBroadcastReceiver();
-        }
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(PlayerService.ACTION_PLAY);
-        intentFilter.addAction(PlayerService.ACTION_PAUSE);
-        intentFilter.addAction(PlayerService.ACTION_RESUME);
-        intentFilter.addAction(PlayerService.ACTION_SEEK);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPlayerBroadcastReceiver, intentFilter);
     }
 
-    @Click({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
-            R.id.fragment_player_button_prev})
+    @OnClick({R.id.fragment_player_button_play, R.id.fragment_player_button_next,
+            R.id.fragment_player_button_prev, R.id.fragment_player_button_shuffle,
+            R.id.fragment_player_button_repeat})
     void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_player_button_play:
                 mOnPlayerListener.onPauseOrResume();
+                break;
+            case R.id.fragment_player_button_next:
+                mOnPlayerListener.onNext();
+                break;
+            case R.id.fragment_player_button_prev:
+                mOnPlayerListener.onPrevious();
+                break;
+            case R.id.fragment_player_button_shuffle:
+                mIsShuffled = !mIsShuffled;
+                mOnPlayerListener.onSwitchShuffle(mIsShuffled);
+                mPlayerView.setShuffleMode(mIsShuffled);
+                break;
+            case R.id.fragment_player_button_repeat:
+                mIsRepeated = !mIsRepeated;
+                mOnPlayerListener.onSwitchRepeat(mIsRepeated);
+                mPlayerView.setRepeatMode(mIsRepeated);
+                break;
         }
     }
 
@@ -91,26 +107,43 @@ public class PlayerFragment extends BaseFragment implements DiscreteSeekBar.OnPr
         mOnPlayerListener.onSeek(mSeekProgress);
     }
 
-    private class PlayerBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case PlayerService.ACTION_PLAY:
-                    mPlayerView.setPlaying();
-                    break;
-                case PlayerService.ACTION_PAUSE:
-                    mPlayerView.setPaused();
-                    break;
-                case PlayerService.ACTION_RESUME:
-                    mPlayerView.setPlaying();
-                    break;
-                case PlayerService.ACTION_SEEK:
-                    int duration = intent.getIntExtra(PlayerService.EXTRA_DURATION, 0);
-                    int progress = intent.getIntExtra(PlayerService.EXTRA_PROGRESS, 0);
-                    if (!mIsInTouchMode) {
-                        mPlayerView.setProgress(progress, duration);
-                    }
-            }
+    @Subscribe
+    public void onPlayerPlaybackEvent(PlayerEvent.PlayerPlaybackEvent event) {
+        mPlayerView.setData(event.getTrackModel());
+        switch (event.getAction()) {
+            case PLAY:
+                mPlayerView.setPlaying();
+                break;
+            case STOP:
+                mPlayerView.setStopped();
+                break;
+            case PAUSE:
+                mPlayerView.setPaused();
+                break;
+            case NEXT:
+                break;
+            case PREV:
+                break;
+            case RESUME:
+                mPlayerView.setPlaying();
+                break;
         }
+    }
+
+    @Subscribe
+    public void onPlayerSeekEvent(PlayerEvent.PlayerSeekEvent event) {
+        if (!mIsInTouchMode) {
+            mPlayerView.setProgress(event.getProgress(), event.getDuration());
+        }
+    }
+
+    @Override
+    public Features requestFeatures(Features.FeaturesBuilder builder) {
+        return builder.addFeature(ToolbarFeature.builder().isBackButton(true).build()).build();
+    }
+
+    public static PlayerFragment newInstance() {
+        PlayerFragment playerFragment = new PlayerFragment();
+        return playerFragment;
     }
 }

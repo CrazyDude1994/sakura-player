@@ -1,52 +1,45 @@
 package com.crazydude.sakuraplayer.adapters;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.provider.MediaStore;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.crazydude.sakuraplayer.gui.views.TrackView;
-import com.crazydude.sakuraplayer.gui.views.TrackView_;
+import com.crazydude.sakuraplayer.interfaces.Callbacks.RecyclerViewClickListener;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
+import com.crazydude.sakuraplayer.models.ArtistModel;
 import com.crazydude.sakuraplayer.models.TrackModel;
 
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-
-import java.util.ArrayList;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * Created by Crazy on 26.04.2015.
  */
-@EBean
-public class TracklistAdapter extends BaseAdapter<TrackModel> {
+@EqualsAndHashCode(callSuper = false)
+@Data
+@Accessors(prefix = "m")
+public class TracklistAdapter extends BaseCursorAdapter<TrackModel, TrackView> {
 
-    @RootContext
-    Context mContext;
+    private final MusicLibraryManager mMusicLibraryManager;
+    private RecyclerViewClickListener mOnRecyclerViewClickListener;
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TrackView trackView = TrackView_.build(mContext);
-        return new ViewHolder(trackView);
+    public TracklistAdapter(MusicLibraryManager musicLibraryManager) {
+        mMusicLibraryManager = musicLibraryManager;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        TrackView trackView = ((ViewHolder)holder).getView();
-        trackView.setContent(getData(position));
+    public BaseViewHolder<TrackView> onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new BaseViewHolder<>(new TrackView(parent.getContext()));
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TrackView mTrackView;
-
-        public ViewHolder(TrackView trackView) {
-            super(trackView);
-            this.mTrackView = trackView;
-        }
-
-        public TrackView getView() {
-            return mTrackView;
-        }
+    @Override
+    public void onBindViewHolder(BaseViewHolder<TrackView> holder, int position) {
+        super.onBindViewHolder(holder, position);
+        holder.getView().setRippleCallback(rippleView -> {
+            if (mOnRecyclerViewClickListener != null) {
+                mOnRecyclerViewClickListener.onClick(rippleView, position);
+            }
+        });
     }
 }
