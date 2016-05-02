@@ -21,8 +21,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.BindColor;
 
@@ -81,8 +79,8 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
     public void setPlayerWidgetData(TrackModel trackModel) {
         mPlayerWidgetArtist.setText(trackModel.getArtistName());
         mPlayerWidgetSong.setText(trackModel.getTrackName());
-/*        if (trackModel.getAlbum() != null && trackModel.getAlbum().getAlbumArtPath() != null) {
-            File file = new File(trackModel.getAlbum().getAlbumArtPath());
+        if (!trackModel.getAlbumArtPath().isEmpty()) {
+            File file = new File(trackModel.getAlbumArtPath());
             Picasso.with(mAppCompatActivity)
                     .load(file)
                     .resizeDimen(R.dimen.list_rounded_image_width_height, R.dimen.list_rounded_image_width_height)
@@ -90,7 +88,7 @@ public class HomeActivityView extends BaseActivityView implements Animator.Anima
                     .into(mWidgetAlbumArt);
         } else {
             mWidgetAlbumArt.setImageDrawable(TextDrawable.builder().buildRound(trackModel.getTrackName().substring(0, 1), mAccentColor));
-        }*/
+        }
     }
 
     public void showPlayerWidget() {

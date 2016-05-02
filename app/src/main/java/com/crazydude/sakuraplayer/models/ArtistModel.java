@@ -3,6 +3,7 @@ package com.crazydude.sakuraplayer.models;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.venmo.cursor.CursorList;
 import com.venmo.cursor.IterableCursorWrapper;
 
@@ -25,23 +26,30 @@ public class ArtistModel {
 
     public static class ArtistModelCursor extends IterableCursorWrapper<ArtistModel> {
 
-        private Cursor mAlbumCursor;
-        private Cursor mTrackCursor;
+        private MusicLibraryManager mMusicLibraryManager;
 
-        public ArtistModelCursor(Cursor cursor, Cursor albumCursor, Cursor trackCursor) {
+        public ArtistModelCursor(Cursor cursor, MusicLibraryManager musicLibraryManager) {
             super(cursor);
-            this.mAlbumCursor = albumCursor;
-            this.mTrackCursor = trackCursor;
+            mMusicLibraryManager = musicLibraryManager;
         }
 
         @Override
         public ArtistModel peek() {
             ArtistModel artistModel = new ArtistModel();
-
             artistModel.setId(getLong(MediaStore.Audio.Artists._ID, 0));
             artistModel.setArtistName(getString(MediaStore.Audio.Artists.ARTIST, ""));
-            artistModel.setAlbums(new CursorList<>(new AlbumModel.AlbumModelCursor(mAlbumCursor, mTrackCursor)));
-            artistModel.setArtistArt("");
+
+            artistModel.setAlbums(new CursorList<>(mMusicLibraryManager.queryAlbumsByArtistId(artistModel.getId())));
+            for (AlbumModel albumModel : artistModel.getAlbums()) {
+                if (albumModel.getAlbumArtPath() != null && !albumModel.getAlbumArtPath().isEmpty()) {
+                    artistModel.setArtistArt(albumModel.getAlbumArtPath());
+                    break;
+                }
+            }
+
+            if (artistModel.getArtistArt() == null) {
+                artistModel.setArtistArt("");
+            }
 
             return artistModel;
         }

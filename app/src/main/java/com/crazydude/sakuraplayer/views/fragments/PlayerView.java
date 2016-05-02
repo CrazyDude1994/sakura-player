@@ -80,8 +80,8 @@ public class PlayerView {
         mArtistName.setText(data.getArtistName());
         mSongName.setText(data.getTrackName());
 
-/*        if (data.getAlbum() != null && data.getAlbum().getAlbumArtPath() != null) {
-            File albumArtFile = new File(data.getAlbum().getAlbumArtPath());
+        if (data.getAlbumArtPath() != null) {
+            File albumArtFile = new File(data.getAlbumArtPath());
             Picasso.with(mContext)
                     .load(albumArtFile)
                     .error(TextDrawable.builder().buildRect(data.getTrackName(), mAccentColor))
@@ -89,7 +89,7 @@ public class PlayerView {
                     .into(mAlbumArt);
         } else {
             mAlbumArt.setImageDrawable(TextDrawable.builder().buildRect(data.getTrackName().substring(0, 1), mAccentColor));
-        }*/
+        }
     }
 
     public void setProgress(int progress, int duration) {

@@ -3,7 +3,7 @@ package com.crazydude.sakuraplayer.models;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.venmo.cursor.IterableCursorAdapter;
+import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.venmo.cursor.IterableCursorWrapper;
 
 import lombok.Data;
@@ -21,11 +21,15 @@ public class TrackModel {
     private String mTrackPath;
     private String mAlbumName;
     private long mTrackId;
+    private String mAlbumArtPath;
 
     public static class TrackModelCursor extends IterableCursorWrapper<TrackModel> {
 
-        public TrackModelCursor(Cursor cursor) {
+        private MusicLibraryManager mMusicLibraryManager;
+
+        public TrackModelCursor(Cursor cursor, MusicLibraryManager musicLibraryManager) {
             super(cursor);
+            mMusicLibraryManager = musicLibraryManager;
         }
 
         @Override
@@ -36,6 +40,8 @@ public class TrackModel {
             trackModel.setTrackPath(getString(getColumnIndex(MediaStore.Audio.Media.DATA)));
             trackModel.setArtistName(getString(MediaStore.Audio.Media.ARTIST, ""));
             trackModel.setAlbumName(getString(MediaStore.Audio.Media.ALBUM, ""));
+            AlbumModel albumModel = mMusicLibraryManager.queryAlbumById(getLong(getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+            trackModel.setAlbumArtPath(albumModel == null ? "" : albumModel.getAlbumArtPath());
             return trackModel;
         }
     }

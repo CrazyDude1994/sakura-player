@@ -61,7 +61,6 @@ public class LastfmArtistFragmentView implements Palette.PaletteAsyncListener,
     @Inject
     Context mContext;
 
-
     private ArrayList<TextView> mTagsViews = new ArrayList<>();
 
 

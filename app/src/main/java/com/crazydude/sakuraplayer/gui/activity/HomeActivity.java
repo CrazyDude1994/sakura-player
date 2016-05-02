@@ -45,10 +45,6 @@ import com.crazydude.sakuraplayer.services.PlayerService;
 import com.crazydude.sakuraplayer.views.activities.HomeActivityView;
 import com.squareup.otto.Subscribe;
 
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Permissions;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -328,11 +324,7 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
 
     @Override
     public void onBackStackChanged() {
-        if (mPlayerFragment != null && mBinder != null && !mPlayerFragment.isVisible()) {
-            mHomeActivityView.showPlayerWidget();
-        } else {
-            mHomeActivityView.hidePlayerWidget();
-        }
+
     }
 
     @OnClick(R.id.activity_home_view_player_widget)
@@ -410,6 +402,11 @@ public class HomeActivity extends BaseActivity implements OnAfterSplashScreenLis
     @Override
     public void onBackPressed() {
         mNavigationHandler.handleBackButtonPress();
+        if (mPlayerFragment != null && mBinder != null && !mPlayerFragment.isVisible()) {
+            mHomeActivityView.showPlayerWidget();
+        } else {
+            mHomeActivityView.hidePlayerWidget();
+        }
     }
 
     @Override
