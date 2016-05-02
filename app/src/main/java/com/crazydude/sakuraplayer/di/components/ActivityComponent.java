@@ -13,10 +13,7 @@ import com.crazydude.sakuraplayer.gui.fragments.RecommendsFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistAllFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistArtistFragment;
 import com.crazydude.sakuraplayer.gui.fragments.TracklistFragment;
-import com.crazydude.sakuraplayer.views.fragments.ArtistFragmentView;
 import com.crazydude.sakuraplayer.views.fragments.RecommendsFragmentView;
-import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
-import com.crazydude.sakuraplayer.views.fragments.TracklistArtistFragmentView;
 
 import javax.inject.Named;
 
@@ -39,17 +36,11 @@ public interface ActivityComponent {
 
     void inject(TracklistAllFragment tracklistAllFragment);
 
-    void inject(TracklistAllFragmentView mTracklistAllFragmentView);
-
     void inject(TracklistArtistFragment tracklistArtistFragment);
-
-    void inject(TracklistArtistFragmentView mTracklistArtistFragmentView);
 
     void inject(PlayerFragment playerFragment);
 
     void inject(ArtistFragment artistFragment);
-
-    void inject(ArtistFragmentView mArtistFragmentView);
 
     void inject(RecommendsFragment recommendsFragment);
 

@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.crazydude.sakuraplayer.R;
 import com.crazydude.sakuraplayer.di.components.ActivityComponent;
 import com.crazydude.sakuraplayer.gui.activity.BaseActivity;
 import com.crazydude.sakuraplayer.interfaces.SwitchableFragment;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by CrazyDude on 15.03.2015.
@@ -42,6 +43,7 @@ abstract public class BaseFragment extends android.support.v4.app.Fragment imple
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(getLayoutRes(), container, false);
+        ButterKnife.bind(this, rootView);
         initViews(rootView);
         return rootView;
     }

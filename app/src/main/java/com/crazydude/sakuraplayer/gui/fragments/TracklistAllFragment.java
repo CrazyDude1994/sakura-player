@@ -1,29 +1,31 @@
 package com.crazydude.sakuraplayer.gui.fragments;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.crazydude.sakuraplayer.R;
+import com.crazydude.sakuraplayer.adapters.TracklistAdapter;
 import com.crazydude.sakuraplayer.common.Utils;
 import com.crazydude.sakuraplayer.events.RequestUpdateLibraryEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryCompletedEvent;
 import com.crazydude.sakuraplayer.events.UpdateLibraryStartedEvent;
 import com.crazydude.sakuraplayer.features.Features;
 import com.crazydude.sakuraplayer.features.ToolbarFeature;
+import com.crazydude.sakuraplayer.gui.decorators.DividerItemDecoration;
 import com.crazydude.sakuraplayer.interfaces.Callbacks;
 import com.crazydude.sakuraplayer.managers.MusicLibraryManager;
 import com.crazydude.sakuraplayer.models.TrackModel;
-import com.crazydude.sakuraplayer.views.fragments.TracklistAllFragmentView;
 import com.squareup.otto.Subscribe;
+import com.venmo.cursor.IterableCursor;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import butterknife.ButterKnife;
+import butterknife.Bind;
 
 /**
  * Created by CrazyDude on 13.04.2015.
@@ -31,15 +33,40 @@ import butterknife.ButterKnife;
 public class TracklistAllFragment extends BaseFragment implements Callbacks.RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
-    TracklistAllFragmentView mTracklistAllFragmentView;
-
-    @Inject
     MusicLibraryManager mMusicLibraryManager;
 
     @Inject
     Utils utils;
-
+    @Bind(R.id.fragment_tracklist_alltracks_recycler)
+    RecyclerView mRecyclerView;
+    @Bind(R.id.fragment_tracklist_alltracks_refresher)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @Inject
+    TracklistAdapter mTracklistAdapter;
+    @Inject
+    @Named("Activity")
+    Context mContext;
     private Callbacks.OnSelectedTrackListener mOnSelectedTrackListener;
+
+    public void setOnRecyclerClickListener(Callbacks.RecyclerViewClickListener listener) {
+        mTracklistAdapter.setOnRecyclerViewClickListener(listener);
+    }
+
+    public TrackModel getData(int position) {
+        return mTracklistAdapter.getData(position);
+    }
+
+    public void setData(IterableCursor<TrackModel> cursor) {
+        mTracklistAdapter.setCursor(cursor);
+    }
+
+    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
+        mSwipeRefreshLayout.setOnRefreshListener(listener);
+    }
+
+    public void setRefreshing(boolean isRefreshing) {
+        mSwipeRefreshLayout.setRefreshing(isRefreshing);
+    }
 
     @Override
     protected int getLayoutRes() {
@@ -49,21 +76,22 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
     @Override
     protected void initViews(View rootView) {
         getActivityComponent().inject(this);
-        getActivityComponent().inject(mTracklistAllFragmentView);
-        ButterKnife.bind(mTracklistAllFragmentView, rootView);
-        mTracklistAllFragmentView.initViews();
-        mTracklistAllFragmentView.setOnRecyclerClickListener(this);
-        mTracklistAllFragmentView.setOnRefreshListener(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mTracklistAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST));
+        setOnRecyclerClickListener(this);
+        setOnRefreshListener(this);
         loadData();
     }
 
     private void loadData() {
-        mTracklistAllFragmentView.setData(mMusicLibraryManager.queryAllTracks());
+        setData(mMusicLibraryManager.queryAllTracks());
     }
 
     @Override
     public void onClick(View view, int position) {
-        mOnSelectedTrackListener.onSelectedTrack(mTracklistAllFragmentView.getData(position));
+        mOnSelectedTrackListener.onSelectedTrack(getData(position));
     }
 
     @Override
@@ -84,12 +112,12 @@ public class TracklistAllFragment extends BaseFragment implements Callbacks.Recy
 
     @Subscribe
     public void onLibraryUpdating(UpdateLibraryStartedEvent event) {
-        mTracklistAllFragmentView.setRefreshing(true);
+        setRefreshing(true);
     }
 
     @Subscribe
     public void onLibraryUpdated(UpdateLibraryCompletedEvent event) {
-        mTracklistAllFragmentView.setRefreshing(false);
+        setRefreshing(false);
         loadData();
     }
 }
